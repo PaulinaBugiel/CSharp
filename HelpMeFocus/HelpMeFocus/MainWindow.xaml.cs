@@ -24,5 +24,20 @@ namespace HelpMeFocus
         {
             InitializeComponent();
         }
+
+        private void hoursTextBox_GotFocus(object sender, RoutedEventArgs e)
+        {
+            hoursTextBox.Text = "";
+        }
+
+        private void minutesTextBox_GotFocus(object sender, RoutedEventArgs e)
+        {
+            minutesTextBox.Text = "";
+        }
+
+        private void secondsTextBox_GotFocus(object sender, RoutedEventArgs e)
+        {
+            secondsTextBox.Text = "";
+        }
     }
 }
