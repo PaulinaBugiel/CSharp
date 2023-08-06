@@ -3,6 +3,134 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:local="clr-namespace:HelpMeFocus">
     <Application.Resources>
-         
+        <ResourceDictionary>
+            
+            <SolidColorBrush x:Key="BorderPrimary" Color="Gray"/>
+            
+            <Style TargetType="Button">
+                <Setter Property="Background" Value="LightGray"/>
+                <Setter Property="TextBlock.TextAlignment" Value="Center"/>
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="Button">
+                            <Border Background="{TemplateBinding Background}"
+                                    Padding="{TemplateBinding Padding}"
+                                    Margin="{TemplateBinding Margin}"
+                                    BorderThickness="1"
+                                    BorderBrush="Gray"
+                                    SnapsToDevicePixels="True">
+                                <ContentPresenter />
+                            </Border>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+                <Style.Triggers>
+                    <Trigger Property="IsMouseOver" Value="True">
+                        <Trigger.EnterActions>
+                            <BeginStoryboard>
+                                <Storyboard>
+                                    <ColorAnimation
+                                        Storyboard.TargetProperty="Background.(SolidColorBrush.Color)"
+                                        To="DarkGray" 
+                                        Duration="0:0:0.15"/>
+                                </Storyboard>
+                            </BeginStoryboard>
+                        </Trigger.EnterActions>
+                        <Trigger.ExitActions>
+                            <BeginStoryboard>
+                                <Storyboard>
+                                    <ColorAnimation
+                                        Storyboard.TargetProperty="Background.(SolidColorBrush.Color)"
+                                        To="LightGray" 
+                                        Duration="0:0:0.15"/>
+                                </Storyboard>
+                            </BeginStoryboard>
+                        </Trigger.ExitActions>
+                    </Trigger>
+                    <Trigger Property="IsEnabled" Value="False">
+                        <Setter Property="Opacity" Value="0.5"/>
+                    </Trigger>
+                </Style.Triggers>
+            </Style>
+
+            <Style x:Key="ButtonWatermark" BasedOn="{StaticResource {x:Type Button}}" TargetType="Button">
+                <Setter Property="Foreground" Value="Black"/>
+                <Setter Property="Background" Value="White"/>
+                <Setter Property="BorderBrush" Value="LightGray"/>
+                <Style.Triggers>
+                    <Trigger Property="IsMouseOver" Value="True">
+                        <Trigger.EnterActions>
+                            <BeginStoryboard>
+                                <Storyboard>
+                                    <ColorAnimation
+                                        Storyboard.TargetProperty="Background.(SolidColorBrush.Color)"
+                                        To="LightGray" 
+                                        Duration="0:0:0.15"/>
+                                </Storyboard>
+                            </BeginStoryboard>
+                        </Trigger.EnterActions>
+                        <Trigger.ExitActions>
+                            <BeginStoryboard>
+                                <Storyboard>
+                                    <ColorAnimation
+                                        Storyboard.TargetProperty="Background.(SolidColorBrush.Color)"
+                                        To="White" 
+                                        Duration="0:0:0.15"/>
+                                </Storyboard>
+                            </BeginStoryboard>
+                        </Trigger.ExitActions>
+                    </Trigger>
+                    <Trigger Property="IsEnabled" Value="False">
+                        <Setter Property="Opacity" Value="0.5"/>
+                    </Trigger>
+                </Style.Triggers>
+            </Style>
+
+            <Style x:Key="StartStopButton" TargetType="Button">
+                <Setter Property="Background" Value="#85ff85"/>
+                <Setter Property="Foreground" Value="#333333"/>
+                <Setter Property="TextBlock.TextAlignment" Value="Center"/>
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="Button">
+                            <Border Background="{TemplateBinding Background}"
+                                    Padding="{TemplateBinding Padding}"
+                                    Margin="{TemplateBinding Margin}"
+                                    BorderThickness="1"
+                                    BorderBrush="#444444"
+                                    SnapsToDevicePixels="True">
+                                <ContentPresenter />
+                            </Border>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+                <Style.Triggers>
+                    <Trigger Property="Content" Value="Stop">
+                        <Setter Property="Background" Value="#ff7373"/>
+                    </Trigger>
+                    <MultiTrigger>
+                        <MultiTrigger.Conditions>
+                            <Condition Property="Content" Value="Stop"/>
+                            <Condition Property="IsMouseOver" Value="True"/>
+                        </MultiTrigger.Conditions>
+                        <Setter Property="Background" Value="#ed5858"/>
+                    </MultiTrigger>
+                    <Trigger Property="Content" Value="Start">
+                        <Setter Property="Background" Value="#85ff85"/>
+                    </Trigger>
+                    <MultiTrigger>
+                        <MultiTrigger.Conditions>
+                            <Condition Property="Content" Value="Start"/>
+                            <Condition Property="IsMouseOver" Value="True"/>
+                        </MultiTrigger.Conditions>
+                        <Setter Property="Background" Value="#61e861"/>
+                    </MultiTrigger>
+                    
+                    <Trigger Property="IsEnabled" Value="False">
+                        <Setter Property="Opacity" Value="0.5"/>
+                    </Trigger>
+                </Style.Triggers>
+            </Style>
+        </ResourceDictionary>
     </Application.Resources>
 </Application>

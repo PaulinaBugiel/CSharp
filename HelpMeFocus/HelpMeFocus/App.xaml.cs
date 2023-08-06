@@ -16,10 +16,12 @@ namespace HelpMeFocus
     {
         protected override void OnStartup(StartupEventArgs e)
         {
-            MainWindow = new MainWindow
+            CounterViewModel vm = new();
+            MainWindow = new MainWindow()
             {
-                DataContext = new CounterViewModel()
+                DataContext = vm
             };
+            vm.CloseAction = new Action(MainWindow.Close);
             MainWindow.Show();
             base.OnStartup(e);
         }

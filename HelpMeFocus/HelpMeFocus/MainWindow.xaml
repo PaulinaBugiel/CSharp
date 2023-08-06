@@ -3,101 +3,16 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:HelpMeFocus"
+        xmlns:local="clr-namespace:HelpMeFocus" 
+        xmlns:views="clr-namespace:HelpMeFocus.Views"
         mc:Ignorable="d"
-        Title="MainWindow" Height="300" Width="240" MinHeight="280" MinWidth="200">
+        Topmost="True"
+        Title="Timer" Height="300" Width="240" MinHeight="280" MinWidth="200">
     <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="10"/>
-            <RowDefinition Height="auto"/>
-            <RowDefinition Height="auto"/>
-            <RowDefinition Height="auto"/>
-            <RowDefinition Height="auto"/>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="auto"/>
-            <RowDefinition Height="10"/>
-        </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="10"/>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="10"/>
+            <ColumnDefinition Width="2*"/>
+            <ColumnDefinition Width="3*"/>
         </Grid.ColumnDefinitions>
-        <TextBlock Grid.Row="1" Grid.Column="1" FontSize="16" HorizontalAlignment="Center" Text="Set the timer" Margin="0 0 0 5"/>
-        <StackPanel Grid.Row="2" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Center" >
-            <Border BorderBrush="Gray" BorderThickness="1" 
-                Margin="5" SnapsToDevicePixels="True">
-                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Background="Beige">
-                    <StackPanel.Resources>
-                        <Style TargetType="TextBox">
-                            <Setter Property="BorderThickness" Value="0"/>
-                            <Setter Property="FontFamily" Value="Consolas"/>
-                            <Setter Property="TextAlignment" Value="Center"/>
-                            <Setter Property="FontSize" Value="16"/>
-                            <Setter Property="Width" Value="30"/>
-                            <Setter Property="Foreground" Value="Gray"/>
-                            <Setter Property="Background" Value="Transparent"/>
-                        </Style>
-                        <Style TargetType="TextBlock">
-                            <Setter Property="FontFamily" Value="Consolas"/>
-                            <Setter Property="FontSize" Value="16"/>
-                        </Style>
-                    </StackPanel.Resources>
-                    <TextBox x:Name="hoursTextBox" Text="{Binding HoursText}" MaxLength="2" GotFocus="hoursTextBox_GotFocus"/>
-                    <TextBlock Text=":"/>
-                    <TextBox x:Name="minutesTextBox" Text="{Binding MinutesText}" MaxLength="2" GotFocus="minutesTextBox_GotFocus"/>
-                    <TextBlock Text=":"/>
-                    <TextBox x:Name="secondsTextBox" Text="{Binding SecondsText}" MaxLength="2" GotFocus="secondsTextBox_GotFocus"/>
-                </StackPanel>
-            </Border>
-            <Button Content="Set" Command="{Binding SetTimerCommand}" Margin="5" Padding="3 0 3 0"/>
-        </StackPanel>
-        <Border Grid.Row="3" Grid.Column="1" BorderBrush="Gray" BorderThickness="1" 
-                HorizontalAlignment="Center" Margin="5" SnapsToDevicePixels="True">
-            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Background="Beige">
-                <TextBox BorderThickness="0" Text="Completed loops: "/>
-                <TextBox BorderThickness="0" Text="{Binding LoopsSoFarText}"/>
-            </StackPanel>
-        </Border>
-        <TextBox Grid.Row="4" Grid.Column="1" TextAlignment="Center" Width="100" FontSize="24"
-                 Background="Beige" Margin="5" Text="{Binding TimerDisplayValue}"/>
-        <Grid Grid.Row="5" Grid.Column="1" Margin="5">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="auto"/>
-                <RowDefinition Height="auto"/>
-                <RowDefinition Height="auto"/>
-            </Grid.RowDefinitions>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="auto"/>
-                <ColumnDefinition Width="auto"/>
-            </Grid.ColumnDefinitions>
-            <RadioButton Grid.Row="0" Content="One run" IsChecked="{Binding OneRun}"/>
-            <RadioButton Grid.Row="1" Content="Infinite loop" IsChecked="{Binding InfiniteLoop}"/>
-            <RadioButton Grid.Row="2" Content="Number of cycles" IsChecked="{Binding Cycles}"/>
-            <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding NumCyclesText}" MinWidth="30" Margin="10 0 0 0"/>
-        </Grid>
-        <Button Grid.Row="6" Grid.Column="1" Margin="50 0"
-                Content="{Binding ButtonText}" Command="{Binding StartStopTimerCommand}">
-            <Button.Resources>
-                <Style TargetType="Button">
-                    <Style.Triggers>
-                        <Trigger Property="Content" Value="Stop">
-                            <Trigger.Setters>
-                                <Setter Property="Background" Value="#FFD65353"/>
-                            </Trigger.Setters>
-                        </Trigger>
-                        <Trigger Property="Content" Value="Start">
-                            <Trigger.Setters>
-                                <Setter Property="Background" Value="#FF6CEC6C"/>
-                            </Trigger.Setters>
-                        </Trigger>
-                        <Trigger Property="IsEnabled" Value="False">
-                            <Trigger.Setters>
-                                <Setter Property="Opacity" Value=".7"/>
-                            </Trigger.Setters>
-                        </Trigger>
-                    </Style.Triggers>
-                </Style>
-            </Button.Resources>
-        </Button>
+        <views:MainView Grid.ColumnSpan="2"/>
     </Grid>
 </Window>

@@ -16,6 +16,7 @@ namespace HelpMeFocus.ViewModels
 {
     class CounterViewModel : INotifyPropertyChanged
     {
+        public Action CloseAction { get; set; }
         public event PropertyChangedEventHandler? PropertyChanged;
         public string TimerDisplayValue { get; set; }
         private bool IsTimerStarted { get; set; } = false;
@@ -33,42 +34,10 @@ namespace HelpMeFocus.ViewModels
         private int _numCycles;
         private int _loopsSoFar;
 
-        public string LoopsSoFarText
-        {
-            get
-            {
-                return _loopsSoFar.ToString();
-            }
-            set
-            {
-                if (!int.TryParse(value, out _loopsSoFar))
-                {
-                    _loopsSoFar = 0;
-                }
-                OnPropertyChanged(nameof(LoopsSoFarText));
-            }
-        }
-
-        public string NumCyclesText
-        {
-            get
-            {
-                return _numCycles.ToString();
-            }
-            set
-            {
-                if (!int.TryParse(value, out _numCycles))
-                {
-                    _numCycles = 2;
-                }
-                OnPropertyChanged(nameof(NumCyclesText));
-            }
-        }
-
-
-
         private RelayCommand _startStopTimerCommand;
         private RelayCommand _setTimerCommand;
+        private RelayCommand _openCompactViewCommand;
+        private RelayCommand _openFullViewCommand;
 
         public CounterViewModel()
         {
@@ -110,6 +79,38 @@ namespace HelpMeFocus.ViewModels
                 _loopsSoFar += 1;
                 LoopsSoFarText = _loopsSoFar.ToString();
                 SystemSounds.Beep.Play();
+            }
+        }
+
+        public string LoopsSoFarText
+        {
+            get
+            {
+                return _loopsSoFar.ToString();
+            }
+            set
+            {
+                if (!int.TryParse(value, out _loopsSoFar))
+                {
+                    _loopsSoFar = 0;
+                }
+                OnPropertyChanged(nameof(LoopsSoFarText));
+            }
+        }
+
+        public string NumCyclesText
+        {
+            get
+            {
+                return _numCycles.ToString();
+            }
+            set
+            {
+                if (!int.TryParse(value, out _numCycles))
+                {
+                    _numCycles = 2;
+                }
+                OnPropertyChanged(nameof(NumCyclesText));
             }
         }
 
@@ -224,7 +225,7 @@ namespace HelpMeFocus.ViewModels
             }
             else // check if timer can be started
             {
-                if (_timeSpan > TimeSpan.FromSeconds(1))
+                if (_timeSpan > TimeSpan.FromSeconds(0))
                     return true;
                 else
                     return false;
@@ -251,11 +252,17 @@ namespace HelpMeFocus.ViewModels
             get 
             { 
                 if (_startStopTimerCommand == null)
-                {
                     _startStopTimerCommand = new RelayCommand(o => StartStopTimer(), o => CanStartStopTimer());
-                }
                 return _startStopTimerCommand;
             }
+        }
+
+        private bool CanSetTimerValue()
+        {
+            if (IsTimerStarted)
+                return false;
+            else
+                return true;
         }
 
         public void SetTimerValue()
@@ -279,10 +286,55 @@ namespace HelpMeFocus.ViewModels
             get
             {
                 if (_setTimerCommand == null)
-                {
-                    _setTimerCommand = new RelayCommand(o => SetTimerValue());
-                }
+                    _setTimerCommand = new RelayCommand(o => SetTimerValue(), o => CanSetTimerValue());
                 return _setTimerCommand;
+            }
+        }
+
+        private bool CanOpenCompactView()
+        {
+            return true;  // TODO
+        }
+
+        private void OpenCompactView()
+        {
+            Window compactViewWindow = new CompactWindow
+            {
+                DataContext = this
+            };
+            compactViewWindow.Show();
+            CloseAction();
+            this.CloseAction = compactViewWindow.Close;
+        }
+
+        public RelayCommand OpenCompactViewCommand
+        {
+            get
+            {
+                if (_openCompactViewCommand == null)
+                    _openCompactViewCommand = new RelayCommand(o => OpenCompactView(), o => CanOpenCompactView());
+                return _openCompactViewCommand;
+            }
+        }
+
+        private void OpenFullView()
+        {
+            Window fullView = new MainWindow
+            {
+                DataContext = this
+            };
+            fullView.Show();
+            CloseAction();
+            this.CloseAction = fullView.Close;
+        }
+
+        public RelayCommand OpenFullViewCommand
+        {
+            get
+            {
+                if (_openFullViewCommand == null)
+                    _openFullViewCommand = new RelayCommand(o => OpenFullView());
+                return _openFullViewCommand;
             }
         }
 
