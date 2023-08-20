@@ -6,28 +6,35 @@
         xmlns:local="clr-namespace:HelpMeFocus"
         mc:Ignorable="d"
         WindowStyle="None" ResizeMode="NoResize" Topmost="True"
-        Title="CompactWindow" Height="28" Width="260" MouseLeftButtonDown="Window_MouseLeftButtonDown">
+        Title="CompactWindow" Height="28" Width="300" MouseLeftButtonDown="Window_MouseLeftButtonDown">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="34"/>
             <ColumnDefinition Width="Auto"/>
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="Auto"/>
         </Grid.ColumnDefinitions>
+        
         <Border Grid.Column="0" BorderBrush="Gray" BorderThickness="1" 
                 Margin="1" SnapsToDevicePixels="True">
-                <TextBox Grid.Row="4" Grid.Column="1" TextAlignment="Center"
-                         Width="80" FontSize="18" FontWeight="Bold" 
-                         Background="Beige" Text="{Binding TimerDisplayValue}" 
-                         IsEnabled="False"/>
+            <TextBox FontSize="18" FontWeight="Bold" Background="Beige" 
+                     Text="{Binding LoopsSoFarText}" IsEnabled="False"/>
         </Border>
-        <Button Grid.Column="1" Margin="8 1" 
+        <Border Grid.Column="1" BorderBrush="Gray" BorderThickness="1" 
+                Margin="1" SnapsToDevicePixels="True">
+            <TextBox TextAlignment="Center"
+                        Width="80" FontSize="18" FontWeight="Bold" 
+                        Background="Beige" Text="{Binding TimerDisplayValue}" 
+                        IsEnabled="False"/>
+        </Border>
+        <Button Grid.Column="2" Margin="8 1" 
                 Style="{StaticResource StartStopButton}" 
                 Padding="3 3 3 0" Content="{Binding ButtonText}" 
                 Command="{Binding StartStopTimerCommand}"/>
-        <Button Grid.Column="2"
+        <Button Grid.Column="3"
                 Command="{Binding OpenFullViewCommand}" 
                 Margin="1" Padding="3 3 3 0"
                 Style="{StaticResource ButtonWatermark}">

@@ -6,7 +6,6 @@
         xmlns:local="clr-namespace:HelpMeFocus" 
         xmlns:views="clr-namespace:HelpMeFocus.Views"
         mc:Ignorable="d"
-        Topmost="True"
         Title="Timer" Height="300" Width="240" MinHeight="280" MinWidth="200">
     <Grid>
         <Grid.ColumnDefinitions>

@@ -4,7 +4,7 @@
     <OutputType>WinExe</OutputType>
     <TargetFramework>net7.0-windows</TargetFramework>
     <Nullable>enable</Nullable>
-    <UseWPF>true</UseWPF>
+    <UseWPF>True</UseWPF>
     <StartupObject>HelpMeFocus.App</StartupObject>
   </PropertyGroup>
 
