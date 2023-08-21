@@ -27,8 +27,8 @@ namespace HelpMeFocus.ViewModels
         private int _hours;
         private int _minutes;
         private int _seconds;
-        private bool _oneRun = true;
-        private bool _infiniteLoop;
+        private bool _oneRun;
+        private bool _infiniteLoop = true;
         private bool _cycles;
 
         private int _numCycles;
@@ -78,7 +78,9 @@ namespace HelpMeFocus.ViewModels
                 }
                 _loopsSoFar += 1;
                 LoopsSoFarText = _loopsSoFar.ToString();
-                SystemSounds.Beep.Play();
+                //SystemSounds.Beep.Play(); // TODO change sound
+                SoundPlayer player = new SoundPlayer(@"kaching.wav");
+                player.Play();
             }
         }
 

@@ -8,6 +8,16 @@
     <StartupObject>HelpMeFocus.App</StartupObject>
   </PropertyGroup>
 
+  <Target Name="CopySound" AfterTargets="Build">
+    <Message Text="Copying sound" Importance="High" />
+
+    <Copy
+      SourceFiles="$(ProjectDir)Resources\kaching.wav"
+      DestinationFolder="$(OutDir)\" />
+
+    <Message Text="Copied build files" Importance="High" />
+  </Target>
+
   <ItemGroup>
     <None Remove="Resources\ToCompactView.png" />
     <None Remove="Resources\ToFullView.png" />
