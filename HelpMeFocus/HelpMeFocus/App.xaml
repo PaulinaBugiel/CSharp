@@ -4,9 +4,7 @@
              xmlns:local="clr-namespace:HelpMeFocus">
     <Application.Resources>
         <ResourceDictionary>
-            
-            <SolidColorBrush x:Key="BorderPrimary" Color="Gray"/>
-            
+
             <Style TargetType="Button">
                 <Setter Property="Background" Value="LightGray"/>
                 <Setter Property="TextBlock.TextAlignment" Value="Center"/>
@@ -105,15 +103,15 @@
                     </Setter.Value>
                 </Setter>
                 <Style.Triggers>
-                    <Trigger Property="Content" Value="Stop">
-                        <Setter Property="Background" Value="#ff7373"/>
+                    <Trigger Property="Content" Value="Pause">
+                        <Setter Property="Background" Value="#ffda73"/>
                     </Trigger>
                     <MultiTrigger>
                         <MultiTrigger.Conditions>
-                            <Condition Property="Content" Value="Stop"/>
+                            <Condition Property="Content" Value="Pause"/>
                             <Condition Property="IsMouseOver" Value="True"/>
                         </MultiTrigger.Conditions>
-                        <Setter Property="Background" Value="#ed5858"/>
+                        <Setter Property="Background" Value="#ebc252"/>
                     </MultiTrigger>
                     <Trigger Property="Content" Value="Start">
                         <Setter Property="Background" Value="#85ff85"/>

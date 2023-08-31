@@ -18,7 +18,10 @@ namespace HelpMeFocus.ViewModels
     {
         public Action CloseAction { get; set; }
         public event PropertyChangedEventHandler? PropertyChanged;
-        public string TimerDisplayValue { get; set; }
+        //public string TimerDisplayValue { get; set; }
+        private string _timerDisplayValue;
+
+
         private bool IsTimerStarted { get; set; } = false;
 
         private DispatcherTimer _countdownTimer = new();
@@ -32,17 +35,18 @@ namespace HelpMeFocus.ViewModels
         private bool _cycles;
 
         private int _numCycles;
-        private int _loopsSoFar;
+        private int _completedCycles;
 
         private RelayCommand _startStopTimerCommand;
         private RelayCommand _setTimerCommand;
         private RelayCommand _openCompactViewCommand;
         private RelayCommand _openFullViewCommand;
+        private RelayCommand _resetTimerCommand;
 
         public CounterViewModel()
         {
             _timeSpan = TimeSpan.FromSeconds(0);
-            _loopsSoFar = 0;
+            _completedCycles = 0;
             _numCycles = 2;
 
             TimerDisplayValue = _timeSpan.ToString();
@@ -56,7 +60,6 @@ namespace HelpMeFocus.ViewModels
         {
             _timeSpan -= _countdownTimer.Interval;
             TimerDisplayValue = _timeSpan.ToString();
-            OnPropertyChanged(nameof(TimerDisplayValue));
             if (_timeSpan <= TimeSpan.FromSeconds(0))
             {
                 if (_oneRun)
@@ -76,27 +79,26 @@ namespace HelpMeFocus.ViewModels
                 {
                     StartStopTimer();
                 }
-                _loopsSoFar += 1;
-                LoopsSoFarText = _loopsSoFar.ToString();
-                //SystemSounds.Beep.Play(); // TODO change sound
+                _completedCycles += 1;
+                CompletedCyclesText = _completedCycles.ToString();
                 SoundPlayer player = new SoundPlayer(@"kaching.wav");
                 player.Play();
             }
         }
 
-        public string LoopsSoFarText
+        public string CompletedCyclesText
         {
             get
             {
-                return _loopsSoFar.ToString();
+                return _completedCycles.ToString();
             }
             set
             {
-                if (!int.TryParse(value, out _loopsSoFar))
+                if (!int.TryParse(value, out _completedCycles))
                 {
-                    _loopsSoFar = 0;
+                    _completedCycles = 0;
                 }
-                OnPropertyChanged(nameof(LoopsSoFarText));
+                OnPropertyChanged(nameof(CompletedCyclesText));
             }
         }
 
@@ -194,6 +196,8 @@ namespace HelpMeFocus.ViewModels
             get { return _oneRun; }
             set
             {
+                if (_oneRun == value)
+                    return;
                 _oneRun = value;
                 OnPropertyChanged(nameof(OneRun));
             }
@@ -204,6 +208,8 @@ namespace HelpMeFocus.ViewModels
             get { return _infiniteLoop; }
             set
             {
+                if (_infiniteLoop == value)
+                    return;
                 _infiniteLoop = value;
                 OnPropertyChanged(nameof(InfiniteLoop));
             }
@@ -214,8 +220,22 @@ namespace HelpMeFocus.ViewModels
             get { return _cycles; }
             set
             {
+                if (_cycles == value)
+                    return;
                 _cycles = value;
                 OnPropertyChanged(nameof(Cycles));
+            }
+        }
+
+        public string TimerDisplayValue
+        {
+            get { return _timerDisplayValue; }
+            set
+            {
+                if (_timerDisplayValue == value)
+                    return;
+                _timerDisplayValue = value;
+                OnPropertyChanged(nameof(TimerDisplayValue));
             }
         }
 
@@ -244,7 +264,7 @@ namespace HelpMeFocus.ViewModels
             else
             {
                 _countdownTimer.Start();
-                ButtonText = "Stop";
+                ButtonText = "Pause";
             }
             IsTimerStarted = !IsTimerStarted;
             OnPropertyChanged(nameof(IsTimerStarted));
@@ -281,7 +301,6 @@ namespace HelpMeFocus.ViewModels
                 _timeSpan = TimeSpan.FromSeconds(0);
             }
             TimerDisplayValue = _timeSpan.ToString();
-            OnPropertyChanged(nameof(TimerDisplayValue));
         }
         public RelayCommand SetTimerCommand
         {
@@ -291,11 +310,6 @@ namespace HelpMeFocus.ViewModels
                     _setTimerCommand = new RelayCommand(o => SetTimerValue(), o => CanSetTimerValue());
                 return _setTimerCommand;
             }
-        }
-
-        private bool CanOpenCompactView()
-        {
-            return true;  // TODO
         }
 
         private void OpenCompactView()
@@ -314,7 +328,7 @@ namespace HelpMeFocus.ViewModels
             get
             {
                 if (_openCompactViewCommand == null)
-                    _openCompactViewCommand = new RelayCommand(o => OpenCompactView(), o => CanOpenCompactView());
+                    _openCompactViewCommand = new RelayCommand(o => OpenCompactView());
                 return _openCompactViewCommand;
             }
         }
@@ -337,6 +351,33 @@ namespace HelpMeFocus.ViewModels
                 if (_openFullViewCommand == null)
                     _openFullViewCommand = new RelayCommand(o => OpenFullView());
                 return _openFullViewCommand;
+            }
+        }
+
+        public bool CanResetTimer()
+        {
+            return true; // TODO
+        }
+        public void ResetTimer()
+        {
+            // Stop timer
+            _countdownTimer.Stop();
+            ButtonText = "Start";
+            IsTimerStarted = false;
+            // Reset display value to zero
+            _timeSpan = TimeSpan.FromSeconds(0);
+            TimerDisplayValue = _timeSpan.ToString();
+            // Reset completed cycles to zero
+            CompletedCyclesText = "0";
+            OnPropertyChanged(nameof(IsTimerStarted));
+        }
+        public RelayCommand ResetTimerCommand
+        {
+            get
+            {
+                if (_resetTimerCommand == null)
+                    _resetTimerCommand = new RelayCommand(o => ResetTimer(), o => CanResetTimer());
+                return _resetTimerCommand;
             }
         }
 

@@ -54,12 +54,12 @@
         <Border Grid.Row="3" Grid.Column="1" BorderBrush="Gray" BorderThickness="1" 
                 HorizontalAlignment="Center" Margin="5" SnapsToDevicePixels="True">
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Background="Beige">
-                <TextBox BorderThickness="0" Text="Completed cycles: "/>
-                <TextBox BorderThickness="0" Text="{Binding LoopsSoFarText}"/>
+                <TextBox BorderThickness="0" Text="Completed cycles: " IsReadOnly="True"/>
+                <TextBox BorderThickness="0" Text="{Binding CompletedCyclesText}" IsReadOnly="True"/>
             </StackPanel>
         </Border>
         <TextBox Grid.Row="4" Grid.Column="1" TextAlignment="Center" Width="100" FontSize="24"
-                 Background="Beige" Margin="5" Text="{Binding TimerDisplayValue}"/>
+                 Background="Beige" Margin="5" Text="{Binding TimerDisplayValue}" IsReadOnly="True"/>
         <Grid Grid.Row="5" Grid.Column="1" Margin="5">
             <Grid.RowDefinitions>
                 <RowDefinition Height="auto"/>
@@ -75,11 +75,13 @@
             <RadioButton Grid.Row="2" Content="Number of cycles" IsChecked="{Binding Cycles}"/>
             <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding NumCyclesText}" MinWidth="30" Margin="10 0 0 0"/>
         </Grid>
-        <Button Grid.Row="6" Grid.Column="1" Margin="30 0 30 5"
-                Style="{StaticResource StartStopButton}" Padding="1 2"
-                Content="{Binding ButtonText}" Command="{Binding StartStopTimerCommand}">
-        </Button>
-        <Button Grid.Row="7" Grid.Column="1"
+        <StackPanel Orientation="Horizontal" Grid.Row="6" Grid.Column="1" Margin="0 0 0 5" HorizontalAlignment="Center">
+            <Button Style="{StaticResource StartStopButton}" Width="80" Margin="0 0 5 0"
+                Content="{Binding ButtonText}" Command="{Binding StartStopTimerCommand}" />
+            <Button Width="80" Command="{Binding ResetTimerCommand}">Reset</Button>
+
+        </StackPanel>
+        <Button Grid.Row="7" Grid.Column="1" Width="185"
                 FontSize="12" Margin="10 0" Style="{StaticResource ButtonWatermark}"
                 Command="{Binding OpenCompactViewCommand}">
             <Grid>
