@@ -12,7 +12,7 @@ namespace PlantTrackerUI.DataAccess
 {
     public class SqlDataAccess : IDataAccess
     {
-        private const string connStringName = "PlandDbZero_String";
+        private const string connStringName = "PlantDbZero_String";
         private readonly string connString = System.Configuration.ConfigurationManager.ConnectionStrings[connStringName].ConnectionString;
 
         public void WateringSystem_InsertOne(WateringSystem model)

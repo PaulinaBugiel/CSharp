@@ -1,0 +1,32 @@
+﻿<UserControl x:Class="PlantTrackerUI.Views.LeftPane"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:PlantTrackerUI.Views"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="300">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <ListView x:Name="PlantsList" Grid.Column="0" Grid.Row="0" ItemsSource="{Binding PlantsList}" 
+                  SelectionMode="Single" SelectedItem="{Binding SelectedPlant}">
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <TextBlock Text="{Binding Name}"/>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+        <StackPanel Orientation="Vertical" Grid.Column="0" Grid.Row="1" >
+            <TextBlock Text="{Binding SelectedPlant.Name}"/>
+            <TextBlock Text="{Binding SelectedPlant.PlantingDateString}"/>
+            <TextBlock Text="{Binding SelectedPlant.TypesString}"/>
+            <TextBlock Text="{Binding SelectedPlant.ContainersString}"/>
+        </StackPanel>
+    </Grid>
+</UserControl>

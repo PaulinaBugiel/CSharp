@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace PlantTrackerUI.Models
 {
-    public class Plant
+    public class Plant : IModel
     {
         public int Id { get; set; }
         public string Name { get; set; }
@@ -28,14 +28,15 @@ namespace PlantTrackerUI.Models
         {
             get
             {
-                string ret = "";
-                foreach (var type in PlantTypes)
-                {
-                    ret += $"{type.Name}, ";
-                }
-                ret = ret.Trim(' ');
-                ret = ret.Trim(',');
-                return ret;
+                return PlantTypes.ToString(',');
+            }
+        }
+
+        public string ContainersString
+        {
+            get
+            {
+                return Containers.ToString(',');
             }
         }
 

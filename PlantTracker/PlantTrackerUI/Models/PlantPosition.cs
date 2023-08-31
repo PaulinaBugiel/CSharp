@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace PlantTrackerUI.Models
 {
-    public class PlantPosition
+    public class PlantPosition : IModel
     {
         public int Id { get; set; }
         public string Name { get; set; }

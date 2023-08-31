@@ -3,7 +3,8 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:PlantTrackerUI"
+        xmlns:local="clr-namespace:PlantTrackerUI" 
+        xmlns:views="clr-namespace:PlantTrackerUI.Views"
         mc:Ignorable="d" FontSize="16"
         Title="MainWindow" Height="650" Width="1000">
     <Grid Opacity="0.7">
@@ -26,9 +27,9 @@
         </Grid.RowDefinitions>
 
         <StackPanel Grid.Row="1" Grid.Column="2" Orientation="Horizontal" Margin="15 0 0 0">
-            <TextBlock Text="{Binding Path=SelectedPlant.Name}"  
+            <TextBlock Text="{Binding SelectedPlant.Name}"  
                            FontSize="22" Margin="0 0 15 0" VerticalAlignment="Center" />
-            <TextBlock Text="{Binding Path=SelectedPlant.TypesString}" 
+            <TextBlock Text="{Binding SelectedPlant.TypesString}" 
                            FontSize="18" Margin="0 0 15 0" Opacity="0.7" VerticalAlignment="Center" />
         </StackPanel>
         <StackPanel Grid.Row="1" Grid.Column="3" Orientation="Horizontal" HorizontalAlignment="Right">
@@ -45,13 +46,15 @@
                         FontSize="18" Opacity="0.7" VerticalAlignment="Center" />
         </StackPanel>
 
-        <ListView x:Name="PlantsList" Grid.Column="1" Grid.Row="1" ItemsSource="{Binding Plants}" SelectionMode="Single"
-                  Grid.RowSpan="2" SelectedItem="{Binding SelectedPlant}">
-            <ListView.ItemTemplate>
-                <DataTemplate>
-                    <TextBlock Text="{Binding Name}"/>
-                </DataTemplate>
-            </ListView.ItemTemplate>
-        </ListView>
+        <views:LeftPane Grid.Row="1" Grid.Column="1" Grid.RowSpan="3" />
+
+        <views:PlantDetailsDashboard Grid.Row="2" Grid.Column="2" Grid.RowSpan="2">
+            <views:PlantDetailsDashboard.Style>
+                <Style TargetType="views:PlantDetailsDashboard">
+                    <Setter Property="Visibility" Value="{Binding ElementName=PlantsList, Path=SelectedItem, 
+                        Converter={StaticResource NullToVis}}"/>
+                </Style>
+            </views:PlantDetailsDashboard.Style>
+        </views:PlantDetailsDashboard>
     </Grid>
 </Window>

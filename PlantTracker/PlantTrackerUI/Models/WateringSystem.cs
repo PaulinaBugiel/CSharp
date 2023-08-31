@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace PlantTrackerUI.Models
 {
-    public class WateringSystem
+    public class WateringSystem : IModel
     {
         public int Id { get; set; }
         public string Name { get; set; }

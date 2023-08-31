@@ -11,7 +11,7 @@ namespace PlantTrackerUI.ViewModels
 {
     public class PlantSystemViewModel : INotifyPropertyChanged
     {
-        public List<Plant> Plants { get; set; } = new List<Plant>();
+        public List<Plant> PlantsList { get; set; } = new List<Plant>();
         public List<PlantType> PlantTypes { get; set; } = new List<PlantType>();
         public List<PlantContainer> Containers { get; set; } = new List<PlantContainer>();
         public List<WateringSystem> WateringSystems { get; set; } = new List<WateringSystem>();
@@ -41,7 +41,7 @@ namespace PlantTrackerUI.ViewModels
             else
                 dataAccess = new DemoDataAccess();
 
-            Plants = dataAccess.Plants_GetAll();
+            PlantsList = dataAccess.Plants_GetAll();
             PlantTypes = dataAccess.PlantType_GetAll();           // TODO maybe move to a specific action
             Containers = dataAccess.Container_GetAll();           // TODO maybe move to a specific action
             WateringSystems = dataAccess.WateringSystem_GetAll(); // TODO maybe move to a specific action
