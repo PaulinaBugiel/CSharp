@@ -77,7 +77,7 @@ namespace PlantTrackerUI.DataAccess
                 new Plant()
                 {
                     Name = "Bazylia",
-                    PlantTypes = plantTypes.Where(x => x.Name == "Ziele" || x.Name == "Jadalne").ToList(),
+                    PlantTypes = plantTypes.Where(x => x.Name == "Ziele" || x.Name == "Jadalne" || x.Name == "Ozdobne" || x.Name == "Warzywo").ToList(),
                     PlantingDate = new DateTime(2023, 09, 16),
                     Containers = containers.Where(x => x.Name == "Słoik").ToList(),
                     WateringSystems = wateringSystems.Where(x => x.Name == "Hydroponika" || x.Name == "Ręczny").ToList(),

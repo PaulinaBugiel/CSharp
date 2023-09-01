@@ -19,7 +19,7 @@ namespace PlantTrackerUI.Models
             string ret = "";
             foreach (var cont in models)
             {
-                ret += $"{cont.Name}{separator}";
+                ret += $"{cont.Name}{separator} ";
             }
             ret = ret.Trim(' ');
             ret = ret.Trim(separator);

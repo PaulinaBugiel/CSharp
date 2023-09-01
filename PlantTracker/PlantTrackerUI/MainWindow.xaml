@@ -11,7 +11,7 @@
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="20" />   <!-- 0: Left Margin -->
             <ColumnDefinition Width="Auto" /> <!-- 1: Left Pane -->
-            <ColumnDefinition Width="Auto" /> <!-- 2: Left Pane -->
+            <ColumnDefinition Width="2*" /> <!-- 2: Left Pane -->
             <ColumnDefinition Width="*" />    <!-- 3: Main Area -->
             <ColumnDefinition Width="Auto" /> <!-- 4: Right Pane -->
             <ColumnDefinition Width="Auto" /> <!-- 5: Right Pane -->
@@ -26,32 +26,34 @@
             <RowDefinition Height="20" />   <!-- 4: Bottom Margin -->
         </Grid.RowDefinitions>
 
-        <StackPanel Grid.Row="1" Grid.Column="2" Orientation="Horizontal" Margin="15 0 0 0">
+        <!-- Top ribbon -->
+        <StackPanel Grid.Row="1" Grid.Column="2" Orientation="Horizontal" Margin="0 0 0 10">
             <TextBlock Text="{Binding SelectedPlant.Name}"  
-                           FontSize="22" Margin="0 0 15 0" VerticalAlignment="Center" />
-            <TextBlock Text="{Binding SelectedPlant.TypesString}" 
-                           FontSize="18" Margin="0 0 15 0" Opacity="0.7" VerticalAlignment="Center" />
+                           FontSize="25" Margin="0 0 15 0" VerticalAlignment="Bottom" />
+            <TextBlock Text="{Binding SelectedPlant.TypesString}" Padding="0 0 0 3"
+                           FontSize="18" Margin="0 0 15 0" Foreground="#948654" VerticalAlignment="Bottom" />
         </StackPanel>
-        <StackPanel Grid.Row="1" Grid.Column="3" Orientation="Horizontal" HorizontalAlignment="Right">
-            <TextBlock Text="PlantingDate" FontSize="18" Margin="0 0 15 0" Opacity="0.7" 
-                        VerticalAlignment="Center" >
+        <StackPanel Grid.Row="1" Grid.Column="3" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0 0 0 10">
+            <TextBlock Text="PlantingDate" FontSize="18" Margin="0 0 15 0" Foreground="#948654" 
+                        VerticalAlignment="Bottom" Padding="0 0 0 3">
                 <TextBlock.Style>
                     <Style TargetType="TextBlock">
-                        <Setter Property="Visibility" Value="{Binding ElementName=PlantsList, Path=SelectedItem, 
+                        <Setter Property="Visibility" Value="{Binding SelectedPlant, 
                             Converter={StaticResource NullToVis}}"/>
                     </Style>
                 </TextBlock.Style>
             </TextBlock>
             <TextBlock Text="{Binding Path=SelectedPlant.PlantingDateString}"
-                        FontSize="18" Opacity="0.7" VerticalAlignment="Center" />
+                        FontSize="18" Foreground="#948654" VerticalAlignment="Bottom"
+                        Padding="0 0 0 3"/>
         </StackPanel>
 
-        <views:LeftPane Grid.Row="1" Grid.Column="1" Grid.RowSpan="3" />
+        <views:LeftPane Grid.Row="1" Grid.Column="1" Grid.RowSpan="3" Margin="0 0 8 0"/>
 
-        <views:PlantDetailsDashboard Grid.Row="2" Grid.Column="2" Grid.RowSpan="2">
+        <views:PlantDetailsDashboard Grid.Row="2" Grid.Column="2" Grid.RowSpan="2" Grid.ColumnSpan="2">
             <views:PlantDetailsDashboard.Style>
                 <Style TargetType="views:PlantDetailsDashboard">
-                    <Setter Property="Visibility" Value="{Binding ElementName=PlantsList, Path=SelectedItem, 
+                    <Setter Property="Visibility" Value="{Binding SelectedPlant, 
                         Converter={StaticResource NullToVis}}"/>
                 </Style>
             </views:PlantDetailsDashboard.Style>

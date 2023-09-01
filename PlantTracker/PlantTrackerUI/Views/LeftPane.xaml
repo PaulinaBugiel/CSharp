@@ -5,28 +5,35 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:PlantTrackerUI.Views"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="300">
+             d:DesignHeight="450" d:DesignWidth="200" MaxWidth="200">
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-        <ListView x:Name="PlantsList" Grid.Column="0" Grid.Row="0" ItemsSource="{Binding PlantsList}" 
-                  SelectionMode="Single" SelectedItem="{Binding SelectedPlant}">
-            <ListView.ItemTemplate>
-                <DataTemplate>
-                    <TextBlock Text="{Binding Name}"/>
-                </DataTemplate>
-            </ListView.ItemTemplate>
-        </ListView>
-        <StackPanel Orientation="Vertical" Grid.Column="0" Grid.Row="1" >
-            <TextBlock Text="{Binding SelectedPlant.Name}"/>
-            <TextBlock Text="{Binding SelectedPlant.PlantingDateString}"/>
-            <TextBlock Text="{Binding SelectedPlant.TypesString}"/>
-            <TextBlock Text="{Binding SelectedPlant.ContainersString}"/>
-        </StackPanel>
+        <Border Grid.Column="0" Grid.Row="0" BorderBrush="#d9cb98"
+                BorderThickness="1" >
+            <ListView Grid.Column="0" Grid.Row="0" ItemsSource="{Binding PlantsList}" 
+                      SelectionMode="Single" SelectedItem="{Binding SelectedPlant}"
+                       BorderThickness="0">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding Name}"/>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+        </Border>
+        <Border Grid.Column="0" Grid.Row="1" BorderBrush="#d9cb98"
+                BorderThickness="1" Margin="0 8 0 0">
+            <StackPanel Orientation="Vertical" Margin="5">
+                <TextBlock Text="{Binding SelectedPlant.Name}" Background="#f7eecd" Margin="0 0 0 7" Padding="1" TextWrapping="Wrap"/>
+                <TextBlock Text="{Binding SelectedPlant.PlantingDateString}" Margin="0 0 0 7" Padding="1" TextWrapping="Wrap"/>
+                <TextBlock Text="{Binding SelectedPlant.TypesString}" Margin="0 0 0 7" Padding="1" TextWrapping="Wrap"/>
+                <TextBlock Text="{Binding SelectedPlant.ContainersString}" Padding="1" TextWrapping="Wrap"/>
+            </StackPanel>
+        </Border>
     </Grid>
 </UserControl>
