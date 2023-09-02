@@ -17,6 +17,8 @@ namespace PlantTrackerUI.ViewModels
         public List<PlantType> PlantTypes { get; set; } = new List<PlantType>();
         private readonly IDataAccess _dataAccess;
         private Plant _selectedPlant;
+        private string _newTypeText;
+
 
         public AddPlantTypeViewModel(Plant selectedPlant)
         {
@@ -38,6 +40,21 @@ namespace PlantTrackerUI.ViewModels
                     return;
                 _selectedPlant = value;
                 OnPropertyChanged(nameof(SelectedPlant));
+            }
+        }
+
+        public string NewTypeText
+        {
+            get
+            {
+                return "Add new type...";
+            }
+            set
+            {
+                if (_newTypeText == value)
+                    return;
+                _newTypeText = value;
+                OnPropertyChanged(nameof(NewTypeText));
             }
         }
 

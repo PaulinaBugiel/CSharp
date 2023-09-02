@@ -24,10 +24,9 @@ namespace PlantTrackerUI.Views
             InitializeComponent();
         }
 
-        protected override void OnInitialized(EventArgs e)
+        private void newTypeTextBox_GotFocus(object sender, RoutedEventArgs e)
         {
-            base.OnInitialized(e);
-            //Application.Current.MainWindow.
+            newTypeTextBox.Text = "";
         }
     }
 }
