@@ -1,4 +1,5 @@
-﻿using PlantTrackerUI.ViewModels;
+﻿using PlantTrackerUI.Services;
+using PlantTrackerUI.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,11 +22,11 @@ namespace PlantTrackerUI
     /// </summary>
     public partial class MainWindow : Window
     {
-        PlantSystemViewModel vm = new PlantSystemViewModel();
         public MainWindow()
         {
             InitializeComponent();
-            DataContext = vm;
+            IWindowService addTypeWindowService = new AddTypeWindowService();
+            DataContext = new PlantSystemViewModel(addTypeWindowService);
         }
     }
 }

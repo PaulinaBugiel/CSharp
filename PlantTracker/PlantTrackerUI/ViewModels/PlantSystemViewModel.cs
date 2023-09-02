@@ -1,6 +1,7 @@
 ﻿using PlantTrackerUI.Core;
 using PlantTrackerUI.DataAccess;
 using PlantTrackerUI.Models;
+using PlantTrackerUI.Services;
 using PlantTrackerUI.Views;
 using System;
 using System.Collections.Generic;
@@ -25,10 +26,11 @@ namespace PlantTrackerUI.ViewModels
         private readonly IDataAccess _dataAccess;
 
         private Plant _selectedPlant;
+        private IWindowService _windowService;
 
         private RelayCommand _openAddPlantTypeWindowCommand;
 
-        public PlantSystemViewModel()
+        public PlantSystemViewModel(IWindowService windowService)
         {
             string dataSourceType = ConfigurationManager.AppSettings["DataSource"]; // TODO test for null
             if (dataSourceType == "Sql")
@@ -37,14 +39,7 @@ namespace PlantTrackerUI.ViewModels
                 _dataAccess = new DemoDataAccess();
 
             PlantsList = _dataAccess.Plants_GetAll();
-            //PlantTypes = dataAccess.PlantType_GetAll();           // TODO maybe move to a specific action
-            //Containers = dataAccess.Container_GetAll();           // TODO maybe move to a specific action
-            //WateringSystems = dataAccess.WateringSystem_GetAll(); // TODO maybe move to a specific action
-            //Positions = dataAccess.PlantPosition_GetAll();        // TODO maybe move to a specific action
-                                                                  //OnPropertyChanged(nameof(wateringSystems)); TODO where shoult it be?
-                                                                  // TODO change 
-                                                                  //SelectedPlant = Plants.Where(x => x.Name == "Bazylia").FirstOrDefault();
-
+            _windowService = windowService;
         }
 
 
@@ -61,27 +56,16 @@ namespace PlantTrackerUI.ViewModels
         }
 
 
-        public bool CanOpenAddPlantTypeWindow()
-        {
-            return true;
-        }
         public void OpenAddPlantTypeWindow(Plant plant)
         {
-            // TODO this breaks MVVM, try IWindowService od IDialogWindowService
-            // TODO block the parent window
-            // TODO prevent from opening more than once
-            Window addPlantTypeWindow = new AddPlantTypeWindow
-            {
-                DataContext = new AddPlantTypeViewModel(SelectedPlant)
-            };
-            addPlantTypeWindow.Show();
+            _windowService.ShowWindow(new AddPlantTypeViewModel(SelectedPlant));
         }
         public RelayCommand OpenAddPlantTypeWindowCommand
         {
             get
             {
                 if (_openAddPlantTypeWindowCommand == null)
-                    _openAddPlantTypeWindowCommand = new RelayCommand(o => OpenAddPlantTypeWindow(SelectedPlant), o => CanOpenAddPlantTypeWindow());
+                    _openAddPlantTypeWindowCommand = new RelayCommand(o => OpenAddPlantTypeWindow(SelectedPlant));
                 return _openAddPlantTypeWindowCommand;
             }
         }

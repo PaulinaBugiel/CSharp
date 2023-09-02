@@ -23,5 +23,11 @@ namespace PlantTrackerUI.Views
         {
             InitializeComponent();
         }
+
+        protected override void OnInitialized(EventArgs e)
+        {
+            base.OnInitialized(e);
+            //Application.Current.MainWindow.
+        }
     }
 }
