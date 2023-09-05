@@ -64,6 +64,11 @@ namespace PlantTrackerUI.DataAccess
             return plantPositions;
         }
 
+
+        public void PlantType_InsertOne(PlantType model)
+        {
+            plantTypes.Add(model);
+        }
         public List<PlantType> PlantType_GetAll()
         {
             return plantTypes;

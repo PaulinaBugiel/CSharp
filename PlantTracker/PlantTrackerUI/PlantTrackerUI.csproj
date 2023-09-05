@@ -8,16 +8,35 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Resources\Cancel.png" />
+    <None Remove="Resources\CancelCircle.png" />
+    <None Remove="Resources\CancelCircleFill.png" />
+    <None Remove="Resources\CancelCircleGray.png" />
     <None Remove="Resources\Close.png" />
+    <None Remove="Resources\Edit.png" />
+    <None Remove="Resources\Ok.png" />
+    <None Remove="Resources\OkCircle.png" />
+    <None Remove="Resources\OkCircleFill.png" />
+    <None Remove="Resources\OkCircleGray.png" />
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Dapper" Version="2.0.151" />
+    <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.39" />
     <PackageReference Include="System.Data.SqlClient" Version="4.8.5" />
   </ItemGroup>
 
   <ItemGroup>
+    <Resource Include="Resources\Cancel.png" />
+    <Resource Include="Resources\CancelCircle.png" />
+    <Resource Include="Resources\CancelCircleFill.png" />
+    <Resource Include="Resources\CancelCircleGray.png" />
     <Resource Include="Resources\Close.png" />
+    <Resource Include="Resources\Edit.png" />
+    <Resource Include="Resources\Ok.png" />
+    <Resource Include="Resources\OkCircle.png" />
+    <Resource Include="Resources\OkCircleFill.png" />
+    <Resource Include="Resources\OkCircleGray.png" />
   </ItemGroup>
 
 </Project>

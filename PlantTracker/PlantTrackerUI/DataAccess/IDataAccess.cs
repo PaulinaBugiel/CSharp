@@ -16,6 +16,7 @@ namespace PlantTrackerUI.DataAccess
 
         List<PlantPosition> PlantPosition_GetAll();
 
+        void PlantType_InsertOne(PlantType model);
         List<PlantType> PlantType_GetAll();
 
 

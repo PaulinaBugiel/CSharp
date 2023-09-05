@@ -5,6 +5,82 @@
              xmlns:helpers="clr-namespace:PlantTrackerUI.Helpers"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
-        <helpers:NullToVisibilityConverter x:Key="NullToVis"/>
+        <ResourceDictionary>
+            <helpers:NullToVisibilityConverter x:Key="NullToVis"/>
+
+            <!-- Ok button (with green checkmark) -->
+            <Style x:Key="OkButton" TargetType="Button">
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="Button">
+                            <Border Background="{TemplateBinding Background}">
+                                <ContentPresenter Content="{TemplateBinding Content}"
+                                                  Margin="{TemplateBinding Margin}"
+                                                  VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                                  HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"/>
+                            </Border>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+                <Setter Property="Content">
+                    <Setter.Value>
+                        <Image Source="Resources/OkCircle.png" Stretch="None"/>
+                    </Setter.Value>
+                </Setter>
+                <Style.Triggers>
+                    <Trigger Property="IsEnabled" Value="False">
+                        <Setter Property="Content">
+                            <Setter.Value>
+                                <Image Source="Resources/OkCircleGray.png" Stretch="None"/>
+                            </Setter.Value>
+                        </Setter>
+                    </Trigger>
+                    <Trigger Property="IsMouseOver" Value="True">
+                        <Setter Property="Content">
+                            <Setter.Value>
+                                <Image Source="Resources/OkCircleFill.png" Stretch="None"/>
+                            </Setter.Value>
+                        </Setter>
+                    </Trigger>
+                </Style.Triggers>
+            </Style>
+
+            <!-- Cancel button (with red 'X') -->
+            <Style x:Key="CacnelButton" TargetType="Button">
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="Button">
+                            <Border Background="{TemplateBinding Background}">
+                                <ContentPresenter Content="{TemplateBinding Content}"
+                                                  Margin="{TemplateBinding Margin}"
+                                                  VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                                  HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"/>
+                            </Border>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+                <Setter Property="Content">
+                    <Setter.Value>
+                        <Image Source="Resources/CancelCircle.png" Stretch="None"/>
+                    </Setter.Value>
+                </Setter>
+                <Style.Triggers>
+                    <Trigger Property="IsEnabled" Value="False">
+                        <Setter Property="Content">
+                            <Setter.Value>
+                                <Image Source="Resources/CancelCircleGray.png" Stretch="None"/>
+                            </Setter.Value>
+                        </Setter>
+                    </Trigger>
+                    <Trigger Property="IsMouseOver" Value="True">
+                        <Setter Property="Content">
+                            <Setter.Value>
+                                <Image Source="Resources/CancelCircleFill.png" Stretch="None"/>
+                            </Setter.Value>
+                        </Setter>
+                    </Trigger>
+                </Style.Triggers>
+            </Style>
+        </ResourceDictionary>
     </Application.Resources>
 </Application>

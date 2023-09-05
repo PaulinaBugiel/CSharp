@@ -55,6 +55,12 @@ namespace PlantTrackerUI.DataAccess
             throw new NotImplementedException();
         }
 
+
+        public void PlantType_InsertOne(PlantType model)
+        {
+            // TODO fill in
+            throw new NotImplementedException();
+        }
         public List<PlantType> PlantType_GetAll()
         {
             // TODO fill in
