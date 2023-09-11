@@ -1,6 +1,7 @@
 ﻿using PlantTrackerUI.Models;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -34,7 +35,7 @@ namespace PlantTrackerUI.DataAccess
             new PlantPosition() { Id = 3, Name = "Balkon", Exposition = SunExposition.SouthEast},
         };
 
-        private List<PlantType> plantTypes = new List<PlantType>()
+        private ObservableCollection<PlantType> plantTypes = new ObservableCollection<PlantType>()
         {
             new PlantType() { Id = 0, Name = "None" },
             new PlantType() { Id = 1, Name = "Ziele" },
@@ -69,7 +70,7 @@ namespace PlantTrackerUI.DataAccess
         {
             plantTypes.Add(model);
         }
-        public List<PlantType> PlantType_GetAll()
+        public ObservableCollection<PlantType> PlantType_GetAll()
         {
             return plantTypes;
         }

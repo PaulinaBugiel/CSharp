@@ -2,6 +2,7 @@
 using PlantTrackerUI.Models;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
@@ -34,6 +35,7 @@ namespace PlantTrackerUI.DataAccess
             {
                 ret = connection.Query<WateringSystem>("dbo.spWateringSystem_GetAll").ToList();
             }
+            //return new ObservableCollection<WateringSystem>(ret);
             return ret;
         }
 
@@ -61,7 +63,7 @@ namespace PlantTrackerUI.DataAccess
             // TODO fill in
             throw new NotImplementedException();
         }
-        public List<PlantType> PlantType_GetAll()
+        public ObservableCollection<PlantType> PlantType_GetAll()
         {
             // TODO fill in
             throw new NotImplementedException();

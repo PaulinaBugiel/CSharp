@@ -18,6 +18,11 @@
     <None Remove="Resources\OkCircle.png" />
     <None Remove="Resources\OkCircleFill.png" />
     <None Remove="Resources\OkCircleGray.png" />
+    <None Remove="Resources\X75opacity.png" />
+    <None Remove="Resources\Xbold.png" />
+    <None Remove="Resources\Xdefault.png" />
+    <None Remove="Resources\XPencilBold.png" />
+    <None Remove="Resources\XPencilDefault.png" />
   </ItemGroup>
 
   <ItemGroup>
@@ -37,6 +42,11 @@
     <Resource Include="Resources\OkCircle.png" />
     <Resource Include="Resources\OkCircleFill.png" />
     <Resource Include="Resources\OkCircleGray.png" />
+    <Resource Include="Resources\X75opacity.png" />
+    <Resource Include="Resources\Xbold.png" />
+    <Resource Include="Resources\Xdefault.png" />
+    <Resource Include="Resources\XPencilBold.png" />
+    <Resource Include="Resources\XPencilDefault.png" />
   </ItemGroup>
 
 </Project>

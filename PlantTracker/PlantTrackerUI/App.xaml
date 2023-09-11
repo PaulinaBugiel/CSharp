@@ -10,10 +10,13 @@
 
             <!-- Ok button (with green checkmark) -->
             <Style x:Key="OkButton" TargetType="Button">
+                <!-- Button has hover colors hardcoded in the original Template so it has to rewritten from scratch -->
                 <Setter Property="Template">
                     <Setter.Value>
                         <ControlTemplate TargetType="Button">
                             <Border Background="{TemplateBinding Background}">
+                                <!-- TemplateBinding - binding to button properties instead of hardcoding them here
+                                     so they can be set/changed and displayed in the XAML -->
                                 <ContentPresenter Content="{TemplateBinding Content}"
                                                   Margin="{TemplateBinding Margin}"
                                                   VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
@@ -76,6 +79,45 @@
                         <Setter Property="Content">
                             <Setter.Value>
                                 <Image Source="Resources/CancelCircleFill.png" Stretch="None"/>
+                            </Setter.Value>
+                        </Setter>
+                    </Trigger>
+                </Style.Triggers>
+            </Style>
+
+
+            <!-- X button (semi-transparent 'X') -->
+            <Style x:Key="XButton" TargetType="Button" x:Shared="False">
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="Button">
+                            <Border Background="{TemplateBinding Background}">
+                                <ContentPresenter Content="{TemplateBinding Content}"
+                                                  Margin="{TemplateBinding Margin}"
+                                                  VerticalAlignment="{TemplateBinding VerticalAlignment}"
+                                                  HorizontalAlignment="{TemplateBinding HorizontalAlignment}"/>
+                            </Border>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+                <Setter Property="Content">
+                    <Setter.Value>
+                        <Image Source="Resources/XPencilDefault.png" Width="16" Stretch="Uniform"/>
+                    </Setter.Value>
+                </Setter>
+                <Setter Property="Background" Value="Transparent"/>
+                <Style.Triggers>
+                    <Trigger Property="IsEnabled" Value="False">
+                        <Setter Property="Content">
+                            <Setter.Value>
+                                <Image Source="Resources/X75opacity.png" Width="16" Stretch="Uniform"/>
+                            </Setter.Value>
+                        </Setter>
+                    </Trigger>
+                    <Trigger Property="IsMouseOver" Value="True">
+                        <Setter Property="Content">
+                            <Setter.Value>
+                                <Image Source="Resources/XPencilBold.png" Width="16" Stretch="Uniform"/>
                             </Setter.Value>
                         </Setter>
                     </Trigger>

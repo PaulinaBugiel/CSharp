@@ -3,6 +3,7 @@ using PlantTrackerUI.DataAccess;
 using PlantTrackerUI.Models;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Configuration;
 using System.Linq;
@@ -16,11 +17,12 @@ namespace PlantTrackerUI.ViewModels
     {
         public event PropertyChangedEventHandler? PropertyChanged;
 
-        public List<PlantType> _plantTypes;
+        public ObservableCollection<PlantType> _plantTypes;
         private readonly IDataAccess _dataAccess;
         private Plant _selectedPlant;
         private string _newTypeText = "";
         private RelayCommand _addNewTypeCommand;
+        private RelayCommand _cancelAddingTypeCommand;
 
 
         bool CanAddNewType()
@@ -35,7 +37,8 @@ namespace PlantTrackerUI.ViewModels
             var typeWithTheSameName = PlantTypes.Where(x => x.Name == NewTypeText).FirstOrDefault();
             if (typeWithTheSameName is not null)
             {
-                MessageBox.Show($"Plant type \"{NewTypeText}\" already exists");
+                MessageBox.Show($"Plant type \"{NewTypeText}\" already exists", "Cannot add plant type",
+                    MessageBoxButton.OK, MessageBoxImage.Error);
             }
             else
             {
@@ -44,7 +47,6 @@ namespace PlantTrackerUI.ViewModels
                 PlantType newType = new PlantType { Name = NewTypeText, Id = newId };
                 NewTypeText = "";
                 _dataAccess.PlantType_InsertOne(newType);
-                // TODO list is not refreshing in GUI
                 PlantTypes = _dataAccess.PlantType_GetAll();
             }
         }
@@ -58,6 +60,26 @@ namespace PlantTrackerUI.ViewModels
             }
         }
 
+        bool CanCancelAddingType()
+        {
+            if (NewTypeText.Length > 0)
+                return true;
+            else
+                return false;
+        }
+        void CancelAddingType()
+        {
+            NewTypeText = "";
+        }
+        public RelayCommand CancelAddingTypeCommand
+        {
+            get
+            {
+                if (_cancelAddingTypeCommand == null)
+                    _cancelAddingTypeCommand = new RelayCommand(o => CancelAddingType(), o => CanCancelAddingType());
+                return _cancelAddingTypeCommand;
+            }
+        }
 
 
         public AddPlantTypeViewModel(Plant selectedPlant)
@@ -71,7 +93,7 @@ namespace PlantTrackerUI.ViewModels
             _plantTypes = _dataAccess.PlantType_GetAll();
         }
 
-        public List<PlantType> PlantTypes
+        public ObservableCollection<PlantType> PlantTypes
         {
             get { return _plantTypes; }
             set

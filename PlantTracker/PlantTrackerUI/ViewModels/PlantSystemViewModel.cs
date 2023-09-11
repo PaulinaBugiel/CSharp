@@ -29,6 +29,7 @@ namespace PlantTrackerUI.ViewModels
         private IWindowService _windowService;
 
         private RelayCommand _openAddPlantTypeWindowCommand;
+        private RelayCommand _removeSelectedTypeCommand;
 
         public PlantSystemViewModel(IWindowService windowService)
         {
@@ -67,6 +68,28 @@ namespace PlantTrackerUI.ViewModels
                 if (_openAddPlantTypeWindowCommand == null)
                     _openAddPlantTypeWindowCommand = new RelayCommand(o => OpenAddPlantTypeWindow(SelectedPlant));
                 return _openAddPlantTypeWindowCommand;
+            }
+        }
+
+        bool CanRemoveSelectedType()
+        {
+            return true;
+        }
+        void RemoveSelectedType(object typeToRemove)
+        {
+            if (typeToRemove is not PlantType)
+                return;
+            string name = ((PlantType)typeToRemove).Name;
+            // TODO Fill in
+            MessageBox.Show($"RemoveSelectedType is working for {name}");
+        }
+        public RelayCommand RemoveSelectedTypeCommand
+        {
+            get
+            {
+                if (_removeSelectedTypeCommand == null)
+                    _removeSelectedTypeCommand = new RelayCommand((o) => RemoveSelectedType(o), o => CanRemoveSelectedType());
+                return _removeSelectedTypeCommand;
             }
         }
 

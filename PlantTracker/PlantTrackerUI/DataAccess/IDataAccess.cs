@@ -1,6 +1,7 @@
 ﻿using PlantTrackerUI.Models;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -17,7 +18,7 @@ namespace PlantTrackerUI.DataAccess
         List<PlantPosition> PlantPosition_GetAll();
 
         void PlantType_InsertOne(PlantType model);
-        List<PlantType> PlantType_GetAll();
+        ObservableCollection<PlantType> PlantType_GetAll();
 
 
         List<Plant> Plants_GetAll();

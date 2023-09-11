@@ -42,7 +42,9 @@
                     <Button Command="{Binding AddNewTypeCommand}" BorderThickness="0" Background="Transparent"
                             Style="{StaticResource OkButton}">
                     </Button>
-                    <Image Source="../Resources/CancelCircleGray.png" Stretch="None"/>
+                    <Button Command="{Binding CancelAddingTypeCommand}" BorderThickness="0" Background="Transparent"
+                            Style="{StaticResource CacnelButton}">
+                    </Button>
                 </WrapPanel>
             </StackPanel>
         </Border>
