@@ -5,10 +5,11 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:HelpMeFocus" 
         mc:Ignorable="d"
-        Title="Timer" Height="300" Width="240" MinHeight="280" MinWidth="200">
+        Title="Timer" Height="330" Width="240" MinHeight="280" MinWidth="200">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="10"/>
+            <RowDefinition Height="auto"/>
             <RowDefinition Height="auto"/>
             <RowDefinition Height="auto"/>
             <RowDefinition Height="auto"/>
@@ -58,9 +59,16 @@
                 <TextBox BorderThickness="0" Text="{Binding CompletedCyclesText}" IsReadOnly="True"/>
             </StackPanel>
         </Border>
-        <TextBox Grid.Row="4" Grid.Column="1" TextAlignment="Center" Width="100" FontSize="24"
+        <Border Grid.Row="4" Grid.Column="1" BorderBrush="Gray" BorderThickness="1" 
+                HorizontalAlignment="Center" Margin="5 0 5 5" SnapsToDevicePixels="True">
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Background="Beige">
+                <TextBox BorderThickness="0" Text="Total time: " IsReadOnly="True"/>
+                <TextBox BorderThickness="0" Text="{Binding TotalTimeText}" IsReadOnly="True"/>
+            </StackPanel>
+        </Border>
+        <TextBox Grid.Row="5" Grid.Column="1" TextAlignment="Center" Width="100" FontSize="24"
                  Background="Beige" Margin="5" Text="{Binding TimerDisplayValue}" IsReadOnly="True"/>
-        <Grid Grid.Row="5" Grid.Column="1" Margin="5">
+        <Grid Grid.Row="6" Grid.Column="1" Margin="5">
             <Grid.RowDefinitions>
                 <RowDefinition Height="auto"/>
                 <RowDefinition Height="auto"/>
@@ -75,13 +83,13 @@
             <RadioButton Grid.Row="2" Content="Number of cycles" IsChecked="{Binding Cycles}"/>
             <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding NumCyclesText}" MinWidth="30" Margin="10 0 0 0"/>
         </Grid>
-        <StackPanel Orientation="Horizontal" Grid.Row="6" Grid.Column="1" Margin="0 0 0 5" HorizontalAlignment="Center">
+        <StackPanel Orientation="Horizontal" Grid.Row="7" Grid.Column="1" Margin="0 0 0 5" HorizontalAlignment="Center">
             <Button Style="{StaticResource StartStopButton}" Width="80" Margin="0 0 5 0"
                 Content="{Binding ButtonText}" Command="{Binding StartStopTimerCommand}" />
             <Button Width="80" Command="{Binding ResetTimerCommand}">Reset</Button>
 
         </StackPanel>
-        <Button Grid.Row="7" Grid.Column="1" Width="185"
+        <Button Grid.Row="8" Grid.Column="1" Width="185"
                 FontSize="12" Margin="10 0" Style="{StaticResource ButtonWatermark}"
                 Command="{Binding OpenCompactViewCommand}">
             <Grid>

@@ -6,13 +6,13 @@
         xmlns:local="clr-namespace:HelpMeFocus"
         mc:Ignorable="d"
         WindowStyle="None" ResizeMode="NoResize" Topmost="True"
-        Title="CompactWindow" Height="28" Width="370" MouseLeftButtonDown="Window_MouseLeftButtonDown">
+        Title="CompactWindow" Height="28" Width="470" MouseLeftButtonDown="Window_MouseLeftButtonDown">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="34"/>
+            <ColumnDefinition Width="Auto"/>
             <ColumnDefinition Width="Auto"/>
             <ColumnDefinition Width="Auto"/>
             <ColumnDefinition Width="Auto"/>
@@ -20,12 +20,15 @@
         </Grid.ColumnDefinitions>
         
         <Border Grid.Column="0" BorderBrush="Gray" BorderThickness="1" 
-                Margin="1" SnapsToDevicePixels="True">
-            <TextBox FontSize="18" FontWeight="Bold" Background="Beige" 
-                     Text="{Binding CompletedCyclesText}" IsEnabled="False"/>
+                Margin="1 1 8 1" SnapsToDevicePixels="True">
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
+                <TextBox BorderThickness="0" FontWeight="Bold" FontSize="14" Width="20" Text="{Binding CompletedCyclesText}" IsEnabled="False"/>
+                <TextBox BorderThickness="0" Text="|" FontSize="14" IsEnabled="False"/>
+                <TextBox BorderThickness="0" Text="{Binding TotalTimeText}" FontSize="14" IsEnabled="False"/>
+            </StackPanel>
         </Border>
         <Border Grid.Column="1" BorderBrush="Gray" BorderThickness="1" 
-                Margin="1" SnapsToDevicePixels="True">
+                Margin="8 1 1 1" SnapsToDevicePixels="True">
             <TextBox TextAlignment="Center"
                         Width="80" FontSize="18" FontWeight="Bold" 
                         Background="Beige" Text="{Binding TimerDisplayValue}" 

@@ -18,14 +18,15 @@ namespace HelpMeFocus.ViewModels
     {
         public Action CloseAction { get; set; }
         public event PropertyChangedEventHandler? PropertyChanged;
-        //public string TimerDisplayValue { get; set; }
         private string _timerDisplayValue;
+        private string _totalTimeText;
 
 
         private bool IsTimerStarted { get; set; } = false;
 
         private DispatcherTimer _countdownTimer = new();
-        private TimeSpan _timeSpan;
+        private TimeSpan _countdownTime;
+        private TimeSpan _totalTime;
         private string _buttonText;
         private int _hours;
         private int _minutes;
@@ -45,11 +46,13 @@ namespace HelpMeFocus.ViewModels
 
         public CounterViewModel()
         {
-            _timeSpan = TimeSpan.FromSeconds(0);
+            _countdownTime = TimeSpan.FromSeconds(0);
+            _totalTime = TimeSpan.FromSeconds(0);
             _completedCycles = 0;
             _numCycles = 2;
 
-            TimerDisplayValue = _timeSpan.ToString();
+            TimerDisplayValue = _countdownTime.ToString();
+            TotalTimeText = _totalTime.ToString();
             ButtonText = "Start";
 
             _countdownTimer.Tick += new EventHandler(countdownTimer_Tick);
@@ -58,9 +61,11 @@ namespace HelpMeFocus.ViewModels
 
         private void countdownTimer_Tick(object? sender, EventArgs e)
         {
-            _timeSpan -= _countdownTimer.Interval;
-            TimerDisplayValue = _timeSpan.ToString();
-            if (_timeSpan <= TimeSpan.FromSeconds(0))
+            _countdownTime -= _countdownTimer.Interval;
+            _totalTime += _countdownTimer.Interval;
+            TimerDisplayValue = _countdownTime.ToString();
+            TotalTimeText = _totalTime.ToString();
+            if (_countdownTime <= TimeSpan.FromSeconds(0))
             {
                 if (_oneRun)
                 {
@@ -239,6 +244,18 @@ namespace HelpMeFocus.ViewModels
             }
         }
 
+        public string TotalTimeText
+        {
+            get { return _totalTimeText; }
+            set
+            {
+                if (_totalTimeText == value)
+                    return;
+                _totalTimeText = value;
+                OnPropertyChanged(nameof(TotalTimeText));
+            }
+        }
+
         public bool CanStartStopTimer()
         {
             if (IsTimerStarted)
@@ -247,7 +264,7 @@ namespace HelpMeFocus.ViewModels
             }
             else // check if timer can be started
             {
-                if (_timeSpan > TimeSpan.FromSeconds(0))
+                if (_countdownTime > TimeSpan.FromSeconds(0))
                     return true;
                 else
                     return false;
@@ -295,12 +312,12 @@ namespace HelpMeFocus.ViewModels
             TimeSpan hSpan = TimeSpan.FromHours(hours);
             TimeSpan mSpan = TimeSpan.FromMinutes(minutes);
             TimeSpan sSpan = TimeSpan.FromSeconds(seconds);
-            _timeSpan = hSpan + mSpan + sSpan;
-            if (_timeSpan <= TimeSpan.FromSeconds(0))
+            _countdownTime = hSpan + mSpan + sSpan;
+            if (_countdownTime <= TimeSpan.FromSeconds(0))
             {
-                _timeSpan = TimeSpan.FromSeconds(0);
+                _countdownTime = TimeSpan.FromSeconds(0);
             }
-            TimerDisplayValue = _timeSpan.ToString();
+            TimerDisplayValue = _countdownTime.ToString();
         }
         public RelayCommand SetTimerCommand
         {
@@ -365,10 +382,11 @@ namespace HelpMeFocus.ViewModels
             ButtonText = "Start";
             IsTimerStarted = false;
             // Reset display value to zero
-            _timeSpan = TimeSpan.FromSeconds(0);
-            TimerDisplayValue = _timeSpan.ToString();
+            _countdownTime = TimeSpan.FromSeconds(0);
+            TimerDisplayValue = _countdownTime.ToString();
             // Reset completed cycles to zero
             CompletedCyclesText = "0";
+            TotalTimeText = _totalTime.ToString();
             OnPropertyChanged(nameof(IsTimerStarted));
         }
         public RelayCommand ResetTimerCommand
