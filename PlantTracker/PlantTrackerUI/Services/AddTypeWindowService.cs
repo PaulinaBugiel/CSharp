@@ -1,4 +1,5 @@
-﻿using PlantTrackerUI.Views;
+﻿using PlantTrackerUI.ViewModels;
+using PlantTrackerUI.Views;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,13 +11,19 @@ namespace PlantTrackerUI.Services
 {
     internal class AddTypeWindowService : IWindowService
     {
-
-        public void ShowWindow(object dataContext)
+        private AddPlantTypeWindow? _window;
+        public void ShowWindow(PopupViewModelBase dataContext)
         {
             // TODO try to use implicit datatemplates (https://stackoverflow.com/questions/25845689/opening-new-window-in-mvvm-wpf?rq=1)
-            var window = new AddPlantTypeWindow();
-            window.DataContext = dataContext;
-            window.ShowDialog();
+            _window = new AddPlantTypeWindow();
+            dataContext.CloseAction = _window.Close;
+            _window.DataContext = dataContext;
+            _window.ShowDialog();
+        }
+
+        public void CloseWindow()
+        {
+            _window.Close();
         }
     }
 }

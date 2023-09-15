@@ -75,6 +75,34 @@ namespace PlantTrackerUI.DataAccess
             return plantTypes;
         }
 
+        public ObservableCollection<PlantType> PlantType_GetAvailableForPlant(int plantId)
+        {
+            Plant plant = Plants_GetById(plantId);
+            ObservableCollection<PlantType> types = PlantType_GetAll();
+            List<PlantType> toRemove = new();
+            foreach (PlantType type in types)
+            {
+                if (plant.PlantTypes.Contains(type))
+                {
+                    toRemove.Add(type);
+                }
+            }
+            foreach (PlantType type in toRemove)
+            {
+                types.Remove(type);
+            }
+            return types;
+        }
+
+        public Plant Plants_GetById(int plantId)
+        {
+            Plant? ret = Plants_GetAll().Where(x => x.Id == plantId).FirstOrDefault();
+            if (ret is null)
+                return new Plant();
+            else
+                return ret;
+        }
+
         public List<Plant> Plants_GetAll()
         {
             List<Plant> ret = new List<Plant>
@@ -82,8 +110,9 @@ namespace PlantTrackerUI.DataAccess
                 // add a few Plants
                 new Plant()
                 {
+                    Id = 0,
                     Name = "Bazylia",
-                    PlantTypes = plantTypes.Where(x => x.Name == "Ziele" || x.Name == "Jadalne" || x.Name == "Ozdobne" || x.Name == "Warzywo").ToList(),
+                    PlantTypes = new ObservableCollection<PlantType>(plantTypes.Where(x => x.Name == "Ziele" || x.Name == "Jadalne" || x.Name == "Ozdobne" || x.Name == "Warzywo")),
                     PlantingDate = new DateTime(2023, 09, 16),
                     Containers = containers.Where(x => x.Name == "Słoik").ToList(),
                     WateringSystems = wateringSystems.Where(x => x.Name == "Hydroponika" || x.Name == "Ręczny").ToList(),
@@ -91,8 +120,9 @@ namespace PlantTrackerUI.DataAccess
                 },
                 new Plant()
                 {
+                    Id = 1,
                     Name = "Pomidor",
-                    PlantTypes = plantTypes.Where(x => x.Name == "Warzywo" || x.Name == "Jadalne").ToList(),
+                    PlantTypes = new ObservableCollection<PlantType>(plantTypes.Where(x => x.Name == "Warzywo" || x.Name == "Jadalne").ToList()),
                     PlantingDate = new DateTime(2023, 09, 16),
                     Containers = containers.Where(x => x.Name == "Doniczka").ToList(),
                     WateringSystems = wateringSystems.Where(x => x.Name == "Ręczny").ToList(),
@@ -100,8 +130,9 @@ namespace PlantTrackerUI.DataAccess
                 },
                 new Plant()
                 {
+                    Id = 2,
                     Name = "Kaktus",
-                    PlantTypes = plantTypes.Where(x => x.Name == "Ozdobne").ToList(),
+                    PlantTypes = new ObservableCollection<PlantType>(plantTypes.Where(x => x.Name == "Ozdobne").ToList()),
                     PlantingDate = new DateTime(2023, 09, 16),
                     Containers = containers.Where(x => x.Name == "Słoik").ToList(),
                     WateringSystems = wateringSystems.Where(x => x.Name == "Ręczny").ToList(),

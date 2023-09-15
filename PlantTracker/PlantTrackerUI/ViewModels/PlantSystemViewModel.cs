@@ -5,6 +5,7 @@ using PlantTrackerUI.Services;
 using PlantTrackerUI.Views;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Configuration;
 using System.Linq;
@@ -14,19 +15,19 @@ using System.Windows;
 
 namespace PlantTrackerUI.ViewModels
 {
-    public class PlantSystemViewModel : INotifyPropertyChanged
+    public class PlantSystemViewModel : INotifyPropertyChanged // TODO Add to ViewModelBase
     {
 
-        public event PropertyChangedEventHandler PropertyChanged;
+        public event PropertyChangedEventHandler PropertyChanged; // TODO Add to ViewModelBase
         public List<Plant> PlantsList { get; set; } = new List<Plant>();
         //public List<PlantType> PlantTypes { get; set; } = new List<PlantType>();
         //public List<PlantContainer> Containers { get; set; } = new List<PlantContainer>();
         //public List<WateringSystem> WateringSystems { get; set; } = new List<WateringSystem>();
         //public List<PlantPosition> Positions { get; set; } = new List<PlantPosition>();
-        private readonly IDataAccess _dataAccess;
 
-        private Plant _selectedPlant;
+        private readonly IDataAccess _dataAccess;
         private IWindowService _windowService;
+        private Plant _selectedPlant;
 
         private RelayCommand _openAddPlantTypeWindowCommand;
         private RelayCommand _removeSelectedTypeCommand;
@@ -93,7 +94,7 @@ namespace PlantTrackerUI.ViewModels
             }
         }
 
-        protected virtual void OnPropertyChanged(string propertyName = null)
+        protected virtual void OnPropertyChanged(string propertyName = null)  // TODO Add to ViewModelBase
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }

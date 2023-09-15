@@ -39,12 +39,6 @@ namespace PlantTrackerUI.DataAccess
             return ret;
         }
 
-        public List<Plant> Plants_GetAll()
-        {
-            // TODO fill in
-            return new List<Plant>();
-        }
-
         public List<PlantContainer> Container_GetAll()
         {
             // TODO fill in
@@ -66,6 +60,23 @@ namespace PlantTrackerUI.DataAccess
         public ObservableCollection<PlantType> PlantType_GetAll()
         {
             // TODO fill in
+            throw new NotImplementedException();
+        }
+
+        public ObservableCollection<PlantType> PlantType_GetAvailableForPlant(int plantId)
+        {
+            throw new NotImplementedException();
+        }
+
+
+        public List<Plant> Plants_GetAll()
+        {
+            // TODO fill in
+            return new List<Plant>();
+        }
+
+        public Plant Plants_GetById(int plantId)
+        {
             throw new NotImplementedException();
         }
     }

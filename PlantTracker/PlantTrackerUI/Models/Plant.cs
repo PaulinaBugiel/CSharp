@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -10,7 +11,7 @@ namespace PlantTrackerUI.Models
     {
         public int Id { get; set; }
         public string Name { get; set; }
-        public List<PlantType> PlantTypes { get; set; }
+        public ObservableCollection<PlantType> PlantTypes { get; set; }
         public DateTime PlantingDate { get; set; }
         public DateTime LastModification { get; set; }
         public List<PlantContainer> Containers { get; set; }

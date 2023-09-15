@@ -19,8 +19,10 @@ namespace PlantTrackerUI.DataAccess
 
         void PlantType_InsertOne(PlantType model);
         ObservableCollection<PlantType> PlantType_GetAll();
+        ObservableCollection<PlantType> PlantType_GetAvailableForPlant(int plantId);
 
 
         List<Plant> Plants_GetAll();
+        Plant Plants_GetById(int plantId);
     }
 }

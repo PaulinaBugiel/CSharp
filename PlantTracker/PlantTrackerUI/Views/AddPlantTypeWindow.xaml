@@ -48,6 +48,8 @@
                 </WrapPanel>
             </StackPanel>
         </Border>
-        <Button Grid.Column="1" Grid.Row="4" Background="#f7eecd" BorderBrush="#d9cb98">Add Type</Button>
+        <Button Grid.Column="1" Grid.Row="4" Background="#f7eecd" BorderBrush="#d9cb98"
+                Command="{Binding AddSelectedTypeCommand}" Content="Add Selected Type" />
+
     </Grid>
 </Window>

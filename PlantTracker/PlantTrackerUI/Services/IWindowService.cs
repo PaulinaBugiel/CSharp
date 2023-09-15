@@ -1,4 +1,5 @@
-﻿using System;
+﻿using PlantTrackerUI.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,6 +9,7 @@ namespace PlantTrackerUI.Services
 {
     public interface IWindowService
     {
-        void ShowWindow(object dataContext);
+        void ShowWindow(PopupViewModelBase dataContext);
+        void CloseWindow();
     }
 }
