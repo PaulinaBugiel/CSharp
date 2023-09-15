@@ -1,0 +1,6 @@
+CREATE TABLE dbo.PlantContainers
+(
+	[Id] INT NOT NULL PRIMARY KEY IDENTITY, 
+    [Name] NVARCHAR(50) NOT NULL,
+	[Capacity] FLOAT NOT NULL
+);
