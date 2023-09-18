@@ -1,0 +1,11 @@
+PlantTypes
+	Id (INT), Name (NVARCHAR(50))
+PlantContainers
+	Id (INT), Name (NVARCHAR(50)), Capacity (FLOAT)
+WateringSystems
+	Id (INT), Name (NVARCHAR(50))
+PlantPositions
+	Id (INT), Name (NVARCHAR(50)), SunExposition(INT)
+	relation to SunExpositions
+SunExpositions
+	Id (INT), Name (NVARCHAR(50))
