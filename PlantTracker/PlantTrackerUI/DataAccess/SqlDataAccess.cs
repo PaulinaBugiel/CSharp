@@ -23,7 +23,7 @@ namespace PlantTrackerUI.DataAccess
                 var p = new DynamicParameters();
                 p.Add("@Name", model.Name);
                 p.Add("@Id", 0, DbType.Int32, ParameterDirection.Output);
-                connection.Execute("dbo.spWateringSystem_Insert", p, commandType: CommandType.StoredProcedure);
+                connection.Execute("dbo.spWateringSystems_Insert", p, commandType: CommandType.StoredProcedure);
                 model.Id = p.Get<int>("@id");
             }
         }
@@ -33,22 +33,29 @@ namespace PlantTrackerUI.DataAccess
             List<WateringSystem> ret;
             using (IDbConnection connection = new System.Data.SqlClient.SqlConnection(connString))
             {
-                ret = connection.Query<WateringSystem>("dbo.spWateringSystem_GetAll").ToList();
+                ret = connection.Query<WateringSystem>("dbo.spWateringSystems_GetAll").ToList();
             }
-            //return new ObservableCollection<WateringSystem>(ret);
             return ret;
         }
 
         public List<PlantContainer> Container_GetAll()
         {
-            // TODO fill in
-            throw new NotImplementedException();
+            List<PlantContainer> ret;
+            using (IDbConnection connection = new System.Data.SqlClient.SqlConnection(connString))
+            {
+                ret = connection.Query<PlantContainer>("dbo.spPlantContainers_GetAll").ToList();
+            }
+            return ret;
         }
 
         public List<PlantPosition> PlantPosition_GetAll()
         {
-            // TODO fill in
-            throw new NotImplementedException();
+            List<PlantPosition> ret;
+            using (IDbConnection connection = new System.Data.SqlClient.SqlConnection(connString))
+            {
+                ret = connection.Query<PlantPosition>("dbo.spPlantPositions_GetAll").ToList();
+            }
+            return ret;
         }
 
 
@@ -59,8 +66,12 @@ namespace PlantTrackerUI.DataAccess
         }
         public ObservableCollection<PlantType> PlantType_GetAll()
         {
-            // TODO fill in
-            throw new NotImplementedException();
+            ObservableCollection<PlantType> ret;
+            using (IDbConnection connection = new System.Data.SqlClient.SqlConnection(connString))
+            {
+                ret = new ObservableCollection<PlantType>(connection.Query<PlantType>("dbo.spPlantTypes_GetAll"));
+            }
+            return ret;
         }
 
         public ObservableCollection<PlantType> PlantType_GetAvailableForPlant(int plantId)
@@ -71,8 +82,24 @@ namespace PlantTrackerUI.DataAccess
 
         public List<Plant> Plants_GetAll()
         {
-            // TODO fill in
-            return new List<Plant>();
+            List<Plant> ret;
+            using (IDbConnection connection = new System.Data.SqlClient.SqlConnection(connString))
+            {
+                ret = connection.Query<Plant>("dbo.spPlants_GetAll").ToList();
+                foreach (Plant plant in ret)
+                {
+                    var p = new DynamicParameters();
+                    p.Add("@PlantId", plant.Id);
+                    plant.Position = connection.Query<PlantPosition>("dbo.spPlantPositions_GetByPlantId",
+                                       p, commandType: CommandType.StoredProcedure).ToList().FirstOrDefault();
+                    plant.Containers = connection.Query<PlantContainer>("dbo.spPlantContainers_GetByPlantId", 
+                                       p, commandType: CommandType.StoredProcedure).ToList();
+                    plant.PlantTypes = new ObservableCollection<PlantType>(connection.Query<PlantType>("dbo.spPlantTypes_GetByPlantId",
+                                       p, commandType: CommandType.StoredProcedure));
+                    plant.WateringSystems = new List<WateringSystem>();
+                }
+            }
+            return ret;
         }
 
         public Plant Plants_GetById(int plantId)

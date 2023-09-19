@@ -9,7 +9,7 @@ namespace PlantTrackerUI.Models
     public class PlantPosition : IModel
     {
         public int Id { get; set; }
-        public string Name { get; set; }
+        public string Name { get; set; } = "";
         public SunExposition Exposition { get; set; }
     }
 
