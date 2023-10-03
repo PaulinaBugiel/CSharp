@@ -30,7 +30,9 @@ namespace PlantTrackerUI.ViewModels
         private Plant _selectedPlant;
 
         private RelayCommand _openAddPlantTypeWindowCommand;
+        private RelayCommand _openAddWateringSystemWindowCommand;
         private RelayCommand _removeSelectedTypeCommand;
+        private RelayCommand _removeSelectedWateringSystemCommand;
 
         public PlantSystemViewModel(IWindowService windowService)
         {
@@ -40,7 +42,7 @@ namespace PlantTrackerUI.ViewModels
             else
                 _dataAccess = new DemoDataAccess();
 
-            PlantsList = _dataAccess.Plants_GetAll();
+            PlantsList = _dataAccess.Plants_GetAllNoDetails();
             _windowService = windowService;
         }
 
@@ -52,12 +54,13 @@ namespace PlantTrackerUI.ViewModels
             {
                 if (_selectedPlant == value)
                     return;
-                _selectedPlant = value;
+                // get plant with all details from db
+                _selectedPlant = _dataAccess.Plants_GetById(value.Id);
                 OnPropertyChanged(nameof(SelectedPlant));
             }
         }
 
-
+        #region Commands
         public void OpenAddPlantTypeWindow(Plant plant)
         {
             _windowService.ShowWindow(new AddPlantTypeViewModel(SelectedPlant));
@@ -94,6 +97,45 @@ namespace PlantTrackerUI.ViewModels
             }
         }
 
+
+
+        public void OpenAddWateringSystemWindow(Plant plant)
+        {
+            _windowService.ShowWindow(new AddWateringSystemViewModel(SelectedPlant));
+        }
+        public RelayCommand OpenAddWateringSystemWindowCommand
+        {
+            get
+            {
+                if (_openAddWateringSystemWindowCommand == null)
+                    _openAddWateringSystemWindowCommand = new RelayCommand(o => OpenAddWateringSystemWindow(SelectedPlant));
+                return _openAddWateringSystemWindowCommand;
+            }
+        }
+
+        bool CanRemoveSelectedWateringSystem()
+        {
+            return true;
+        }
+        void RemoveSelectedWateringSystem(object typeToRemove)
+        {
+            if (typeToRemove is not PlantType)
+                return;
+            string name = ((PlantType)typeToRemove).Name;
+            // TODO Fill in
+            MessageBox.Show($"RemoveSelectedType is working for {name}");
+        }
+        public RelayCommand RemoveSelectedWateringSystemCommand
+        {
+            get
+            {
+                if (_removeSelectedWateringSystemCommand == null)
+                    _removeSelectedWateringSystemCommand = new RelayCommand((o) => RemoveSelectedWateringSystem(o), o => CanRemoveSelectedWateringSystem());
+                return _removeSelectedWateringSystemCommand;
+            }
+        }
+
+        #endregion
         protected virtual void OnPropertyChanged(string propertyName = null)  // TODO Add to ViewModelBase
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));

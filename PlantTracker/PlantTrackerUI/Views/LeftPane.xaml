@@ -29,10 +29,16 @@
         <Border Grid.Column="0" Grid.Row="1" BorderBrush="#d9cb98"
                 BorderThickness="1" Margin="0 8 0 0">
             <StackPanel Orientation="Vertical" Margin="5">
-                <TextBlock Text="{Binding SelectedPlant.Name}" Background="#f7eecd" Margin="0 0 0 7" Padding="1" TextWrapping="Wrap"/>
-                <TextBlock Text="{Binding SelectedPlant.PlantingDateString}" Margin="0 0 0 7" Padding="1" TextWrapping="Wrap"/>
-                <TextBlock Text="{Binding SelectedPlant.TypesString}" Margin="0 0 0 7" Padding="1" TextWrapping="Wrap"/>
-                <TextBlock Text="{Binding SelectedPlant.ContainersString}" Padding="1" TextWrapping="Wrap"/>
+                <TextBlock Text="{Binding SelectedPlant.Name}" FontWeight="Bold" Margin="0 0 0 7" Padding="1" TextWrapping="Wrap"/>
+                <TextBlock Text="Last modified:" Margin="0 0 0 7" Padding="1" TextWrapping="Wrap">
+                    <TextBlock.Style>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="Visibility" Value="{Binding SelectedPlant, 
+                                Converter={StaticResource NullToVis}}"/>
+                        </Style>
+                    </TextBlock.Style>
+                </TextBlock>
+                <TextBlock Text="{Binding SelectedPlant.LastModificationDateString}" Margin="0 0 0 7" Padding="1" TextWrapping="Wrap"/>
             </StackPanel>
         </Border>
     </Grid>

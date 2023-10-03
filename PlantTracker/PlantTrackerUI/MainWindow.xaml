@@ -11,8 +11,8 @@
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="20" />   <!-- 0: Left Margin -->
             <ColumnDefinition Width="Auto" /> <!-- 1: Left Pane -->
-            <ColumnDefinition Width="2*" /> <!-- 2: Left Pane -->
-            <ColumnDefinition Width="*" />    <!-- 3: Main Area -->
+            <ColumnDefinition Width="*" /> <!-- 2: Main Area -->
+            <ColumnDefinition Width="2*" />    <!-- 3: Main Area -->
             <ColumnDefinition Width="Auto" /> <!-- 4: Right Pane -->
             <ColumnDefinition Width="Auto" /> <!-- 5: Right Pane -->
             <ColumnDefinition Width="20" />   <!-- 6: Right Margin -->
@@ -27,14 +27,12 @@
         </Grid.RowDefinitions>
 
         <!-- Top ribbon -->
-        <StackPanel Grid.Row="1" Grid.Column="2" Orientation="Horizontal" Margin="0 0 0 10">
-            <TextBlock Text="{Binding SelectedPlant.Name}"  
-                           FontSize="25" Margin="0 0 15 0" VerticalAlignment="Bottom" />
-            <TextBlock Text="{Binding SelectedPlant.TypesString}" Padding="0 0 0 3"
-                           FontSize="18" Margin="0 0 15 0" Foreground="#948654" VerticalAlignment="Bottom" />
-        </StackPanel>
-        <StackPanel Grid.Row="1" Grid.Column="3" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0 0 0 10">
-            <TextBlock Text="PlantingDate" FontSize="18" Margin="0 0 15 0" Foreground="#948654" 
+        <TextBlock Grid.Row="1" Grid.Column="2" Text="{Binding SelectedPlant.Name}" Margin="0 0 0 5"
+                        FontSize="25" VerticalAlignment="Bottom" />
+        <TextBlock Grid.Row="1" Grid.Column="3" Text="{Binding SelectedPlant.TypesString}" Padding="0 0 0 3"
+                        FontSize="18" Margin="0 0 0 2" Foreground="#948654" VerticalAlignment="Bottom" />
+        <StackPanel Grid.Row="1" Grid.Column="4" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0 0 0 2">
+            <TextBlock Text="PlantingDate:" FontSize="18" Margin="0 0 15 0" Foreground="#948654" 
                         VerticalAlignment="Bottom" Padding="0 0 0 3">
                 <TextBlock.Style>
                     <Style TargetType="TextBlock">
@@ -50,7 +48,7 @@
 
         <views:LeftPane Grid.Row="1" Grid.Column="1" Grid.RowSpan="3" Margin="0 0 8 0"/>
 
-        <views:PlantDetailsDashboard Grid.Row="2" Grid.Column="2" Grid.RowSpan="2" Grid.ColumnSpan="2">
+        <views:PlantDetailsDashboard Grid.Row="2" Grid.Column="2" Grid.RowSpan="2" Grid.ColumnSpan="3">
             <views:PlantDetailsDashboard.Style>
                 <Style TargetType="views:PlantDetailsDashboard">
                     <Setter Property="Visibility" Value="{Binding SelectedPlant, 
