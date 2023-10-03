@@ -386,6 +386,7 @@ namespace HelpMeFocus.ViewModels
             TimerDisplayValue = _countdownTime.ToString();
             // Reset completed cycles to zero
             CompletedCyclesText = "0";
+            _totalTime = TimeSpan.FromSeconds(0);
             TotalTimeText = _totalTime.ToString();
             OnPropertyChanged(nameof(IsTimerStarted));
         }
