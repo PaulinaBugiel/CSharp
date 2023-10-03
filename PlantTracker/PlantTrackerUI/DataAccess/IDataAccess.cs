@@ -11,18 +11,25 @@ namespace PlantTrackerUI.DataAccess
     public interface IDataAccess
     {
         void WateringSystem_InsertOne(WateringSystem model);
-        List<WateringSystem> WateringSystem_GetAll();
+        ObservableCollection<WateringSystem> WateringSystem_GetAll();
+        ObservableCollection<WateringSystem> WateringSystem_GetByPlantId(int plantId);
+        ObservableCollection<WateringSystem> WateringSystem_GetAvailableForPlant(int plantId);
 
-        List<PlantContainer> Container_GetAll();
+        void PlantContainer_InsertOne(PlantContainer model);
+        List<PlantContainer> PlantContainer_GetAll();
+        List<PlantContainer> PlantContainer_GetByPlantId(int plantId);
+        List<PlantContainer> PlantContainer_GetAvailableForPlant(int plantId);
 
         List<PlantPosition> PlantPosition_GetAll();
 
         void PlantType_InsertOne(PlantType model);
         ObservableCollection<PlantType> PlantType_GetAll();
+        ObservableCollection<PlantType> PlantType_GetByPlantId(int plantId);
         ObservableCollection<PlantType> PlantType_GetAvailableForPlant(int plantId);
 
 
         List<Plant> Plants_GetAll();
+        List<Plant> Plants_GetAllNoDetails();
         Plant Plants_GetById(int plantId);
     }
 }
