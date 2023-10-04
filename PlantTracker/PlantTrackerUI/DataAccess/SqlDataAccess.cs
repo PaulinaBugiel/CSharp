@@ -25,7 +25,7 @@ namespace PlantTrackerUI.DataAccess
                 p.Add("@Name", model.Name);
                 p.Add("@Id", 0, DbType.Int32, ParameterDirection.Output);
                 connection.Execute("dbo.spWateringSystems_Insert", p, commandType: CommandType.StoredProcedure);
-                model.Id = p.Get<int>("@id");
+                model.Id = p.Get<int>("@Id");
             }
         }
 
@@ -71,7 +71,7 @@ namespace PlantTrackerUI.DataAccess
                 p.Add("@Capacity", model.Capacity);
                 p.Add("@Id", 0, DbType.Int32, ParameterDirection.Output);
                 connection.Execute("dbo.spPlantContainers_Insert", p, commandType: CommandType.StoredProcedure);
-                model.Id = p.Get<int>("@id");
+                model.Id = p.Get<int>("@Id");
             }
         }
         public List<PlantContainer> PlantContainer_GetAll()

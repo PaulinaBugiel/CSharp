@@ -10,23 +10,19 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
 using System.Windows.Shapes;
 
 namespace PlantTrackerUI.Views
 {
     /// <summary>
-    /// Interaction logic for AddWateringSystemWindow.xaml
+    /// Interaction logic for AddPlantAttributeView.xaml
     /// </summary>
-    public partial class AddWateringSystemWindow : Window
+    public partial class AddPlantAttributeView : UserControl
     {
-        public AddWateringSystemWindow()
+        public AddPlantAttributeView()
         {
             InitializeComponent();
-        }
-
-        private void newWateringSystemTextBox_GotFocus(object sender, RoutedEventArgs e)
-        {
-            newWateringSystemTextBox.Text = "";
         }
     }
 }

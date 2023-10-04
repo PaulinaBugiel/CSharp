@@ -13,7 +13,7 @@ using System.Windows;
 
 namespace PlantTrackerUI.ViewModels
 {
-    class AddPlantTypeViewModel : PopupViewModelBase, INotifyPropertyChanged
+    class AddPlantTypeViewModel : PopupViewModelBase, IAddPlantAttribute<PlantType>, INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler? PropertyChanged;
 
@@ -21,6 +21,7 @@ namespace PlantTrackerUI.ViewModels
         private readonly IDataAccess _dataAccess;
         private Plant _selectedPlant;
         private string _newTypeText = "";
+
         private PlantType _selectedType;
 
 
@@ -42,7 +43,7 @@ namespace PlantTrackerUI.ViewModels
 
         #region Properties
 
-        public ObservableCollection<PlantType> PlantTypes
+        public ObservableCollection<PlantType> PlantAttributes
         {
             get { return _plantTypes; }
             set
@@ -50,7 +51,7 @@ namespace PlantTrackerUI.ViewModels
                 if (_plantTypes == value)
                     return;
                 _plantTypes = value;
-                OnPropertyChanged(nameof(PlantTypes));
+                OnPropertyChanged(nameof(PlantAttributes));
             }
         }
 
@@ -66,7 +67,7 @@ namespace PlantTrackerUI.ViewModels
             }
         }
 
-        public string NewTypeText
+        public string NewAttributeText
         {
             get
             {
@@ -77,11 +78,13 @@ namespace PlantTrackerUI.ViewModels
                 if (_newTypeText == value)
                     return;
                 _newTypeText = value;
-                OnPropertyChanged(nameof(NewTypeText));
+                OnPropertyChanged(nameof(NewAttributeText));
             }
         }
+        public string AddSelectedAttributeButtonText { get { return "Add Selected Type"; } set { } }
+        public string NewAttributeLabelText { get { return "New Type:"; } set { } }
 
-        public PlantType SelectedType
+        public PlantType SelectedAttribute
         {
             get { return _selectedType; }
             set
@@ -89,7 +92,7 @@ namespace PlantTrackerUI.ViewModels
                 if (_selectedType == value)
                     return;
                 _selectedType = value;
-                OnPropertyChanged(nameof(SelectedType));
+                OnPropertyChanged(nameof(SelectedAttribute));
             }
         }
         #endregion
@@ -99,7 +102,7 @@ namespace PlantTrackerUI.ViewModels
         /// <summary>
         /// Adds new PlantType with name written in NewTypeText field
         /// </summary>
-        public RelayCommand AddNewTypeCommand
+        public RelayCommand AddNewAttributeCommand
         {
             get
             {
@@ -110,7 +113,7 @@ namespace PlantTrackerUI.ViewModels
         }
         bool CanAddNewType()
         {
-            if (NewTypeText.Length > 0)
+            if (NewAttributeText.Length > 0)
                 return true;
             else
                 return false;
@@ -118,20 +121,20 @@ namespace PlantTrackerUI.ViewModels
         void AddNewType()
         {
             ObservableCollection<PlantType> allTypes = _dataAccess.PlantType_GetAll();
-            var typeWithTheSameName = allTypes.Where(x => x.Name == NewTypeText).FirstOrDefault();
+            var typeWithTheSameName = allTypes.Where(x => x.Name == NewAttributeText).FirstOrDefault();
             if (typeWithTheSameName is not null)
             {
-                MessageBox.Show($"Plant type \"{NewTypeText}\" already exists", "Cannot add plant type",
+                MessageBox.Show($"Plant type \"{NewAttributeText}\" already exists", "Cannot add plant type",
                     MessageBoxButton.OK, MessageBoxImage.Error);
             }
             else
             {
                 PlantType? maxIdType = allTypes.OrderByDescending(x => x.Id).First();
                 int newId = maxIdType is null ? 1 : maxIdType.Id + 1;
-                PlantType newType = new PlantType { Name = NewTypeText, Id = newId };
-                NewTypeText = "";
+                PlantType newType = new PlantType { Name = NewAttributeText, Id = newId };
+                NewAttributeText = "";
                 _dataAccess.PlantType_InsertOne(newType);
-                PlantTypes = _dataAccess.PlantType_GetAvailableForPlant(_selectedPlant.Id);
+                PlantAttributes = _dataAccess.PlantType_GetAvailableForPlant(_selectedPlant.Id);
 
             }
         }
@@ -139,7 +142,7 @@ namespace PlantTrackerUI.ViewModels
         /// <summary>
         /// Cancels adding new PlantType - clears the NewTypeText field
         /// </summary>
-        public RelayCommand CancelAddingTypeCommand
+        public RelayCommand CancelAddingAttributeCommand
         {
             get
             {
@@ -150,17 +153,17 @@ namespace PlantTrackerUI.ViewModels
         }
         bool CanCancelAddingType()
         {
-            if (NewTypeText.Length > 0)
+            if (NewAttributeText.Length > 0)
                 return true;
             else
                 return false;
         }
         void CancelAddingType()
         {
-            NewTypeText = "";
+            NewAttributeText = "";
         }
 
-        public RelayCommand AddSelectedTypeCommand
+        public RelayCommand AddSelectedAttributeCommand
         {
             get
             {
@@ -171,14 +174,14 @@ namespace PlantTrackerUI.ViewModels
         }
         bool CanAddSelectedType()
         {
-            if (SelectedType is null)
+            if (SelectedAttribute is null)
                 return false;
             else
                 return true;
         }
         void AddSelectedType()
         {
-            SelectedPlant.PlantTypes.Add(SelectedType);
+            SelectedPlant.PlantTypes.Add(SelectedAttribute);
             // TODO Update the plant to database
             // Close the window
             OnPropertyChanged(nameof(SelectedPlant));

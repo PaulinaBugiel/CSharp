@@ -13,18 +13,18 @@ using System.Windows;
 
 namespace PlantTrackerUI.ViewModels
 {
-    class AddWateringSystemViewModel : PopupViewModelBase, INotifyPropertyChanged
+    class AddWateringSystemViewModel : PopupViewModelBase, IAddPlantAttribute<WateringSystem>, INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler? PropertyChanged;
 
-        public ObservableCollection<WateringSystem> _wateringSystems;
+        public ObservableCollection<WateringSystem> _plantTypes;
         private readonly IDataAccess _dataAccess;
         private Plant _selectedPlant;
-        private string _newWateringSystemText = "";
-        private WateringSystem _selectedWateringSystem;
+        private string _newPlantTypeText = "";
+        private WateringSystem _selectedPlantType;
 
 
-        private RelayCommand _addNewWateringSystemCommand;
+        private RelayCommand _addNewPlantTypeCommand;
         private RelayCommand _cancelAddingWateringSystemCommand;
         private RelayCommand _addSelectedWateringSystemCommand;
 
@@ -37,20 +37,20 @@ namespace PlantTrackerUI.ViewModels
             else
                 _dataAccess = new DemoDataAccess();
             _selectedPlant = selectedPlant;
-            _wateringSystems = _dataAccess.WateringSystem_GetAvailableForPlant(_selectedPlant.Id);
+            _plantTypes = _dataAccess.WateringSystem_GetAvailableForPlant(_selectedPlant.Id);
         }
 
         #region Properties
 
-        public ObservableCollection<WateringSystem> WateringSystems
+        public ObservableCollection<WateringSystem> PlantAttributes
         {
-            get { return _wateringSystems; }
+            get { return _plantTypes; }
             set
             {
-                if (_wateringSystems == value)
+                if (_plantTypes == value)
                     return;
-                _wateringSystems = value;
-                OnPropertyChanged(nameof(WateringSystems));
+                _plantTypes = value;
+                OnPropertyChanged(nameof(PlantAttributes));
             }
         }
 
@@ -66,30 +66,33 @@ namespace PlantTrackerUI.ViewModels
             }
         }
 
-        public string NewWateringSystemText
+        public string NewAttributeText
         {
             get
             {
-                return _newWateringSystemText;
+                return _newPlantTypeText;
             }
             set
             {
-                if (_newWateringSystemText == value)
+                if (_newPlantTypeText == value)
                     return;
-                _newWateringSystemText = value;
-                OnPropertyChanged(nameof(NewWateringSystemText));
+                _newPlantTypeText = value;
+                OnPropertyChanged(nameof(NewAttributeText));
             }
         }
 
-        public WateringSystem SelectedWateringSystem
+        public string AddSelectedAttributeButtonText { get { return "Add Selected Watering System"; } set { } }
+        public string NewAttributeLabelText { get { return "New Watering System:"; } set { } }
+
+        public WateringSystem SelectedAttribute
         {
-            get { return _selectedWateringSystem; }
+            get { return _selectedPlantType; }
             set
             {
-                if (_selectedWateringSystem == value)
+                if (_selectedPlantType == value)
                     return;
-                _selectedWateringSystem = value;
-                OnPropertyChanged(nameof(SelectedWateringSystem));
+                _selectedPlantType = value;
+                OnPropertyChanged(nameof(SelectedAttribute));
             }
         }
         #endregion
@@ -97,41 +100,41 @@ namespace PlantTrackerUI.ViewModels
         #region Commands
 
         /// <summary>
-        /// Adds new PlantType with name written in NewWateringSystemText field
+        /// Adds new PlantType with name written in NewPlantTypeText field
         /// </summary>
-        public RelayCommand AddNewWateringSystemCommand
+        public RelayCommand AddNewAttributeCommand
         {
             get
             {
-                if (_addNewWateringSystemCommand == null)
-                    _addNewWateringSystemCommand = new RelayCommand(o => AddNewWateringSystem(), o => CanAddNewWateringSystem());
-                return _addNewWateringSystemCommand;
+                if (_addNewPlantTypeCommand == null)
+                    _addNewPlantTypeCommand = new RelayCommand(o => AddNewPlantType(), o => CanAddNewPlantType());
+                return _addNewPlantTypeCommand;
             }
         }
-        bool CanAddNewWateringSystem()
+        bool CanAddNewPlantType()
         {
-            if (NewWateringSystemText.Length > 0)
+            if (NewAttributeText.Length > 0)
                 return true;
             else
                 return false;
         }
-        void AddNewWateringSystem()
+        void AddNewPlantType()
         {
             ObservableCollection<WateringSystem> allWateringSystems = _dataAccess.WateringSystem_GetAll();
-            var typeWithTheSameName = allWateringSystems.Where(x => x.Name == NewWateringSystemText).FirstOrDefault();
+            var typeWithTheSameName = allWateringSystems.Where(x => x.Name == NewAttributeText).FirstOrDefault();
             if (typeWithTheSameName is not null)
             {
-                MessageBox.Show($"Watering system \"{NewWateringSystemText}\" already exists", "Cannot add",
+                MessageBox.Show($"Watering system \"{NewAttributeText}\" already exists", "Cannot add",
                     MessageBoxButton.OK, MessageBoxImage.Error);
             }
             else
             {
                 WateringSystem? maxIdType = allWateringSystems.OrderByDescending(x => x.Id).First();
                 int newId = maxIdType is null ? 1 : maxIdType.Id + 1;
-                WateringSystem newWateringSystem = new WateringSystem { Name = NewWateringSystemText, Id = newId };
-                NewWateringSystemText = "";
+                WateringSystem newWateringSystem = new WateringSystem { Name = NewAttributeText, Id = newId };
+                NewAttributeText = "";
                 _dataAccess.WateringSystem_InsertOne(newWateringSystem);
-                WateringSystems = _dataAccess.WateringSystem_GetAvailableForPlant(_selectedPlant.Id);
+                PlantAttributes = _dataAccess.WateringSystem_GetAvailableForPlant(_selectedPlant.Id);
 
             }
         }
@@ -139,7 +142,7 @@ namespace PlantTrackerUI.ViewModels
         /// <summary>
         /// Cancels adding new WateringSystem - clears the NewWateringSystemText field
         /// </summary>
-        public RelayCommand CancelAddingWateringSystemCommand
+        public RelayCommand CancelAddingAttributeCommand
         {
             get
             {
@@ -150,17 +153,17 @@ namespace PlantTrackerUI.ViewModels
         }
         bool CanCancelAddingWateringSystem()
         {
-            if (NewWateringSystemText.Length > 0)
+            if (NewAttributeText.Length > 0)
                 return true;
             else
                 return false;
         }
         void CancelAddingWateringSystem()
         {
-            NewWateringSystemText = "";
+            NewAttributeText = "";
         }
 
-        public RelayCommand AddSelectedWateringSystemCommand
+        public RelayCommand AddSelectedAttributeCommand
         {
             get
             {
@@ -171,14 +174,14 @@ namespace PlantTrackerUI.ViewModels
         }
         bool CanAddSelectedWateringSystem()
         {
-            if (SelectedWateringSystem is null)
+            if (SelectedAttribute is null)
                 return false;
             else
                 return true;
         }
         void AddSelectedWateringSystem()
         {
-            SelectedPlant.WateringSystems.Add(SelectedWateringSystem);
+            SelectedPlant.WateringSystems.Add(SelectedAttribute);
             // TODO Update the plant to database
             // Close the window
             OnPropertyChanged(nameof(SelectedPlant));

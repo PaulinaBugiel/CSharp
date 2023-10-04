@@ -3,9 +3,20 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:local="clr-namespace:PlantTrackerUI"
              xmlns:helpers="clr-namespace:PlantTrackerUI.Helpers"
+             xmlns:vms="clr-namespace:PlantTrackerUI.ViewModels"
+             xmlns:vws="clr-namespace:PlantTrackerUI.Views"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
         <ResourceDictionary>
+
+            <DataTemplate DataType="{x:Type vms:AddPlantTypeViewModel}">
+                <vws:AddPlantAttributeView/>
+            </DataTemplate>
+
+            <DataTemplate DataType="{x:Type vms:AddWateringSystemViewModel}">
+                <vws:AddPlantAttributeView/>
+            </DataTemplate>
+
             <helpers:NullToVisibilityConverter x:Key="NullToVis"/>
 
             <!-- Ok button (with green checkmark) -->

@@ -25,8 +25,8 @@ namespace PlantTrackerUI
         public MainWindow()
         {
             InitializeComponent();
-            IWindowService addTypeWindowService = new AddTypeWindowService();
-            DataContext = new PlantSystemViewModel(addTypeWindowService);
+            IWindowService genericWindowService = new WindowService();
+            DataContext = new PlantSystemViewModel(genericWindowService);
         }
     }
 }
