@@ -182,8 +182,7 @@ namespace PlantTrackerUI.ViewModels
         void AddSelectedType()
         {
             SelectedPlant.PlantTypes.Add(SelectedAttribute);
-            // TODO Update the plant to database
-            // Close the window
+            _dataAccess.PlantType_AddOneForPlant(SelectedPlant.Id, SelectedAttribute.Id);
             OnPropertyChanged(nameof(SelectedPlant));
             CloseWindow();
             

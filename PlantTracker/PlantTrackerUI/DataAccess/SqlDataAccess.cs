@@ -62,6 +62,28 @@ namespace PlantTrackerUI.DataAccess
             return ret;
         }
 
+        public void WateringSystem_AddOneForPlant(int plantId, int wateringSystemId)
+        {
+            using (IDbConnection connection = new System.Data.SqlClient.SqlConnection(connString))
+            {
+                var p = new DynamicParameters();
+                p.Add("@PlantId", plantId);
+                p.Add("@WateringSystemId", wateringSystemId);
+                connection.Execute("dbo.spWateringSystems_AddWateringSystemForPlant", p, commandType: CommandType.StoredProcedure);
+            }
+        }
+
+        public void WateringSystem_RemoveOneForPlant(int plantId, int wateringSystemId)
+        {
+            using (IDbConnection connection = new System.Data.SqlClient.SqlConnection(connString))
+            {
+                var p = new DynamicParameters();
+                p.Add("@PlantId", plantId);
+                p.Add("@WateringSystemId", wateringSystemId);
+                connection.Execute("dbo.spPlantWateringSystems_RemoveWateringSystemForPlant", p, commandType: CommandType.StoredProcedure);
+            }
+        }
+
         public void PlantContainer_InsertOne(PlantContainer model)
         {
             using (IDbConnection connection = new SqlConnection(connString))
@@ -105,6 +127,28 @@ namespace PlantTrackerUI.DataAccess
                 ret = connection.Query<PlantContainer>("dbo.spPlantContainers_GetGetAvailableForPlant", p, commandType: CommandType.StoredProcedure).ToList();
             }
             return ret;
+        }
+
+        public void PlantContainer_AddOneForPlant(int plantId, int containerId)
+        {
+            using (IDbConnection connection = new System.Data.SqlClient.SqlConnection(connString))
+            {
+                var p = new DynamicParameters();
+                p.Add("@PlantId", plantId);
+                p.Add("@ContainerId", containerId);
+                connection.Execute("dbo.spPlantContainers_AddContainerForPlant", p, commandType: CommandType.StoredProcedure);
+            }
+        }
+
+        public void PlantContainer_RemoveOneForPlant(int plantId, int containerId)
+        {
+            using (IDbConnection connection = new System.Data.SqlClient.SqlConnection(connString))
+            {
+                var p = new DynamicParameters();
+                p.Add("@PlantId", plantId);
+                p.Add("@ContainerId", containerId);
+                connection.Execute("dbo.spPlantContainers_RemoveContainerForPlant", p, commandType: CommandType.StoredProcedure);
+            }
         }
 
         public List<PlantPosition> PlantPosition_GetAll()
@@ -165,6 +209,27 @@ namespace PlantTrackerUI.DataAccess
                     );
             }
             return ret;
+        }
+        public void PlantType_AddOneForPlant(int plantId, int typeId)
+        {
+            using (IDbConnection connection = new System.Data.SqlClient.SqlConnection(connString))
+            {
+                var p = new DynamicParameters();
+                p.Add("@PlantId", plantId);
+                p.Add("@TypeId", typeId);
+                connection.Execute("dbo.spPlantTypes_AddTypeForPlant", p, commandType: CommandType.StoredProcedure);
+            }
+        }
+
+        public void PlantType_RemoveOneForPlant(int plantId, int typeId)
+        {
+            using (IDbConnection connection = new System.Data.SqlClient.SqlConnection(connString))
+            {
+                var p = new DynamicParameters();
+                p.Add("@PlantId", plantId);
+                p.Add("@TypeId", typeId);
+                connection.Execute("dbo.spPlantTypes_RemoveTypeForPlant", p, commandType: CommandType.StoredProcedure);
+            }
         }
 
 

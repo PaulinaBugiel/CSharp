@@ -200,5 +200,35 @@ namespace PlantTrackerUI.DataAccess
         {
             throw new NotImplementedException();
         }
+
+        public void WateringSystem_AddOneForPlant(int plantId, int wateringSystemId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void PlantType_AddOneForPlant(int plantId, int typeId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void PlantContainer_AddOneForPlant(int plantId, int containerId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void WateringSystem_RemoveOneForPlant(int plantId, int wateringSystemId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void PlantContainer_RemoveOneForPlant(int plantId, int containerId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void PlantType_RemoveOneForPlant(int plantId, int typeId)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

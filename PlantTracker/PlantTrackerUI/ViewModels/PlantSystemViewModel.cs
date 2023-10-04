@@ -76,8 +76,9 @@ namespace PlantTrackerUI.ViewModels
             if (typeToRemove is not PlantType)
                 return;
 
-            SelectedPlant.PlantTypes.Remove((PlantType)typeToRemove);
-            // TODO Update in database
+            PlantType toRemove = (PlantType)typeToRemove;
+            SelectedPlant.PlantTypes.Remove(toRemove);
+            _dataAccess.PlantType_RemoveOneForPlant(SelectedPlant.Id, toRemove.Id);
 
         }
         public RelayCommand RemoveSelectedTypeCommand
@@ -101,8 +102,9 @@ namespace PlantTrackerUI.ViewModels
             if (wateringSystemToRemove is not WateringSystem)
                 return;
 
-            SelectedPlant.WateringSystems.Remove((WateringSystem)wateringSystemToRemove);
-            // TODO Update in database
+            WateringSystem toRemove = (WateringSystem)wateringSystemToRemove;
+            SelectedPlant.WateringSystems.Remove(toRemove);
+            _dataAccess.WateringSystem_RemoveOneForPlant(SelectedPlant.Id, toRemove.Id);
 
         }
         public RelayCommand RemoveSelectedWateringSystemCommand

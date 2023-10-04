@@ -182,8 +182,7 @@ namespace PlantTrackerUI.ViewModels
         void AddSelectedWateringSystem()
         {
             SelectedPlant.WateringSystems.Add(SelectedAttribute);
-            // TODO Update the plant to database
-            // Close the window
+            _dataAccess.WateringSystem_AddOneForPlant(SelectedPlant.Id, SelectedAttribute.Id);
             OnPropertyChanged(nameof(SelectedPlant));
             CloseWindow();
 

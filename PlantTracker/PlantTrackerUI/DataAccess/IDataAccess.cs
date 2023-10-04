@@ -14,11 +14,15 @@ namespace PlantTrackerUI.DataAccess
         ObservableCollection<WateringSystem> WateringSystem_GetAll();
         ObservableCollection<WateringSystem> WateringSystem_GetByPlantId(int plantId);
         ObservableCollection<WateringSystem> WateringSystem_GetAvailableForPlant(int plantId);
+        void WateringSystem_AddOneForPlant(int plantId, int wateringSystemId);
+        void WateringSystem_RemoveOneForPlant(int plantId, int wateringSystemId);
 
         void PlantContainer_InsertOne(PlantContainer model);
         List<PlantContainer> PlantContainer_GetAll();
         List<PlantContainer> PlantContainer_GetByPlantId(int plantId);
         List<PlantContainer> PlantContainer_GetAvailableForPlant(int plantId);
+        void PlantContainer_AddOneForPlant(int plantId, int containerId);
+        void PlantContainer_RemoveOneForPlant(int plantId, int containerId);
 
         List<PlantPosition> PlantPosition_GetAll();
 
@@ -26,6 +30,8 @@ namespace PlantTrackerUI.DataAccess
         ObservableCollection<PlantType> PlantType_GetAll();
         ObservableCollection<PlantType> PlantType_GetByPlantId(int plantId);
         ObservableCollection<PlantType> PlantType_GetAvailableForPlant(int plantId);
+        void PlantType_AddOneForPlant(int plantId, int typeId);
+        void PlantType_RemoveOneForPlant(int plantId, int typeId);
 
 
         List<Plant> Plants_GetAll();
