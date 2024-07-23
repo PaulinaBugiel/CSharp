@@ -13,44 +13,44 @@ using System.Windows;
 
 namespace PlantTrackerUI.ViewModels
 {
-    class AddPlantTypeViewModel : PopupViewModelBase, IAddPlantAttribute<PlantType>, INotifyPropertyChanged
+    class AddPlantContainerViewModel : PopupViewModelBase, IAddPlantAttribute<PlantContainer>, INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler? PropertyChanged;
 
-        public ObservableCollection<PlantType> _plantTypes;
+        public ObservableCollection<PlantContainer> _plantContainers;
         private readonly IDataAccess _dataAccess;
         private Plant _selectedPlant;
-        private string _newTypeText = "";
+        private string _newContainerText = "";
 
-        private PlantType? _selectedType;
-
-
-        private RelayCommand? _addNewTypeCommand;
-        private RelayCommand? _cancelAddingTypeCommand;
-        private RelayCommand? _addSelectedTypeCommand;
+        private PlantContainer? _selectedContainer;
 
 
-        public AddPlantTypeViewModel(Plant selectedPlant)
+        private RelayCommand? _addNewContainerCommand;
+        private RelayCommand? _cancelAddingContainerCommand;
+        private RelayCommand? _addSelectedContainerCommand;
+
+
+        public AddPlantContainerViewModel(Plant selectedPlant)
         {
-            string? dataSourceType = ConfigurationManager.AppSettings["DataSource"]; // TODO test for null
+            string dataSourceType = ConfigurationManager.AppSettings["DataSource"]; // TODO test for null
             if (dataSourceType == "Sql")
                 _dataAccess = new SqlDataAccess();
             else
                 _dataAccess = new DemoDataAccess();
             _selectedPlant = selectedPlant;
-            _plantTypes = _dataAccess.PlantType_GetAvailableForPlant(_selectedPlant.Id);
+            _plantContainers = _dataAccess.PlantContainer_GetAvailableForPlant(_selectedPlant.Id);
         }
 
         #region Properties
 
-        public ObservableCollection<PlantType> PlantAttributes
+        public ObservableCollection<PlantContainer> PlantAttributes
         {
-            get { return _plantTypes; }
+            get { return _plantContainers; }
             set
             {
-                if (_plantTypes == value)
+                if (_plantContainers == value)
                     return;
-                _plantTypes = value;
+                _plantContainers = value;
                 OnPropertyChanged(nameof(PlantAttributes));
             }
         }
@@ -71,27 +71,27 @@ namespace PlantTrackerUI.ViewModels
         {
             get
             {
-                return _newTypeText;
+                return _newContainerText;
             }
             set
             {
-                if (_newTypeText == value)
+                if (_newContainerText == value)
                     return;
-                _newTypeText = value;
+                _newContainerText = value;
                 OnPropertyChanged(nameof(NewAttributeText));
             }
         }
-        public string AddSelectedAttributeButtonText { get { return "Add Selected Type"; } set { } }
-        public string NewAttributeLabelText { get { return "New Type:"; } set { } }
+        public string AddSelectedAttributeButtonText { get { return "Add Selected Container"; } set { } }
+        public string NewAttributeLabelText { get { return "New Container:"; } set { } }
 
-        public PlantType SelectedAttribute
+        public PlantContainer SelectedAttribute
         {
-            get { return _selectedType; }
+            get { return _selectedContainer; }
             set
             {
-                if (_selectedType == value)
+                if (_selectedContainer == value)
                     return;
-                _selectedType = value;
+                _selectedContainer = value;
                 OnPropertyChanged(nameof(SelectedAttribute));
             }
         }
@@ -106,35 +106,35 @@ namespace PlantTrackerUI.ViewModels
         {
             get
             {
-                if (_addNewTypeCommand == null)
-                    _addNewTypeCommand = new RelayCommand(o => AddNewType(), o => CanAddNewType());
-                return _addNewTypeCommand;
+                if (_addNewContainerCommand == null)
+                    _addNewContainerCommand = new RelayCommand(o => AddNewContainer(), o => CanAddNewContainer());
+                return _addNewContainerCommand;
             }
         }
-        bool CanAddNewType()
+        bool CanAddNewContainer()
         {
             if (NewAttributeText.Length > 0)
                 return true;
             else
                 return false;
         }
-        void AddNewType()
+        void AddNewContainer()
         {
-            ObservableCollection<PlantType> allTypes = _dataAccess.PlantType_GetAll();
-            var typeWithTheSameName = allTypes.Where(x => x.Name == NewAttributeText).FirstOrDefault();
-            if (typeWithTheSameName is not null)
+            ObservableCollection<PlantContainer> allContainers = _dataAccess.PlantContainer_GetAll();
+            var containerWithTheSameName = allContainers.Where(x => x.Name == NewAttributeText).FirstOrDefault();
+            if (containerWithTheSameName is not null)
             {
-                MessageBox.Show($"Plant type \"{NewAttributeText}\" already exists", "Cannot add plant type",
+                MessageBox.Show($"Plant container \"{NewAttributeText}\" already exists", "Cannot add plant container",
                     MessageBoxButton.OK, MessageBoxImage.Error);
             }
             else
             {
-                PlantType? maxIdType = allTypes.OrderByDescending(x => x.Id).First();
+                PlantContainer? maxIdType = allContainers.OrderByDescending(x => x.Id).First();
                 int newId = maxIdType is null ? 1 : maxIdType.Id + 1;
-                PlantType newType = new PlantType { Name = NewAttributeText, Id = newId };
+                PlantContainer newContainer = new PlantContainer { Name = NewAttributeText, Id = newId };
                 NewAttributeText = "";
-                _dataAccess.PlantType_InsertOne(newType);
-                PlantAttributes = _dataAccess.PlantType_GetAvailableForPlant(_selectedPlant.Id);
+                _dataAccess.PlantContainer_InsertOne(newContainer);
+                PlantAttributes = _dataAccess.PlantContainer_GetAvailableForPlant(_selectedPlant.Id);
 
             }
         }
@@ -146,9 +146,9 @@ namespace PlantTrackerUI.ViewModels
         {
             get
             {
-                if (_cancelAddingTypeCommand == null)
-                    _cancelAddingTypeCommand = new RelayCommand(o => CancelAddingType(), o => CanCancelAddingType());
-                return _cancelAddingTypeCommand;
+                if (_cancelAddingContainerCommand == null)
+                    _cancelAddingContainerCommand = new RelayCommand(o => CancelAddingType(), o => CanCancelAddingType());
+                return _cancelAddingContainerCommand;
             }
         }
         bool CanCancelAddingType()
@@ -167,22 +167,22 @@ namespace PlantTrackerUI.ViewModels
         {
             get
             {
-                if (_addSelectedTypeCommand == null)
-                    _addSelectedTypeCommand = new RelayCommand(o => AddSelectedType(), o => CanAddSelectedType());
-                return _addSelectedTypeCommand;
+                if (_addSelectedContainerCommand == null)
+                    _addSelectedContainerCommand = new RelayCommand(o => AddSelectedContainer(), o => CanAddSelectedContainer());
+                return _addSelectedContainerCommand;
             }
         }
-        bool CanAddSelectedType()
+        bool CanAddSelectedContainer()
         {
             if (SelectedAttribute is null)
                 return false;
             else
                 return true;
         }
-        void AddSelectedType()
+        void AddSelectedContainer()
         {
-            SelectedPlant.PlantTypes.Add(SelectedAttribute);
-            _dataAccess.PlantType_AddOneForPlant(SelectedPlant.Id, SelectedAttribute.Id);
+            SelectedPlant.Containers.Add(SelectedAttribute);
+            _dataAccess.PlantContainer_AddOneForPlant(SelectedPlant.Id, SelectedAttribute.Id);
             OnPropertyChanged(nameof(SelectedPlant));
             CloseWindow();
             

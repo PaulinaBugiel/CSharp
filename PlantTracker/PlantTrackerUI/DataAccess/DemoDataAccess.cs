@@ -19,7 +19,7 @@ namespace PlantTrackerUI.DataAccess
             new WateringSystem() { Id = 4, Name = "Deszcz" }
         };
 
-        private static List<PlantContainer> containers = new List<PlantContainer>()
+        private static ObservableCollection<PlantContainer> containers = new ObservableCollection<PlantContainer>()
         {
             new PlantContainer() { Id = 0, Name = "None", Capacity = 0.0f },
             new PlantContainer() { Id = 1, Name = "Doniczka", Capacity = 0.0f },
@@ -54,7 +54,7 @@ namespace PlantTrackerUI.DataAccess
                     Name = "Bazylia",
                     PlantTypes = new ObservableCollection<PlantType>(plantTypes.Where(x => x.Name == "Ziele" || x.Name == "Jadalne" || x.Name == "Ozdobne" || x.Name == "Warzywo")),
                     PlantingDate = new DateTime(2023, 09, 16),
-                    Containers = containers.Where(x => x.Name == "Słoik").ToList(),
+                    Containers = new ObservableCollection<PlantContainer>(containers.Where(x => x.Name == "Słoik")),
                     WateringSystems = new ObservableCollection<WateringSystem>(wateringSystems.Where(x => x.Name == "Hydroponika" || x.Name == "Ręczny")),
                     Position = plantPositions.Where(x => x.Name == "Parapet").FirstOrDefault()
                 },
@@ -64,7 +64,7 @@ namespace PlantTrackerUI.DataAccess
                     Name = "Pomidor",
                     PlantTypes = new ObservableCollection<PlantType>(plantTypes.Where(x => x.Name == "Warzywo" || x.Name == "Jadalne").ToList()),
                     PlantingDate = new DateTime(2023, 09, 16),
-                    Containers = containers.Where(x => x.Name == "Doniczka").ToList(),
+                    Containers = new ObservableCollection<PlantContainer>(containers.Where(x => x.Name == "Doniczka")),
                     WateringSystems = new ObservableCollection<WateringSystem>(wateringSystems.Where(x => x.Name == "Ręczny")),
                     Position = plantPositions.Where(x => x.Name == "Parapet w Kuchni").FirstOrDefault()
                 },
@@ -74,7 +74,7 @@ namespace PlantTrackerUI.DataAccess
                     Name = "Kaktus",
                     PlantTypes = new ObservableCollection<PlantType>(plantTypes.Where(x => x.Name == "Ozdobne").ToList()),
                     PlantingDate = new DateTime(2023, 09, 16),
-                    Containers = containers.Where(x => x.Name == "Słoik").ToList(),
+                    Containers = new ObservableCollection<PlantContainer>(containers.Where(x => x.Name == "Słoik")),
                     WateringSystems = new ObservableCollection<WateringSystem>(wateringSystems.Where(x => x.Name == "Ręczny")),
                     Position = plantPositions.Where(x => x.Name == "Balkon").FirstOrDefault()
                 }
@@ -113,7 +113,7 @@ namespace PlantTrackerUI.DataAccess
             wateringSystems.Add(model);
         }
 
-        public List<PlantContainer> PlantContainer_GetAll()
+        public ObservableCollection<PlantContainer> PlantContainer_GetAll()
         {
             return containers;
         }
@@ -227,6 +227,46 @@ namespace PlantTrackerUI.DataAccess
         }
 
         public void PlantType_RemoveOneForPlant(int plantId, int typeId)
+        {
+            throw new NotImplementedException();
+        }
+
+        ObservableCollection<PlantContainer> IDataAccess.PlantContainer_GetByPlantId(int plantId)
+        {
+            throw new NotImplementedException();
+        }
+
+        ObservableCollection<PlantContainer> IDataAccess.PlantContainer_GetAvailableForPlant(int plantId)
+        {
+            throw new NotImplementedException();
+        }
+
+        void IDataAccess.PlantPosition_InsertOne(PlantPosition model)
+        {
+            throw new NotImplementedException();
+        }
+
+        ObservableCollection<PlantPosition> IDataAccess.PlantPosition_GetAll()
+        {
+            throw new NotImplementedException();
+        }
+
+        ObservableCollection<PlantPosition> IDataAccess.PlantPosition_GetByPlantId(int plantId)
+        {
+            throw new NotImplementedException();
+        }
+
+        ObservableCollection<PlantPosition> IDataAccess.PlantPosition_GetAvailableForPlant(int plantId)
+        {
+            throw new NotImplementedException();
+        }
+
+        void IDataAccess.PlantPosition_AddOneForPlant(int plantId, int positionId)
+        {
+            throw new NotImplementedException();
+        }
+
+        void IDataAccess.PlantPosition_RemoveOneForPlant(int plantId, int positionId)
         {
             throw new NotImplementedException();
         }

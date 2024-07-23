@@ -14,24 +14,29 @@ namespace PlantTrackerUI.DataAccess
         ObservableCollection<WateringSystem> WateringSystem_GetAll();
         ObservableCollection<WateringSystem> WateringSystem_GetByPlantId(int plantId);
         ObservableCollection<WateringSystem> WateringSystem_GetAvailableForPlant(int plantId);
-        void WateringSystem_AddOneForPlant(int plantId, int wateringSystemId);
-        void WateringSystem_RemoveOneForPlant(int plantId, int wateringSystemId);
+        void WateringSystem_AddOneForPlant(int plantId, int wateringSystemId); // TODO: int wateringSystemId => WateringSystem wateringSystem
+        void WateringSystem_RemoveOneForPlant(int plantId, int wateringSystemId); // TODO: int wateringSystemId => WateringSystem wateringSystem
 
         void PlantContainer_InsertOne(PlantContainer model);
-        List<PlantContainer> PlantContainer_GetAll();
-        List<PlantContainer> PlantContainer_GetByPlantId(int plantId);
-        List<PlantContainer> PlantContainer_GetAvailableForPlant(int plantId);
-        void PlantContainer_AddOneForPlant(int plantId, int containerId);
-        void PlantContainer_RemoveOneForPlant(int plantId, int containerId);
+        ObservableCollection<PlantContainer> PlantContainer_GetAll();
+        ObservableCollection<PlantContainer> PlantContainer_GetByPlantId(int plantId);
+        ObservableCollection<PlantContainer> PlantContainer_GetAvailableForPlant(int plantId);
+        void PlantContainer_AddOneForPlant(int plantId, int containerId); // TODO: int containerId => PlantContainer container
+        void PlantContainer_RemoveOneForPlant(int plantId, int containerId); // TODO: int containerId => PlantContainer container
 
-        List<PlantPosition> PlantPosition_GetAll();
+        void PlantPosition_InsertOne(PlantPosition model);
+        ObservableCollection<PlantPosition> PlantPosition_GetAll();
+        ObservableCollection<PlantPosition> PlantPosition_GetByPlantId(int plantId);
+        ObservableCollection<PlantPosition> PlantPosition_GetAvailableForPlant(int plantId);
+        void PlantPosition_AddOneForPlant(int plantId, int positionId); // TODO: int positionId => PlantPosition container
+        void PlantPosition_RemoveOneForPlant(int plantId, int positionId); // TODO: int positionId => PlantPosition container
 
         void PlantType_InsertOne(PlantType model);
         ObservableCollection<PlantType> PlantType_GetAll();
         ObservableCollection<PlantType> PlantType_GetByPlantId(int plantId);
         ObservableCollection<PlantType> PlantType_GetAvailableForPlant(int plantId);
-        void PlantType_AddOneForPlant(int plantId, int typeId);
-        void PlantType_RemoveOneForPlant(int plantId, int typeId);
+        void PlantType_AddOneForPlant(int plantId, int typeId); // TODO: int typeId => PlantType type
+        void PlantType_RemoveOneForPlant(int plantId, int typeId); // TODO: int typeId => PlantType type
 
 
         List<Plant> Plants_GetAll();

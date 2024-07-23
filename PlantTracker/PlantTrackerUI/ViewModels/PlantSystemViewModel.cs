@@ -27,8 +27,10 @@ namespace PlantTrackerUI.ViewModels
 
         private RelayCommand _openAddPlantTypeWindowCommand;
         private RelayCommand _openAddWateringSystemWindowCommand;
+        private RelayCommand _openAddContainerWindowCommand;
         private RelayCommand _removeSelectedTypeCommand;
         private RelayCommand _removeSelectedWateringSystemCommand;
+        private RelayCommand _removeSelectedContainerCommand;
 
         public PlantSystemViewModel(IWindowService genericWindowService)
         {
@@ -44,6 +46,8 @@ namespace PlantTrackerUI.ViewModels
             _removeSelectedTypeCommand = new RelayCommand((o) => RemoveSelectedType(o));
             _openAddWateringSystemWindowCommand = new RelayCommand(o => OpenAddWateringSystemWindow(SelectedPlant));
             _removeSelectedWateringSystemCommand = new RelayCommand((o) => RemoveSelectedWateringSystem(o));
+            _openAddContainerWindowCommand = new RelayCommand(o => OpenAddContainerWindow(SelectedPlant));
+            _removeSelectedContainerCommand = new RelayCommand((o) => RemoveSelectedContainer(o));
         }
 
 
@@ -96,7 +100,6 @@ namespace PlantTrackerUI.ViewModels
             get { return _openAddWateringSystemWindowCommand; }
         }
 
-
         void RemoveSelectedWateringSystem(object wateringSystemToRemove)
         {
             if (wateringSystemToRemove is not WateringSystem)
@@ -105,11 +108,36 @@ namespace PlantTrackerUI.ViewModels
             WateringSystem toRemove = (WateringSystem)wateringSystemToRemove;
             SelectedPlant.WateringSystems.Remove(toRemove);
             _dataAccess.WateringSystem_RemoveOneForPlant(SelectedPlant.Id, toRemove.Id);
-
         }
+
         public RelayCommand RemoveSelectedWateringSystemCommand
         {
             get { return _removeSelectedWateringSystemCommand; }
+        }
+
+
+        public void OpenAddContainerWindow(Plant plant)
+        {
+            _windowService.ShowWindow(new AddPlantContainerViewModel(SelectedPlant));
+        }
+        public RelayCommand OpenAddContainerWindowCommand
+        {
+            get { return _openAddContainerWindowCommand; }
+        }
+
+
+        void RemoveSelectedContainer(object containerToRemove)
+        {
+            if (containerToRemove is not PlantContainer)
+                return;
+
+            PlantContainer toRemove = (PlantContainer)containerToRemove;
+            SelectedPlant.Containers.Remove(toRemove);
+            _dataAccess.PlantContainer_RemoveOneForPlant(SelectedPlant.Id, toRemove.Id);
+        }
+        public RelayCommand RemoveSelectedContainerCommand
+        {
+            get { return _removeSelectedContainerCommand; }
         }
         #endregion
 

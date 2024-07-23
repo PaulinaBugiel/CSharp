@@ -14,7 +14,7 @@ namespace PlantTrackerUI.Models
         public ObservableCollection<PlantType> PlantTypes { get; set; } = new();
         public DateTime PlantingDate { get; set; }
         public DateTime LastModificationDate { get; set; }
-        public List<PlantContainer> Containers { get; set; } = new();
+        public ObservableCollection<PlantContainer> Containers { get; set; } = new();
         public ObservableCollection<WateringSystem> WateringSystems { get; set; } = new();
         public PlantPosition? Position { get; set; } = new();
 

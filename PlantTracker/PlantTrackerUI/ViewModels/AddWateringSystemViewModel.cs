@@ -107,18 +107,18 @@ namespace PlantTrackerUI.ViewModels
             get
             {
                 if (_addNewPlantTypeCommand == null)
-                    _addNewPlantTypeCommand = new RelayCommand(o => AddNewPlantType(), o => CanAddNewPlantType());
+                    _addNewPlantTypeCommand = new RelayCommand(o => AddNewWateringSystem(), o => CanAddNewWateringSystem());
                 return _addNewPlantTypeCommand;
             }
         }
-        bool CanAddNewPlantType()
+        bool CanAddNewWateringSystem()
         {
             if (NewAttributeText.Length > 0)
                 return true;
             else
                 return false;
         }
-        void AddNewPlantType()
+        void AddNewWateringSystem()
         {
             ObservableCollection<WateringSystem> allWateringSystems = _dataAccess.WateringSystem_GetAll();
             var typeWithTheSameName = allWateringSystems.Where(x => x.Name == NewAttributeText).FirstOrDefault();

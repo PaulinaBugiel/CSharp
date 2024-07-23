@@ -1,0 +1,28 @@
+PlantTypes
+		GetAll
+		Insert
+		GetAvailableForPlant
+		RemoveTypeForPlant
+PlantContainers
+		GetAll
+		Insert
+		GetAvailableForPlant
+		RemoveContainerForPlant
+WateringSystems
+		GetAll
+		Insert
+		GetAvailableForPlant
+		RemoveWateringSystemForPlant
+PlantPositions
+		GetAll
+	Insert
+	GetAvailableForPlant
+	RemovePositionForPlant
+	
+Plants
+	GetAll
+	Insert
+	GetById
+
+PlantsContainers
+	GetById -> Container id, name, capacity
