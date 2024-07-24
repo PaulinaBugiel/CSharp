@@ -11,7 +11,7 @@ namespace PlantTrackerUI.ViewModels
 {
     public interface IAddPlantAttribute<T> where T : IModel
     {
-        public ObservableCollection<T> PlantAttributes { get; set; }
+        public ObservableCollection<T> AvailablePlantAttributes { get; set; }
         public Plant SelectedPlant { get; set; }
         public string NewAttributeText { get; set; }
         public string AddSelectedAttributeButtonText { get; set; }

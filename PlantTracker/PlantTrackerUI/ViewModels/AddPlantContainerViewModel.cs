@@ -17,7 +17,7 @@ namespace PlantTrackerUI.ViewModels
     {
         public event PropertyChangedEventHandler? PropertyChanged;
 
-        public ObservableCollection<PlantContainer> _plantContainers;
+        public ObservableCollection<PlantContainer> _availablePlantContainers;
         private readonly IDataAccess _dataAccess;
         private Plant _selectedPlant;
         private string _newContainerText = "";
@@ -38,20 +38,20 @@ namespace PlantTrackerUI.ViewModels
             else
                 _dataAccess = new DemoDataAccess();
             _selectedPlant = selectedPlant;
-            _plantContainers = _dataAccess.PlantContainer_GetAvailableForPlant(_selectedPlant.Id);
+            _availablePlantContainers = _dataAccess.PlantContainer_GetAvailableForPlant(_selectedPlant.Id);
         }
 
         #region Properties
 
-        public ObservableCollection<PlantContainer> PlantAttributes
+        public ObservableCollection<PlantContainer> AvailablePlantAttributes
         {
-            get { return _plantContainers; }
+            get { return _availablePlantContainers; }
             set
             {
-                if (_plantContainers == value)
+                if (_availablePlantContainers == value)
                     return;
-                _plantContainers = value;
-                OnPropertyChanged(nameof(PlantAttributes));
+                _availablePlantContainers = value;
+                OnPropertyChanged(nameof(AvailablePlantAttributes));
             }
         }
 
@@ -100,7 +100,7 @@ namespace PlantTrackerUI.ViewModels
         #region Commands
 
         /// <summary>
-        /// Adds new PlantType with name written in NewTypeText field
+        /// Adds new PlantContainer with name from NewAttributeText field
         /// </summary>
         public RelayCommand AddNewAttributeCommand
         {
@@ -134,7 +134,7 @@ namespace PlantTrackerUI.ViewModels
                 PlantContainer newContainer = new PlantContainer { Name = NewAttributeText, Id = newId };
                 NewAttributeText = "";
                 _dataAccess.PlantContainer_InsertOne(newContainer);
-                PlantAttributes = _dataAccess.PlantContainer_GetAvailableForPlant(_selectedPlant.Id);
+                AvailablePlantAttributes = _dataAccess.PlantContainer_GetAvailableForPlant(_selectedPlant.Id);
 
             }
         }
@@ -147,18 +147,18 @@ namespace PlantTrackerUI.ViewModels
             get
             {
                 if (_cancelAddingContainerCommand == null)
-                    _cancelAddingContainerCommand = new RelayCommand(o => CancelAddingType(), o => CanCancelAddingType());
+                    _cancelAddingContainerCommand = new RelayCommand(o => CancelAddingContainer(), o => CanCancelAddingContainer());
                 return _cancelAddingContainerCommand;
             }
         }
-        bool CanCancelAddingType()
+        bool CanCancelAddingContainer()
         {
             if (NewAttributeText.Length > 0)
                 return true;
             else
                 return false;
         }
-        void CancelAddingType()
+        void CancelAddingContainer()
         {
             NewAttributeText = "";
         }
@@ -189,7 +189,7 @@ namespace PlantTrackerUI.ViewModels
         }
         #endregion
 
-        protected virtual void OnPropertyChanged(string propertyName = null)
+        protected virtual void OnPropertyChanged(string? propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }

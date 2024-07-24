@@ -28,9 +28,11 @@ namespace PlantTrackerUI.ViewModels
         private RelayCommand _openAddPlantTypeWindowCommand;
         private RelayCommand _openAddWateringSystemWindowCommand;
         private RelayCommand _openAddContainerWindowCommand;
+        private RelayCommand _openAddPositionWindowCommand;
         private RelayCommand _removeSelectedTypeCommand;
         private RelayCommand _removeSelectedWateringSystemCommand;
         private RelayCommand _removeSelectedContainerCommand;
+        private RelayCommand _removeSelectedPositionCommand; // TODO there is only one position!
 
         public PlantSystemViewModel(IWindowService genericWindowService)
         {
@@ -42,12 +44,17 @@ namespace PlantTrackerUI.ViewModels
 
             PlantsList = _dataAccess.Plants_GetAllNoDetails();
             _windowService = genericWindowService;
-            _openAddPlantTypeWindowCommand = new RelayCommand(o => OpenAddPlantTypeWindow(SelectedPlant));
+            _openAddPlantTypeWindowCommand = new RelayCommand(o => OpenAddPlantTypeWindow(SelectedPlant)); // TODO remove argument?
             _removeSelectedTypeCommand = new RelayCommand((o) => RemoveSelectedType(o));
+
             _openAddWateringSystemWindowCommand = new RelayCommand(o => OpenAddWateringSystemWindow(SelectedPlant));
             _removeSelectedWateringSystemCommand = new RelayCommand((o) => RemoveSelectedWateringSystem(o));
+
             _openAddContainerWindowCommand = new RelayCommand(o => OpenAddContainerWindow(SelectedPlant));
             _removeSelectedContainerCommand = new RelayCommand((o) => RemoveSelectedContainer(o));
+
+            _openAddPositionWindowCommand = new RelayCommand(o => OpenAddPositionWindow(SelectedPlant));
+            _removeSelectedPositionCommand = new RelayCommand(o => RemoveSelectedPosition(o));
         }
 
 
@@ -125,7 +132,6 @@ namespace PlantTrackerUI.ViewModels
             get { return _openAddContainerWindowCommand; }
         }
 
-
         void RemoveSelectedContainer(object containerToRemove)
         {
             if (containerToRemove is not PlantContainer)
@@ -138,6 +144,29 @@ namespace PlantTrackerUI.ViewModels
         public RelayCommand RemoveSelectedContainerCommand
         {
             get { return _removeSelectedContainerCommand; }
+        }
+
+        public void OpenAddPositionWindow(Plant plant)
+        {
+            _windowService.ShowWindow(new AddPlantPositionViewModel(SelectedPlant));
+        }
+        public RelayCommand OpenAddPositionWindowCommand
+        {
+            get { return _openAddPositionWindowCommand; }
+        }
+
+        void RemoveSelectedPosition(object positionToRemove) // TODO remove positionToRemove
+        {
+            if (positionToRemove is not PlantPosition)
+                return;
+
+            PlantPosition toRemove = (PlantPosition)positionToRemove;
+            SelectedPlant.Position = null; // TODO there can be only one position!!
+            _dataAccess.PlantContainer_RemoveOneForPlant(SelectedPlant.Id, toRemove.Id); // ?????
+        }
+        public RelayCommand RemoveSelectedPositionCommand
+        {
+            get { return _removeSelectedPositionCommand; }
         }
         #endregion
 

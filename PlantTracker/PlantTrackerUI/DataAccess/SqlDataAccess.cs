@@ -309,8 +309,10 @@ namespace PlantTrackerUI.DataAccess
                 {
                     var p = new DynamicParameters();
                     p.Add("@PlantId", plant.Id);
-                    plant.Position = connection.Query<PlantPosition>("dbo.spPlantPositions_GetByPlantId",
-                                       p, commandType: CommandType.StoredProcedure).ToList().FirstOrDefault();
+                    //plant.Position = connection.Query<PlantPosition>("dbo.spPlantPositions_GetByPlantId",
+                    //                   p, commandType: CommandType.StoredProcedure).ToList().FirstOrDefault();
+                    plant.Position = new ObservableCollection<PlantPosition>(connection.Query<PlantPosition>("dbo.spPlantPositions_GetByPlantId",
+                                       p, commandType: CommandType.StoredProcedure));
                     plant.Containers = new ObservableCollection<PlantContainer>(connection.Query<PlantContainer>("dbo.spPlantContainers_GetByPlantId",
                                        p, commandType: CommandType.StoredProcedure));
                     plant.PlantTypes = new ObservableCollection<PlantType>(connection.Query<PlantType>("dbo.spPlantTypes_GetByPlantId",
@@ -343,7 +345,8 @@ namespace PlantTrackerUI.DataAccess
                 ret = connection.Query<Plant>("dbo.spPlants_GetById", p, commandType: CommandType.StoredProcedure).ToList().FirstOrDefault();
                 if (ret is null)
                     return new Plant();
-                ret.Position = connection.Query<PlantPosition>("dbo.spPlantPositions_GetByPlantId", p, commandType: CommandType.StoredProcedure).ToList().FirstOrDefault();
+                //ret.Position = connection.Query<PlantPosition>("dbo.spPlantPositions_GetByPlantId", p, commandType: CommandType.StoredProcedure).ToList().FirstOrDefault();
+                ret.Position = new ObservableCollection<PlantPosition>(connection.Query<PlantPosition>("dbo.spPlantPositions_GetByPlantId", p, commandType: CommandType.StoredProcedure));
                 ret.Containers = new ObservableCollection<PlantContainer>(connection.Query<PlantContainer>("dbo.spPlantContainers_GetByPlantId", p, commandType: CommandType.StoredProcedure));
                 ret.PlantTypes = new ObservableCollection<PlantType>(connection.Query<PlantType>("dbo.spPlantTypes_GetByPlantId", p, commandType: CommandType.StoredProcedure));
                 ret.WateringSystems = new ObservableCollection<WateringSystem>(connection.Query<WateringSystem>("dbo.spWateringSystems_GetByPlantId", p, commandType: CommandType.StoredProcedure));

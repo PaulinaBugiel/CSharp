@@ -42,7 +42,7 @@ namespace PlantTrackerUI.ViewModels
 
         #region Properties
 
-        public ObservableCollection<WateringSystem> PlantAttributes
+        public ObservableCollection<WateringSystem> AvailablePlantAttributes
         {
             get { return _plantTypes; }
             set
@@ -50,7 +50,7 @@ namespace PlantTrackerUI.ViewModels
                 if (_plantTypes == value)
                     return;
                 _plantTypes = value;
-                OnPropertyChanged(nameof(PlantAttributes));
+                OnPropertyChanged(nameof(AvailablePlantAttributes));
             }
         }
 
@@ -134,7 +134,7 @@ namespace PlantTrackerUI.ViewModels
                 WateringSystem newWateringSystem = new WateringSystem { Name = NewAttributeText, Id = newId };
                 NewAttributeText = "";
                 _dataAccess.WateringSystem_InsertOne(newWateringSystem);
-                PlantAttributes = _dataAccess.WateringSystem_GetAvailableForPlant(_selectedPlant.Id);
+                AvailablePlantAttributes = _dataAccess.WateringSystem_GetAvailableForPlant(_selectedPlant.Id);
 
             }
         }

@@ -41,8 +41,13 @@
                         WrapPanelItemsSource="{Binding SelectedPlant.Containers}" 
                         AddElementWindowCommand="{Binding OpenAddContainerWindowCommand}"
                         RemoveElementCommand="{Binding RemoveSelectedContainerCommand}"/>
-            <TextBlock Grid.Row="4" Text="Planting date:" Margin="3 2"/>
-            <TextBlock Grid.Row="4" Grid.Column="2" Text="{Binding SelectedPlant.PlantingDateString}" Margin="3 2"/>
+            <TextBlock Grid.Row="4" Text="Position:" Margin="3 2"/>
+            <usercontrols:WrapPanelItemsControl Grid.Row="4" Grid.Column="2" AddButtonContent="Add Position..."
+                        WrapPanelItemsSource="{Binding SelectedPlant.Position}" 
+                        AddElementWindowCommand="{Binding OpenAddPositionWindowCommand}"
+                        RemoveElementCommand="{Binding RemoveSelectedPositionCommand}"/>
+            <TextBlock Grid.Row="5" Text="Planting date:" Margin="3 2"/>
+            <TextBlock Grid.Row="5" Grid.Column="2" Text="{Binding SelectedPlant.PlantingDateString}" Margin="3 2"/>
 
             <!-- <TextBlock Grid.Row="3" Text="Last watering date" /> -->
             <!-- <TextBlock Grid.Row="4" Text="Container(s):" /> -->

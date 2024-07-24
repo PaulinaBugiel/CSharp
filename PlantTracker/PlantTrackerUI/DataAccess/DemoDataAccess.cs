@@ -56,7 +56,8 @@ namespace PlantTrackerUI.DataAccess
                     PlantingDate = new DateTime(2023, 09, 16),
                     Containers = new ObservableCollection<PlantContainer>(containers.Where(x => x.Name == "Słoik")),
                     WateringSystems = new ObservableCollection<WateringSystem>(wateringSystems.Where(x => x.Name == "Hydroponika" || x.Name == "Ręczny")),
-                    Position = plantPositions.Where(x => x.Name == "Parapet").FirstOrDefault()
+                    Position = new ObservableCollection<PlantPosition>(plantPositions.Where(x => x.Name == "Parapet"))
+                    //Position = plantPositions.Where(x => x.Name == "Parapet").FirstOrDefault()
                 },
                 new Plant()
                 {
@@ -66,7 +67,8 @@ namespace PlantTrackerUI.DataAccess
                     PlantingDate = new DateTime(2023, 09, 16),
                     Containers = new ObservableCollection<PlantContainer>(containers.Where(x => x.Name == "Doniczka")),
                     WateringSystems = new ObservableCollection<WateringSystem>(wateringSystems.Where(x => x.Name == "Ręczny")),
-                    Position = plantPositions.Where(x => x.Name == "Parapet w Kuchni").FirstOrDefault()
+                    Position = new ObservableCollection<PlantPosition>(plantPositions.Where(x => x.Name == "Parapet"))
+                    //Position = plantPositions.Where(x => x.Name == "Parapet w Kuchni").FirstOrDefault()
                 },
                 new Plant()
                 {
@@ -76,7 +78,8 @@ namespace PlantTrackerUI.DataAccess
                     PlantingDate = new DateTime(2023, 09, 16),
                     Containers = new ObservableCollection<PlantContainer>(containers.Where(x => x.Name == "Słoik")),
                     WateringSystems = new ObservableCollection<WateringSystem>(wateringSystems.Where(x => x.Name == "Ręczny")),
-                    Position = plantPositions.Where(x => x.Name == "Balkon").FirstOrDefault()
+                    Position = new ObservableCollection<PlantPosition>(plantPositions.Where(x => x.Name == "Parapet"))
+                    //Position = plantPositions.Where(x => x.Name == "Balkon").FirstOrDefault()
                 }
             };
 
