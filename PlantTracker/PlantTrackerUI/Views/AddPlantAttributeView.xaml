@@ -22,7 +22,7 @@
         </Grid.RowDefinitions>
         <Border Grid.Column="1" Grid.Row="1" BorderBrush="#d9cb98" BorderThickness="1" >
             <StackPanel>
-                <ListView ItemsSource="{Binding PlantAttributes}" 
+                <ListView ItemsSource="{Binding AvailablePlantAttributes}" 
                     SelectionMode="Single" SelectedItem="{Binding SelectedAttribute}"
                     BorderThickness="0">
                     <ListView.ItemTemplate>

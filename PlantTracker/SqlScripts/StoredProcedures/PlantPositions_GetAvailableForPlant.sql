@@ -4,14 +4,15 @@ AS
 BEGIN
 	SET NOCOUNT ON;
 
-	select p.Id, p.Name
-	from dbo.PlantPositions p
-	where p.Id not in 
+	select pp.Id, pp.Name, pp.SunExpositionId
+	from dbo.PlantPositions pp
+	where pp.Id not in 
 	(
-		select p.Id
-		from dbo.PlantsPositionsJunction pp
-		inner join dbo.PlantPositions p on pp.PositionId = p.Id
-		where pp.PlantId = @PlantId
+		select p.PlantPositionId
+		from dbo.Plants p
+		where p.Id = @PlantId
 	)
 END
 GO
+
+

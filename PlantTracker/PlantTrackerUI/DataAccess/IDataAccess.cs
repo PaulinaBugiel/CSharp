@@ -39,8 +39,9 @@ namespace PlantTrackerUI.DataAccess
         void PlantType_RemoveOneForPlant(int plantId, int typeId); // TODO: int typeId => PlantType type
 
 
-        List<Plant> Plants_GetAll();
-        List<Plant> Plants_GetAllNoDetails();
+        ObservableCollection<Plant> Plants_GetAll();
+        ObservableCollection<Plant> Plants_GetAllNoDetails();
         Plant Plants_GetById(int plantId);
+        void Plants_UpdatePosition(int plantId, int newPositionId);
     }
 }

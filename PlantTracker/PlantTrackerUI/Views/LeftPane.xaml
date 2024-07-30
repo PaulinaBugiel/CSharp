@@ -16,7 +16,7 @@
         </Grid.RowDefinitions>
         <Border Grid.Column="0" Grid.Row="0" BorderBrush="#d9cb98"
                 BorderThickness="1" >
-            <ListView Grid.Column="0" Grid.Row="0" ItemsSource="{Binding PlantsList}" 
+            <ListView Grid.Column="0" Grid.Row="0" ItemsSource="{Binding AllPlantsNoDetails}" 
                       SelectionMode="Single" SelectedItem="{Binding SelectedPlant}"
                        BorderThickness="0">
                 <ListView.ItemTemplate>

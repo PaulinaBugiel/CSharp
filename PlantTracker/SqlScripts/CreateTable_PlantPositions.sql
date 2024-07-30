@@ -1,6 +1,0 @@
-CREATE TABLE dbo.PlantPositions
-(
-	[Id] INT NOT NULL PRIMARY KEY IDENTITY, 
-    [Name] NVARCHAR(50) NOT NULL,
-	[SunExpositionId] INT NOT NULL
-);

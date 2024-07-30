@@ -21,7 +21,7 @@ namespace PlantTrackerUI.ViewModels
         public ObservableCollection<PlantPosition> _availablePlantPositions;
         private readonly IDataAccess _dataAccess;
         private Plant _selectedPlant;
-        private string _newPositionText;
+        private string _newPositionText = "";
 
         private PlantPosition? _selectedPosition;
 
@@ -174,7 +174,7 @@ namespace PlantTrackerUI.ViewModels
         }
         void AddSelectedPosition()
         {
-            SelectedPlant.Position.Add(SelectedAttribute);
+            SelectedPlant.Position = SelectedAttribute;
             _dataAccess.PlantPosition_AddOneForPlant(SelectedPlant.Id, SelectedAttribute.Id); // TODO there can be only one position!
             OnPropertyChanged(nameof(SelectedPlant));
             CloseWindow();

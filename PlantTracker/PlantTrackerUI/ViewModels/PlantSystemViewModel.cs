@@ -19,11 +19,14 @@ namespace PlantTrackerUI.ViewModels
     {
 
         public event PropertyChangedEventHandler? PropertyChanged; // TODO Add to ViewModelBase
-        public List<Plant> PlantsList { get; set; } = new List<Plant>();
+        public ObservableCollection<Plant> AllPlantsNoDetails { get; set; } = new ObservableCollection<Plant>();
+        public ObservableCollection<Plant> AllPlantsWithDetails { get; set; } = new ObservableCollection<Plant>();
+        public ObservableCollection<PlantPosition> PlantPositions { get; set; } = new ObservableCollection<PlantPosition>();
 
         private readonly IDataAccess _dataAccess;
         private IWindowService _windowService;
         private Plant? _selectedPlant;
+        private PlantPosition? _currentPlantPosition;
 
         private RelayCommand _openAddPlantTypeWindowCommand;
         private RelayCommand _openAddWateringSystemWindowCommand;
@@ -42,8 +45,10 @@ namespace PlantTrackerUI.ViewModels
             else
                 _dataAccess = new DemoDataAccess();
 
-            PlantsList = _dataAccess.Plants_GetAllNoDetails();
+            AllPlantsNoDetails = _dataAccess.Plants_GetAllNoDetails();
+            PlantPositions = _dataAccess.PlantPosition_GetAll();
             _windowService = genericWindowService;
+
             _openAddPlantTypeWindowCommand = new RelayCommand(o => OpenAddPlantTypeWindow(SelectedPlant)); // TODO remove argument?
             _removeSelectedTypeCommand = new RelayCommand((o) => RemoveSelectedType(o));
 
@@ -67,7 +72,22 @@ namespace PlantTrackerUI.ViewModels
                     return;
                 // get plant with all details from db
                 _selectedPlant = _dataAccess.Plants_GetById(value.Id);
+                _currentPlantPosition = PlantPositions.FirstOrDefault(x => x.Name == SelectedPlant?.Position?.Name);
+                OnPropertyChanged(nameof(CurrentPlantPosition));
                 OnPropertyChanged(nameof(SelectedPlant));
+            }
+        }
+
+        public PlantPosition CurrentPlantPosition
+        {
+            get { return _currentPlantPosition; }
+            set
+            {
+                if (_currentPlantPosition == value)
+                    return;
+                _currentPlantPosition = value;
+                _dataAccess.Plants_UpdatePosition(SelectedPlant.Id, _currentPlantPosition.Id);
+                OnPropertyChanged(nameof(CurrentPlantPosition));
             }
         }
 

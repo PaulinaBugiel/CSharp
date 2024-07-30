@@ -45,7 +45,7 @@ namespace PlantTrackerUI.DataAccess
             new PlantType() { Id = 5, Name = "Ozdobne" }
         };
 
-        private static List<Plant> plantsFull = new List<Plant>
+        private static ObservableCollection<Plant> plantsFull = new ObservableCollection<Plant>
             {
                 // add a few Plants
                 new Plant()
@@ -56,8 +56,7 @@ namespace PlantTrackerUI.DataAccess
                     PlantingDate = new DateTime(2023, 09, 16),
                     Containers = new ObservableCollection<PlantContainer>(containers.Where(x => x.Name == "Słoik")),
                     WateringSystems = new ObservableCollection<WateringSystem>(wateringSystems.Where(x => x.Name == "Hydroponika" || x.Name == "Ręczny")),
-                    Position = new ObservableCollection<PlantPosition>(plantPositions.Where(x => x.Name == "Parapet"))
-                    //Position = plantPositions.Where(x => x.Name == "Parapet").FirstOrDefault()
+                    Position = plantPositions.Where(x => x.Name == "Parapet").FirstOrDefault()
                 },
                 new Plant()
                 {
@@ -67,8 +66,7 @@ namespace PlantTrackerUI.DataAccess
                     PlantingDate = new DateTime(2023, 09, 16),
                     Containers = new ObservableCollection<PlantContainer>(containers.Where(x => x.Name == "Doniczka")),
                     WateringSystems = new ObservableCollection<WateringSystem>(wateringSystems.Where(x => x.Name == "Ręczny")),
-                    Position = new ObservableCollection<PlantPosition>(plantPositions.Where(x => x.Name == "Parapet"))
-                    //Position = plantPositions.Where(x => x.Name == "Parapet w Kuchni").FirstOrDefault()
+                    Position = plantPositions.Where(x => x.Name == "Parapet w Kuchni").FirstOrDefault()
                 },
                 new Plant()
                 {
@@ -78,12 +76,11 @@ namespace PlantTrackerUI.DataAccess
                     PlantingDate = new DateTime(2023, 09, 16),
                     Containers = new ObservableCollection<PlantContainer>(containers.Where(x => x.Name == "Słoik")),
                     WateringSystems = new ObservableCollection<WateringSystem>(wateringSystems.Where(x => x.Name == "Ręczny")),
-                    Position = new ObservableCollection<PlantPosition>(plantPositions.Where(x => x.Name == "Parapet"))
-                    //Position = plantPositions.Where(x => x.Name == "Balkon").FirstOrDefault()
+                    Position = plantPositions.Where(x => x.Name == "Balkon").FirstOrDefault()
                 }
             };
 
-        private static List<Plant> plantsNoDetails = new List<Plant>
+        private static ObservableCollection<Plant> plantsNoDetails = new ObservableCollection<Plant>
             {
                 // add a few Plants
                 new Plant()
@@ -164,12 +161,12 @@ namespace PlantTrackerUI.DataAccess
                 return ret;
         }
 
-        public List<Plant> Plants_GetAll()
+        public ObservableCollection<Plant> Plants_GetAll()
         {
             return plantsFull;
         }
 
-        public List<Plant> Plants_GetAllNoDetails()
+        public ObservableCollection<Plant> Plants_GetAllNoDetails()
         {
             return plantsNoDetails;
         }
@@ -270,6 +267,11 @@ namespace PlantTrackerUI.DataAccess
         }
 
         void IDataAccess.PlantPosition_RemoveOneForPlant(int plantId, int positionId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Plants_UpdatePosition(int plantId, int newPositionId)
         {
             throw new NotImplementedException();
         }
