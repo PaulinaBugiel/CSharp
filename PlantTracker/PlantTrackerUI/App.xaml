@@ -18,6 +18,10 @@
                 <vws:AddPlantAttributeView/>
             </DataTemplate>
 
+            <DataTemplate DataType="{x:Type vms:ManageWateringSystemsViewModel}">
+                <vws:ManagePlantAttributesView/>
+            </DataTemplate>
+
             <DataTemplate DataType="{x:Type vms:AddPlantContainerViewModel}">
                 <vws:AddPlantAttributeView/>
             </DataTemplate>

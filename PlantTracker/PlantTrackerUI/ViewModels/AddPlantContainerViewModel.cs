@@ -28,6 +28,7 @@ namespace PlantTrackerUI.ViewModels
         private RelayCommand? _addNewContainerCommand;
         private RelayCommand? _cancelAddingContainerCommand;
         private RelayCommand? _addSelectedContainerCommand;
+        private RelayCommand? _removeAttributeCommand;
 
 
         public AddPlantContainerViewModel(Plant selectedPlant)
@@ -186,6 +187,26 @@ namespace PlantTrackerUI.ViewModels
             OnPropertyChanged(nameof(SelectedPlant));
             CloseWindow();
             
+        }
+
+        public RelayCommand RemoveAttributeCommand
+        {
+            get
+            {
+                if (_removeAttributeCommand == null)
+                    _removeAttributeCommand = new RelayCommand(o => RemoveContainer(), o => CanRemoveContainer());
+                return _removeAttributeCommand;
+            }
+        }
+
+        bool CanRemoveContainer()
+        {
+            return true;
+        }
+
+        void RemoveContainer()
+        {
+
         }
         #endregion
 

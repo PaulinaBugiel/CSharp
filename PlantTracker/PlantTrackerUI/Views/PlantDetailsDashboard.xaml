@@ -13,6 +13,7 @@
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="15"/>
                 <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
@@ -27,27 +28,28 @@
             <TextBlock Grid.Row="0" Text="Name:" Margin="3 2"/>
             <TextBlock Grid.Row="0" Grid.Column="2" Text="{Binding SelectedPlant.Name}" Margin="3 2"/>
             <TextBlock Grid.Row="1" Text="Type:" Margin="3 2"/>
-            <usercontrols:WrapPanelItemsControl Grid.Row="1" Grid.Column="2" AddButtonContent="Manage Types..."
+            <usercontrols:WrapPanelItemsControl Grid.Row="1" Grid.Column="2" AddButtonContent="Add Types..."
                         WrapPanelItemsSource="{Binding SelectedPlant.PlantTypes}" 
                         AddElementWindowCommand="{Binding OpenAddPlantTypeWindowCommand}"
                         RemoveElementCommand="{Binding RemoveSelectedTypeCommand}"/>
             <TextBlock Grid.Row="2" Text="Watering System:" Margin="3 2"/>
-            <usercontrols:WrapPanelItemsControl Grid.Row="2" Grid.Column="2" AddButtonContent="Manage Watering Systems..."
+            <usercontrols:WrapPanelItemsControl Grid.Row="2" Grid.Column="2" AddButtonContent="Add Watering Systems..."
                         WrapPanelItemsSource="{Binding SelectedPlant.WateringSystems}" 
                         AddElementWindowCommand="{Binding OpenAddWateringSystemWindowCommand}"
                         RemoveElementCommand="{Binding RemoveSelectedWateringSystemCommand}"/>
+            <Button Grid.Row="2" Grid.Column="3" Content="Manage Watering Systems..."
+                    Command="{Binding OpenManageWateringSystemsWindowCommand}"/>
             <TextBlock Grid.Row="3" Text="Containers:" Margin="3 2"/>
-            <usercontrols:WrapPanelItemsControl Grid.Row="3" Grid.Column="2" AddButtonContent="Manage Containers..."
+            <usercontrols:WrapPanelItemsControl Grid.Row="3" Grid.Column="2" AddButtonContent="Add Containers..."
                         WrapPanelItemsSource="{Binding SelectedPlant.Containers}" 
                         AddElementWindowCommand="{Binding OpenAddContainerWindowCommand}"
                         RemoveElementCommand="{Binding RemoveSelectedContainerCommand}"/>
             <TextBlock Grid.Row="4" Text="Place:" Margin="3 2"/>
-            <StackPanel Grid.Row="4" Grid.Column="2" Orientation="Horizontal" Margin="3 2">
+            <StackPanel Grid.Row="4" Grid.Column="2" Orientation="Horizontal">
                 <ComboBox Style="{DynamicResource ComboBoxStyle1}" ItemsSource="{Binding PlantPositions}" 
                           SelectedItem="{Binding CurrentPlantPosition}"
                           IsSynchronizedWithCurrentItem="True"
-                          DisplayMemberPath="Name"
-                          BorderThickness="1" BorderBrush="#d9cb98" Background="#f7eecd">
+                          DisplayMemberPath="Name">
                 </ComboBox>
                 <Button Content="Manage Plant Positions..." Command="{Binding OpenAddPositionWindowCommand}"
                         Background="#cdf7d3" BorderThickness="1" BorderBrush="#8adb96" Padding="5 0"/>

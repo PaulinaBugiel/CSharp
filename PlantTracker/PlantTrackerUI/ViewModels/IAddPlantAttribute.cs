@@ -20,5 +20,6 @@ namespace PlantTrackerUI.ViewModels
         public RelayCommand AddNewAttributeCommand { get; }
         public RelayCommand CancelAddingAttributeCommand { get; }
         public RelayCommand AddSelectedAttributeCommand { get; }
+        //public RelayCommand RemoveAttributeCommand { get; }
     }
 }

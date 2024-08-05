@@ -29,13 +29,16 @@ namespace PlantTrackerUI.ViewModels
         private PlantPosition? _currentPlantPosition;
 
         private RelayCommand _openAddPlantTypeWindowCommand;
-        private RelayCommand _openAddWateringSystemWindowCommand;
-        private RelayCommand _openAddContainerWindowCommand;
-        private RelayCommand _openAddPositionWindowCommand;
         private RelayCommand _removeSelectedTypeCommand;
+
+        private RelayCommand _openAddWateringSystemWindowCommand;
         private RelayCommand _removeSelectedWateringSystemCommand;
+        private RelayCommand _openManageWateringSystemsWindowCommand;
+
+        private RelayCommand _openAddContainerWindowCommand;
         private RelayCommand _removeSelectedContainerCommand;
-        private RelayCommand _removeSelectedPositionCommand; // TODO there is only one position!
+
+        private RelayCommand _openAddPositionWindowCommand;
 
         public PlantSystemViewModel(IWindowService genericWindowService)
         {
@@ -50,16 +53,19 @@ namespace PlantTrackerUI.ViewModels
             _windowService = genericWindowService;
 
             _openAddPlantTypeWindowCommand = new RelayCommand(o => OpenAddPlantTypeWindow(SelectedPlant)); // TODO remove argument?
-            _removeSelectedTypeCommand = new RelayCommand((o) => RemoveSelectedType(o));
+            _removeSelectedTypeCommand = new RelayCommand(o => RemoveSelectedType(o));
 
             _openAddWateringSystemWindowCommand = new RelayCommand(o => OpenAddWateringSystemWindow(SelectedPlant));
-            _removeSelectedWateringSystemCommand = new RelayCommand((o) => RemoveSelectedWateringSystem(o));
+            _removeSelectedWateringSystemCommand = new RelayCommand(o => RemoveSelectedWateringSystem(o));
+            _openManageWateringSystemsWindowCommand = new RelayCommand(o => OpenManageWateringSystemsWindow());
+
 
             _openAddContainerWindowCommand = new RelayCommand(o => OpenAddContainerWindow(SelectedPlant));
-            _removeSelectedContainerCommand = new RelayCommand((o) => RemoveSelectedContainer(o));
+            _removeSelectedContainerCommand = new RelayCommand(o => RemoveSelectedContainer(o));
 
             _openAddPositionWindowCommand = new RelayCommand(o => OpenAddPositionWindow(SelectedPlant));
-            _removeSelectedPositionCommand = new RelayCommand(o => RemoveSelectedPosition(o));
+
+
         }
 
 
@@ -118,6 +124,8 @@ namespace PlantTrackerUI.ViewModels
         }
 
 
+        //  TODO OpenManageWateringSystemsWindow(Plant plant)
+
         public void OpenAddWateringSystemWindow(Plant plant)
         {
             _windowService.ShowWindow(new AddWateringSystemViewModel(SelectedPlant));
@@ -125,6 +133,15 @@ namespace PlantTrackerUI.ViewModels
         public RelayCommand OpenAddWateringSystemWindowCommand
         {
             get { return _openAddWateringSystemWindowCommand; }
+        }
+
+        public void OpenManageWateringSystemsWindow()
+        {
+            _windowService.ShowWindow(new ManageWateringSystemsViewModel());
+        }
+        public RelayCommand OpenManageWateringSystemsWindowCommand
+        {
+            get { return _openManageWateringSystemsWindowCommand; }
         }
 
         void RemoveSelectedWateringSystem(object wateringSystemToRemove)
@@ -175,19 +192,6 @@ namespace PlantTrackerUI.ViewModels
             get { return _openAddPositionWindowCommand; }
         }
 
-        void RemoveSelectedPosition(object positionToRemove) // TODO remove positionToRemove
-        {
-            if (positionToRemove is not PlantPosition)
-                return;
-
-            PlantPosition toRemove = (PlantPosition)positionToRemove;
-            SelectedPlant.Position = null; // TODO there can be only one position!!
-            _dataAccess.PlantContainer_RemoveOneForPlant(SelectedPlant.Id, toRemove.Id); // ?????
-        }
-        public RelayCommand RemoveSelectedPositionCommand
-        {
-            get { return _removeSelectedPositionCommand; }
-        }
         #endregion
 
         protected virtual void OnPropertyChanged(string? propertyName = null)  // TODO Add to ViewModelBase
