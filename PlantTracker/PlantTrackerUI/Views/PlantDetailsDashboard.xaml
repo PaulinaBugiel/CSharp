@@ -14,6 +14,7 @@
                 <ColumnDefinition Width="15"/>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
@@ -25,25 +26,50 @@
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
+            
+            <!-- Name -->
             <TextBlock Grid.Row="0" Text="Name:" Margin="3 2"/>
             <TextBlock Grid.Row="0" Grid.Column="2" Text="{Binding SelectedPlant.Name}" Margin="3 2"/>
+            
+            <!-- Type -->
             <TextBlock Grid.Row="1" Text="Type:" Margin="3 2"/>
-            <usercontrols:WrapPanelItemsControl Grid.Row="1" Grid.Column="2" AddButtonContent="Add Types..."
+            <usercontrols:WrapPanelItemsControl Grid.Row="1" Grid.Column="2" 
                         WrapPanelItemsSource="{Binding SelectedPlant.PlantTypes}" 
-                        AddElementWindowCommand="{Binding OpenAddPlantTypeWindowCommand}"
                         RemoveElementCommand="{Binding RemoveSelectedTypeCommand}"/>
+            <usercontrols:AddAttributeButtonControl Grid.Row="1" Grid.Column="3" 
+                                                    AddButtonContent="Add Types..." 
+                                                    AddElementWindowCommand="{Binding OpenAddPlantTypeWindowCommand}"/>
+            <StackPanel Grid.Row="1" Grid.Column="4" VerticalAlignment="Center" HorizontalAlignment="Stretch">
+                <Button Content="Manage Types..." BorderBrush="#d9cb98" Background="#f7eecd"
+                        Command="{Binding OpenManageTypesWindowCommand}"/>
+            </StackPanel>
+            <!-- Watering Systems -->
             <TextBlock Grid.Row="2" Text="Watering System:" Margin="3 2"/>
-            <usercontrols:WrapPanelItemsControl Grid.Row="2" Grid.Column="2" AddButtonContent="Add Watering Systems..."
+            <usercontrols:WrapPanelItemsControl Grid.Row="2" Grid.Column="2" 
                         WrapPanelItemsSource="{Binding SelectedPlant.WateringSystems}" 
-                        AddElementWindowCommand="{Binding OpenAddWateringSystemWindowCommand}"
                         RemoveElementCommand="{Binding RemoveSelectedWateringSystemCommand}"/>
-            <Button Grid.Row="2" Grid.Column="3" Content="Manage Watering Systems..."
-                    Command="{Binding OpenManageWateringSystemsWindowCommand}"/>
+            <usercontrols:AddAttributeButtonControl Grid.Row="2" Grid.Column="3" 
+                                                    AddButtonContent="Add Watering..." 
+                                                    AddElementWindowCommand="{Binding OpenAddWateringSystemWindowCommand}"/>
+            <StackPanel Grid.Row="2" Grid.Column="4" VerticalAlignment="Center" HorizontalAlignment="Stretch">
+                <Button Content="Manage Watering..." BorderBrush="#d9cb98" Background="#f7eecd"
+                        Command="{Binding OpenManageWateringSystemsWindowCommand}"/>
+            </StackPanel>
+            
+            <!-- Containers -->
             <TextBlock Grid.Row="3" Text="Containers:" Margin="3 2"/>
-            <usercontrols:WrapPanelItemsControl Grid.Row="3" Grid.Column="2" AddButtonContent="Add Containers..."
+            <usercontrols:WrapPanelItemsControl Grid.Row="3" Grid.Column="2" 
                         WrapPanelItemsSource="{Binding SelectedPlant.Containers}" 
-                        AddElementWindowCommand="{Binding OpenAddContainerWindowCommand}"
                         RemoveElementCommand="{Binding RemoveSelectedContainerCommand}"/>
+            <usercontrols:AddAttributeButtonControl Grid.Row="3" Grid.Column="3" 
+                                                    AddButtonContent="Add Containers..."
+                                                    AddElementWindowCommand="{Binding OpenAddContainerWindowCommand}"/>
+            <StackPanel Grid.Row="3" Grid.Column="4" VerticalAlignment="Center" HorizontalAlignment="Stretch">
+                <Button Content="Manage Containers..." BorderBrush="#d9cb98" Background="#f7eecd"
+                        Command="{Binding OpenManageWateringSystemsWindowCommand}"/>
+            </StackPanel>
+
+            <!-- Place -->
             <TextBlock Grid.Row="4" Text="Place:" Margin="3 2"/>
             <StackPanel Grid.Row="4" Grid.Column="2" Orientation="Horizontal">
                 <ComboBox Style="{DynamicResource ComboBoxStyle1}" ItemsSource="{Binding PlantPositions}" 

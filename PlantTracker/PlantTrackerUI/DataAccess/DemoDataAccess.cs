@@ -275,5 +275,35 @@ namespace PlantTrackerUI.DataAccess
         {
             throw new NotImplementedException();
         }
+
+        public ObservableCollection<Plant> WateringSystem_GetAllPlantsWithSystem(WateringSystem wateringSystem)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void WateringSystem_DeleteWateringSystem(int wateringSystemId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void PlantType_DeletePlantType(int typeId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public ObservableCollection<Plant> PlantType_GetAllPlantsWithType(PlantType plantType)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void PlantContainer_DeletePlantContainer(int plantContainerId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public ObservableCollection<Plant> PlantContainer_GetAllPlantsWithContainer(PlantContainer container)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

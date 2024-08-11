@@ -8,7 +8,11 @@
              d:DesignHeight="450" d:DesignWidth="800"
              x:Name="root">
     <Grid>
-        <WrapPanel>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="auto"/>
+        </Grid.ColumnDefinitions>
+        <WrapPanel Grid.Column="0">
             <ItemsControl x:Name="PlantAttributeItemsControl" ItemsSource="{Binding WrapPanelItemsSource, ElementName=root}">
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
@@ -28,12 +32,7 @@
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
             </ItemsControl>
-            <Border BorderThickness="1" BorderBrush="#8adb96" Background="#cdf7d3" Margin="0 0 5 0">
-                <StackPanel Orientation="Horizontal" >
-                    <Button Background="#cdf7d3" BorderThickness="0" Padding="5 0"
-                    Command="{Binding AddElementWindowCommand, ElementName=root}" Content="{Binding AddButtonContent, ElementName=root}"/>
-                </StackPanel>
-            </Border>
         </WrapPanel>
+
     </Grid>
 </UserControl>

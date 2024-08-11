@@ -84,6 +84,28 @@ namespace PlantTrackerUI.DataAccess
             }
         }
 
+        public void WateringSystem_DeleteWateringSystem(int wateringSystemId)
+        {
+            using (IDbConnection connection = new System.Data.SqlClient.SqlConnection(connString))
+            {
+                var p = new DynamicParameters();
+                p.Add("@WateringSystemId", wateringSystemId);
+                connection.Execute("dbo.spWateringSystems_DeleteWateringSystem", p, commandType: CommandType.StoredProcedure);
+            }
+        }
+
+        public ObservableCollection<Plant> WateringSystem_GetAllPlantsWithSystem(WateringSystem wateringSystem)
+        {
+            ObservableCollection<Plant> ret;
+            using (IDbConnection connection = new SqlConnection(connString))
+            {
+                var p = new DynamicParameters();
+                p.Add("@WateringSystemId", wateringSystem.Id);
+                ret = new ObservableCollection<Plant>(connection.Query<Plant>("dbo.spWateringSystems_GetAllPlantsWithSystem", p, commandType: CommandType.StoredProcedure));
+            }
+            return ret;
+        }
+
 
         public void PlantContainer_InsertOne(PlantContainer model)
         {
@@ -153,6 +175,28 @@ namespace PlantTrackerUI.DataAccess
                 p.Add("@ContainerId", containerId);
                 connection.Execute("dbo.spPlantContainers_RemoveContainerForPlant", p, commandType: CommandType.StoredProcedure);
             }
+        }
+
+        public void PlantContainer_DeletePlantContainer(int plantContainerId)
+        {
+            using (IDbConnection connection = new System.Data.SqlClient.SqlConnection(connString))
+            {
+                var p = new DynamicParameters();
+                p.Add("@ContainerId", plantContainerId);
+                connection.Execute("dbo.spPlantContainers_DeletePlantContainer", p, commandType: CommandType.StoredProcedure);
+            }
+        }
+
+        public ObservableCollection<Plant> PlantContainer_GetAllPlantsWithContainer(PlantContainer container)
+        {
+            ObservableCollection<Plant> ret;
+            using (IDbConnection connection = new SqlConnection(connString))
+            {
+                var p = new DynamicParameters();
+                p.Add("@ContainerId", container.Id);
+                ret = new ObservableCollection<Plant>(connection.Query<Plant>("dbo.spPlantContainers_GetAllPlantsWithContainer", p, commandType: CommandType.StoredProcedure));
+            }
+            return ret;
         }
 
 
@@ -235,7 +279,7 @@ namespace PlantTrackerUI.DataAccess
                 p.Add("@Name", model.Name);
                 p.Add("@Id", 0, DbType.Int32, ParameterDirection.Output);
                 connection.Execute("dbo.spPlantTypes_Insert", p, commandType: CommandType.StoredProcedure);
-                model.Id = p.Get<int>("@id");
+                model.Id = p.Get<int>("@Id");
             }
         }
         public ObservableCollection<PlantType> PlantType_GetAll()
@@ -296,6 +340,28 @@ namespace PlantTrackerUI.DataAccess
                 p.Add("@TypeId", typeId);
                 connection.Execute("dbo.spPlantTypes_RemoveTypeForPlant", p, commandType: CommandType.StoredProcedure);
             }
+        }
+
+        public void PlantType_DeletePlantType(int typeId)
+        {
+            using (IDbConnection connection = new System.Data.SqlClient.SqlConnection(connString))
+            {
+                var p = new DynamicParameters();
+                p.Add("@TypeId", typeId);
+                connection.Execute("dbo.spPlantTypes_DeletePlantType", p, commandType: CommandType.StoredProcedure);
+            }
+        }
+
+        public ObservableCollection<Plant> PlantType_GetAllPlantsWithType(PlantType plantType)
+        {
+            ObservableCollection<Plant> ret;
+            using (IDbConnection connection = new SqlConnection(connString))
+            {
+                var p = new DynamicParameters();
+                p.Add("@PlantTypeId", plantType.Id);
+                ret = new ObservableCollection<Plant>(connection.Query<Plant>("dbo.spPlantTypes_GetAllPlantsWithType", p, commandType: CommandType.StoredProcedure));
+            }
+            return ret;
         }
 
 

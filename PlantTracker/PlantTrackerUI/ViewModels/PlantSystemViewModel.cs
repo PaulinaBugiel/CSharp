@@ -30,6 +30,7 @@ namespace PlantTrackerUI.ViewModels
 
         private RelayCommand _openAddPlantTypeWindowCommand;
         private RelayCommand _removeSelectedTypeCommand;
+        private RelayCommand _openManageTypesWindowCommand;
 
         private RelayCommand _openAddWateringSystemWindowCommand;
         private RelayCommand _removeSelectedWateringSystemCommand;
@@ -37,6 +38,7 @@ namespace PlantTrackerUI.ViewModels
 
         private RelayCommand _openAddContainerWindowCommand;
         private RelayCommand _removeSelectedContainerCommand;
+        private RelayCommand _openManageContainersWindowCommand;
 
         private RelayCommand _openAddPositionWindowCommand;
 
@@ -54,14 +56,15 @@ namespace PlantTrackerUI.ViewModels
 
             _openAddPlantTypeWindowCommand = new RelayCommand(o => OpenAddPlantTypeWindow(SelectedPlant)); // TODO remove argument?
             _removeSelectedTypeCommand = new RelayCommand(o => RemoveSelectedType(o));
+            _openManageTypesWindowCommand = new RelayCommand(o => OpenManageTypesWindow());
 
             _openAddWateringSystemWindowCommand = new RelayCommand(o => OpenAddWateringSystemWindow(SelectedPlant));
             _removeSelectedWateringSystemCommand = new RelayCommand(o => RemoveSelectedWateringSystem(o));
             _openManageWateringSystemsWindowCommand = new RelayCommand(o => OpenManageWateringSystemsWindow());
 
-
             _openAddContainerWindowCommand = new RelayCommand(o => OpenAddContainerWindow(SelectedPlant));
             _removeSelectedContainerCommand = new RelayCommand(o => RemoveSelectedContainer(o));
+            _openManageContainersWindowCommand = new RelayCommand(o => OpenManageContainersWindow());
 
             _openAddPositionWindowCommand = new RelayCommand(o => OpenAddPositionWindow(SelectedPlant));
 
@@ -124,7 +127,17 @@ namespace PlantTrackerUI.ViewModels
         }
 
 
-        //  TODO OpenManageWateringSystemsWindow(Plant plant)
+        void OpenManageTypesWindow()
+        {
+            _windowService.ShowWindow(new ManagePlantTypesViewModel());
+            SelectedPlant.PlantTypes = _dataAccess.PlantType_GetByPlantId(SelectedPlant.Id);
+            OnPropertyChanged(nameof(SelectedPlant));
+        }
+
+        public RelayCommand OpenManageTypesWindowCommand
+        {
+            get { return _openManageTypesWindowCommand; }
+        }
 
         public void OpenAddWateringSystemWindow(Plant plant)
         {
@@ -138,6 +151,8 @@ namespace PlantTrackerUI.ViewModels
         public void OpenManageWateringSystemsWindow()
         {
             _windowService.ShowWindow(new ManageWateringSystemsViewModel());
+            SelectedPlant.WateringSystems = _dataAccess.WateringSystem_GetByPlantId(SelectedPlant.Id);
+            OnPropertyChanged(nameof(SelectedPlant));
         }
         public RelayCommand OpenManageWateringSystemsWindowCommand
         {
@@ -167,6 +182,17 @@ namespace PlantTrackerUI.ViewModels
         public RelayCommand OpenAddContainerWindowCommand
         {
             get { return _openAddContainerWindowCommand; }
+        }
+
+        public void OpenManageContainersWindow()
+        {
+            _windowService.ShowWindow(new ManagePlantContainersViewModel());
+            SelectedPlant.Containers = _dataAccess.PlantContainer_GetByPlantId(SelectedPlant.Id);
+            OnPropertyChanged(nameof(SelectedPlant));
+        }
+        public RelayCommand OpenManageContainersWindowCommand
+        {
+            get { return _openManageContainersWindowCommand; }
         }
 
         void RemoveSelectedContainer(object containerToRemove)

@@ -23,16 +23,6 @@ namespace PlantTrackerUI.UserControls
     /// </summary>
     public partial class WrapPanelItemsControl : UserControl
     {
-        public string AddButtonContent
-        {
-            get { return (string)GetValue(AddButtonContentProperty); }
-            set { SetValue(AddButtonContentProperty, value); }
-        }
-        // Using a DependencyProperty as the backing store for AddButtonContent.  This enables animation, styling, binding, etc...
-        public static readonly DependencyProperty AddButtonContentProperty =
-            DependencyProperty.Register("AddButtonContent", typeof(string), typeof(WrapPanelItemsControl), new PropertyMetadata("Add..."));
-
-
 
         public IEnumerable WrapPanelItemsSource
         {
@@ -41,17 +31,6 @@ namespace PlantTrackerUI.UserControls
         }
         public static readonly DependencyProperty WrapPanelItemsSourceProperty =
             DependencyProperty.Register("WrapPanelItemsSource", typeof(IEnumerable), typeof(WrapPanelItemsControl), new PropertyMetadata(null));
-
-
-
-        public ICommand AddElementWindowCommand
-        {
-            get { return (ICommand)GetValue(AddElementWindowCommandProperty); }
-            set { SetValue(AddElementWindowCommandProperty, value); }
-        }
-        public static readonly DependencyProperty AddElementWindowCommandProperty =
-            DependencyProperty.Register("AddElementWindowCommand", typeof(ICommand), typeof(WrapPanelItemsControl), new PropertyMetadata(null));
-
 
 
         public ICommand RemoveElementCommand

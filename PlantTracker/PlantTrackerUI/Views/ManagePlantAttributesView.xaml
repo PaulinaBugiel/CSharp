@@ -3,9 +3,10 @@
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:usercontrols="clr-namespace:PlantTrackerUI.UserControls"
       xmlns:local="clr-namespace:PlantTrackerUI.Views"
       mc:Ignorable="d" 
-      d:DesignHeight="300" d:DesignWidth="300"
+      d:DesignHeight="300"
       Title="Manage Plant Attributes">
 
     <Grid>
@@ -22,39 +23,34 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="10"/>
         </Grid.RowDefinitions>
-        <Border Grid.Column="1" Grid.Row="1" BorderBrush="#d9cb98" BorderThickness="1" >
-            <StackPanel>
-                <ListView ItemsSource="{Binding PlantAttributes}" 
-                    SelectionMode="Single" SelectedItem="{Binding SelectedAttribute}"
-                    BorderThickness="0">
-                    <ListView.ItemTemplate>
-                        <DataTemplate>
-                            <StackPanel Orientation="Horizontal">
-                                <TextBlock Text="{Binding Name}" Margin="4 2 4 2"/>
-                                <Button Margin="4 0 4 0" Style="{StaticResource XButton}" 
-                                        Command="{Binding ElementName=root, Path=RemoveAttributeCommand}"
-                                        CommandParameter="{Binding}"></Button>
-                            </StackPanel>
-                        </DataTemplate>
-                    </ListView.ItemTemplate>
-                </ListView>
-                <WrapPanel Background="#f7eecd">
-                    <TextBlock Text="{Binding NewAttributeLabelText}" VerticalAlignment="Center" Margin="4 0 4 0"/>
-                    <TextBox Grid.Column="1" Grid.Row="2" Background="White" 
-                             BorderThickness="1" BorderBrush="#d9cb98" VerticalAlignment="Center"
-                             HorizontalAlignment="Left" Margin="4 2 4 2" Padding="3 2"
-                             MinWidth="40"
-                             Text="{Binding NewAttributeText, UpdateSourceTrigger=PropertyChanged}"/>
-                    <Button Command="{Binding AddNewAttributeCommand}" BorderThickness="0" Background="Transparent"
-                            Style="{StaticResource OkButton}">
-                    </Button>
-                    <Button Command="{Binding CancelAddingAttributeCommand}" BorderThickness="0" Background="Transparent"
-                            Style="{StaticResource CacnelButton}">
-                    </Button>
-                </WrapPanel>
-            </StackPanel>
+        <usercontrols:ManagePlantAttributesListControl Grid.Column="1" Grid.Row="1"
+                PlantAttributesItemsSource="{Binding PlantAttributes}"
+                RemoveElementCommand="{Binding RemoveAttributeCommand}"/>
+        <Border Grid.Column="1" Grid.Row="2" BorderThickness="1" BorderBrush="#d9cb98" Background="#f7eecd" Margin="0 0 5 0">
+            <WrapPanel Background="#f7eecd">
+                <TextBlock Text="{Binding NewAttributePlaceholderText}" VerticalAlignment="Center" Margin="4 0 4 0"/>
+                <TextBox Grid.Column="1" Grid.Row="2" Background="White" 
+             BorderThickness="1" BorderBrush="#d9cb98" VerticalAlignment="Center"
+             HorizontalAlignment="Left" Margin="4 2 4 2" Padding="3 2"
+             MinWidth="40"
+             Text="{Binding NewAttributeText, UpdateSourceTrigger=PropertyChanged}"/>
+                <Button Command="{Binding AddNewAttributeCommand}" BorderThickness="0" Background="Transparent"
+            Style="{StaticResource OkButton}">
+                </Button>
+                <Button Command="{Binding CancelAddingAttributeCommand}" BorderThickness="0" Background="Transparent"
+            Style="{StaticResource CacnelButton}">
+                </Button>
+            </WrapPanel>
         </Border>
-        <Button Grid.Column="1" Grid.Row="4" Background="#f7eecd" BorderBrush="#d9cb98"
-                Command="{Binding AddSelectedAttributeCommand}" Content="{Binding AddSelectedAttributeButtonText}" />
+        <Grid Grid.Column="1" Grid.Row="4">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Button Grid.Column="0" Background="#f7eecd" BorderBrush="#d9cb98" Content="Apply" Command="{Binding ApplyChangesCommand}" />
+            <Button Grid.Column="1" Background="#f7eecd" BorderBrush="#d9cb98" Content="Cancel" Command="{Binding CancelChangesCommand}" />
+        </Grid>
+        
+
     </Grid>
 </Page>

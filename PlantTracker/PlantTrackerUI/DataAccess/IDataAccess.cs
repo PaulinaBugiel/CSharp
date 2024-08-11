@@ -16,6 +16,8 @@ namespace PlantTrackerUI.DataAccess
         ObservableCollection<WateringSystem> WateringSystem_GetAvailableForPlant(int plantId);
         void WateringSystem_AddOneForPlant(int plantId, int wateringSystemId); // TODO: int wateringSystemId => WateringSystem wateringSystem
         void WateringSystem_RemoveOneForPlant(int plantId, int wateringSystemId); // TODO: int wateringSystemId => WateringSystem wateringSystem
+        void WateringSystem_DeleteWateringSystem(int wateringSystemId);
+        ObservableCollection<Plant> WateringSystem_GetAllPlantsWithSystem(WateringSystem wateringSystem);
 
         void PlantContainer_InsertOne(PlantContainer model);
         ObservableCollection<PlantContainer> PlantContainer_GetAll();
@@ -23,6 +25,8 @@ namespace PlantTrackerUI.DataAccess
         ObservableCollection<PlantContainer> PlantContainer_GetAvailableForPlant(int plantId);
         void PlantContainer_AddOneForPlant(int plantId, int containerId); // TODO: int containerId => PlantContainer container
         void PlantContainer_RemoveOneForPlant(int plantId, int containerId); // TODO: int containerId => PlantContainer container
+        void PlantContainer_DeletePlantContainer(int plantContainerId);
+        ObservableCollection<Plant> PlantContainer_GetAllPlantsWithContainer(PlantContainer container);
 
         void PlantPosition_InsertOne(PlantPosition model);
         ObservableCollection<PlantPosition> PlantPosition_GetAll();
@@ -37,6 +41,8 @@ namespace PlantTrackerUI.DataAccess
         ObservableCollection<PlantType> PlantType_GetAvailableForPlant(int plantId);
         void PlantType_AddOneForPlant(int plantId, int typeId); // TODO: int typeId => PlantType type
         void PlantType_RemoveOneForPlant(int plantId, int typeId); // TODO: int typeId => PlantType type
+        void PlantType_DeletePlantType(int typeId);
+        ObservableCollection<Plant> PlantType_GetAllPlantsWithType(PlantType plantType);
 
 
         ObservableCollection<Plant> Plants_GetAll();

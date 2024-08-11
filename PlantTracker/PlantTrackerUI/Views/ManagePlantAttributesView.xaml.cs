@@ -22,27 +22,19 @@ namespace PlantTrackerUI.Views
     /// </summary>
     public partial class ManagePlantAttributesView : Page
     {
-        public IEnumerable StackPanelItemsSource
-        {
-            get { return (IEnumerable)GetValue(StackPanelItemsSourceProperty); }
-            set { SetValue(StackPanelItemsSourceProperty, value); }
-        }
-        public static readonly DependencyProperty StackPanelItemsSourceProperty =
-            DependencyProperty.Register("StackPanelItemsSource", typeof(IEnumerable), typeof(ManagePlantAttributesView), new PropertyMetadata(null));
-
         public ManagePlantAttributesView()
         {
             InitializeComponent();
         }
 
-        //public ICommand RemoveElementCommand
+        //public ICommand RemoveAttributeViewCommand
         //{
-        //    get { return (ICommand)GetValue(RemoveElementCommandProperty); }
-        //    set { SetValue(RemoveElementCommandProperty, value); }
+        //    get { return (ICommand)GetValue(RemoveAttributeViewCommandProperty); }
+        //    set { SetValue(RemoveAttributeViewCommandProperty, value); }
         //}
 
-        //// Using a DependencyProperty as the backing store for RemoveElementCommand.  This enables animation, styling, binding, etc...
-        //public static readonly DependencyProperty RemoveElementCommandProperty =
-        //    DependencyProperty.Register("RemoveElementCommand", typeof(ICommand), typeof(WrapPanelItemsControl), new PropertyMetadata(null));
+        //// Using a DependencyProperty as the backing store for RemoveAttributeViewCommand.  This enables animation, styling, binding, etc...
+        //public static readonly DependencyProperty RemoveAttributeViewCommandProperty =
+        //    DependencyProperty.Register("RemoveAttributeViewCommand", typeof(ICommand), typeof(ManagePlantAttributesView), new PropertyMetadata(null));
     }
 }

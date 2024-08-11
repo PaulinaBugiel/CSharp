@@ -1,0 +1,38 @@
+﻿<UserControl x:Class="PlantTrackerUI.UserControls.ManagePlantAttributesListControl"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:PlantTrackerUI.UserControls"
+      mc:Ignorable="d" 
+      d:DesignHeight="450" MinWidth="150"
+      x:Name="thiscontrol">
+
+    <Grid>
+        <StackPanel Orientation="Vertical">
+            <ItemsControl x:Name="ManagePlantAttributesControl"
+                          ItemsSource="{Binding PlantAttributesItemsSource, ElementName=thiscontrol}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <StackPanel/>
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Border BorderThickness="1" BorderBrush="#d9cb98" Background="#f7eecd" Margin="0 0 5 0">
+                            <Grid x:Name="ItemsStackPanel">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="30"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Grid.Column="0" Text="{Binding Name}" Margin="5 2"/>
+                                <Button Grid.Column="1" BorderThickness="0" Margin="0 1 3 0" Style="{StaticResource XButton}"
+                                 Command="{Binding ElementName=thiscontrol, Path=RemoveElementCommand}" CommandParameter="{Binding}"/>
+                            </Grid>
+                        </Border>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </StackPanel>
+    </Grid>
+</UserControl>
