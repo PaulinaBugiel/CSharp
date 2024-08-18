@@ -66,10 +66,10 @@
                                                     AddElementWindowCommand="{Binding OpenAddContainerWindowCommand}"/>
             <StackPanel Grid.Row="3" Grid.Column="4" VerticalAlignment="Center" HorizontalAlignment="Stretch">
                 <Button Content="Manage Containers..." BorderBrush="#d9cb98" Background="#f7eecd"
-                        Command="{Binding OpenManageWateringSystemsWindowCommand}"/>
+                        Command="{Binding OpenManageContainersWindowCommand}"/>
             </StackPanel>
 
-            <!-- Place -->
+            <!-- Position -->
             <TextBlock Grid.Row="4" Text="Place:" Margin="3 2"/>
             <StackPanel Grid.Row="4" Grid.Column="2" Orientation="Horizontal">
                 <ComboBox Style="{DynamicResource ComboBoxStyle1}" ItemsSource="{Binding PlantPositions}" 
@@ -77,8 +77,10 @@
                           IsSynchronizedWithCurrentItem="True"
                           DisplayMemberPath="Name">
                 </ComboBox>
-                <Button Content="Manage Plant Positions..." Command="{Binding OpenAddPositionWindowCommand}"
-                        Background="#cdf7d3" BorderThickness="1" BorderBrush="#8adb96" Padding="5 0"/>
+            </StackPanel>
+            <StackPanel Grid.Row="4" Grid.Column="4" VerticalAlignment="Center" HorizontalAlignment="Stretch">
+                <Button Content="Manage Positions..." BorderBrush="#d9cb98" Background="#f7eecd"
+                        Command="{Binding OpenManagePositionsWindowCommand}"/>
             </StackPanel>
 
             <!-- <TextBlock Grid.Row="4" Text="Position:" Margin="3 2"/> -->

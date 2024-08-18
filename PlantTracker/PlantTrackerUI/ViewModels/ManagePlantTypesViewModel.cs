@@ -22,7 +22,7 @@ namespace PlantTrackerUI.ViewModels
         private ObservableCollection<PlantType> _tmpAdds;
         private ObservableCollection<PlantType> _tmpDeletes;
         private IDataAccess _dataAccess;
-        string _newPlantTypeText = ""; // TODO probably some container?
+        string _newPlantTypeText = "";
 
         private RelayCommand _addNewPlantTypeCommand;
         private RelayCommand _removePlantTypeCommand;

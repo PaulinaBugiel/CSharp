@@ -31,20 +31,6 @@
                         </DataTemplate>
                     </ListView.ItemTemplate>
                 </ListView>
-                <WrapPanel Background="#f7eecd">
-                    <TextBlock Text="{Binding NewAttributeLabelText}" VerticalAlignment="Center" Margin="4 0 4 0"/>
-                    <TextBox Grid.Column="1" Grid.Row="2" Background="White" 
-                             BorderThickness="1" BorderBrush="#d9cb98" VerticalAlignment="Center"
-                             HorizontalAlignment="Left" Margin="4 2 4 2" Padding="3 2"
-                             MinWidth="40"
-                             Text="{Binding NewAttributeText, UpdateSourceTrigger=PropertyChanged}"/>
-                    <Button Command="{Binding AddNewAttributeCommand}" BorderThickness="0" Background="Transparent"
-                            Style="{StaticResource OkButton}">
-                    </Button>
-                    <Button Command="{Binding CancelAddingAttributeCommand}" BorderThickness="0" Background="Transparent"
-                            Style="{StaticResource CacnelButton}">
-                    </Button>
-                </WrapPanel>
             </StackPanel>
         </Border>
         <Button Grid.Column="1" Grid.Row="4" Background="#f7eecd" BorderBrush="#d9cb98"

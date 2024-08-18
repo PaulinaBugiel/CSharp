@@ -13,85 +13,84 @@ using System.Windows;
 
 namespace PlantTrackerUI.ViewModels
 {
-    class ManageWateringSystemsViewModel : PopupViewModelBase, IManagePlantAttributes<WateringSystem>, INotifyPropertyChanged
+    internal class ManagePlantPositionsViewModel: PopupViewModelBase, IManagePlantAttributes<PlantPosition>, INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler? PropertyChanged;
 
-        private ObservableCollection<WateringSystem> _wateringSystemsToView;
-        private readonly ObservableCollection<WateringSystem> _wateringSystemsInDb;
-        private ObservableCollection<WateringSystem> _tmpAdds;
-        private ObservableCollection<WateringSystem> _tmpDeletes;
+        private ObservableCollection<PlantPosition> _plantPositionsToView;
+        private readonly ObservableCollection<PlantPosition> _plantPositionsInDb;
+        private ObservableCollection<PlantPosition> _tmpAdds;
+        private ObservableCollection<PlantPosition> _tmpDeletes;
         private IDataAccess _dataAccess;
-        string _newWateringSystemText = "";
+        string _newPlantPositionText = "";
 
-        private RelayCommand _addNewWateringSystemCommand;
-        private RelayCommand _removeWateringSystemCommand;
-        private RelayCommand _cancelAddingWateringSystemCommand;
+        private RelayCommand _addNewPlantPositionCommand;
+        private RelayCommand _removePlantPositionCommand;
+        private RelayCommand _cancelAddingPlantPositionCommand;
         private RelayCommand _applyChangesCommand;
         private RelayCommand _cancelChangesCommand;
-
-        public ManageWateringSystemsViewModel()
+        public ManagePlantPositionsViewModel()
         {
             string dataSourceType = ConfigurationManager.AppSettings["DataSource"];
             if (dataSourceType == "Sql")
                 _dataAccess = new SqlDataAccess();
             else
                 _dataAccess = new DemoDataAccess();
-            _wateringSystemsToView = _dataAccess.WateringSystem_GetAll();
-            _wateringSystemsInDb = _dataAccess.WateringSystem_GetAll();
-            _tmpAdds = new ObservableCollection<WateringSystem>();
-            _tmpDeletes = new ObservableCollection<WateringSystem>();
+            _plantPositionsToView = _dataAccess.PlantPosition_GetAll();
+            _plantPositionsInDb = _dataAccess.PlantPosition_GetAll();
+            _tmpAdds = new ObservableCollection<PlantPosition>();
+            _tmpDeletes = new ObservableCollection<PlantPosition>();
         }
 
 
-        public ObservableCollection<WateringSystem> PlantAttributes 
-        { 
-            get { return _wateringSystemsToView; }
+        public ObservableCollection<PlantPosition> PlantAttributes
+        {
+            get { return _plantPositionsToView; }
             set
             {
-                if (_wateringSystemsToView == value)
+                if (_plantPositionsToView == value)
                     return;
-                _wateringSystemsToView = value;
+                _plantPositionsToView = value;
                 OnPropertyChanged(nameof(PlantAttributes));
             }
         }
 
-        public string NewAttributePlaceholderText { get { return "New Watering System:"; } set { } }
+        public string NewAttributePlaceholderText { get { return "New Plant Position:"; } set { } }
 
         public string NewAttributeText
         {
-            get { return _newWateringSystemText; }
+            get { return _newPlantPositionText; }
             set
             {
-                if (_newWateringSystemText == value)
+                if (_newPlantPositionText == value)
                     return;
-                _newWateringSystemText = value;
+                _newPlantPositionText = value;
                 OnPropertyChanged(nameof(NewAttributeText));
             }
         }
 
         /// <summary>
-        /// Adds new PlantType with name written in NewPlantTypeText field
+        /// Adds new PlantPosition with name written in NewPlantPositionText field
         /// </summary>
         public RelayCommand AddNewAttributeCommand
         {
             get
             {
-                if (_addNewWateringSystemCommand == null)
-                    _addNewWateringSystemCommand = new RelayCommand(o => AddNewWateringSystem(), o => CanAddNewWateringSystem());
-                return _addNewWateringSystemCommand;
+                if (_addNewPlantPositionCommand == null)
+                    _addNewPlantPositionCommand = new RelayCommand(o => AddNewPlantPosition(), o => CanAddNewPlantPosition());
+                return _addNewPlantPositionCommand;
             }
         }
-        bool CanAddNewWateringSystem()
+        bool CanAddNewPlantPosition()
         {
             if (NewAttributeText.Length > 0)
                 return true;
             else
                 return false;
         }
-        void AddNewWateringSystem()
+        void AddNewPlantPosition()
         {
-            var typeWithTheSameName = _wateringSystemsToView.Where(x => x.Name == NewAttributeText).FirstOrDefault();
+            var typeWithTheSameName = _plantPositionsToView.Where(x => x.Name == NewAttributeText).FirstOrDefault();
             if (typeWithTheSameName is not null)
             {
                 MessageBox.Show($"Watering system \"{NewAttributeText}\" already exists", "Cannot add",
@@ -99,9 +98,9 @@ namespace PlantTrackerUI.ViewModels
             }
             else
             {
-                WateringSystem wateringSystemToAdd = new WateringSystem { Name = NewAttributeText };
-                _wateringSystemsToView.Add(wateringSystemToAdd);
-                _tmpAdds.Add(wateringSystemToAdd);
+                PlantPosition plantPositionToAdd = new PlantPosition { Name = NewAttributeText };
+                _plantPositionsToView.Add(plantPositionToAdd);
+                _tmpAdds.Add(plantPositionToAdd);
                 NewAttributeText = "";
 
             }
@@ -109,25 +108,25 @@ namespace PlantTrackerUI.ViewModels
 
 
         /// <summary>
-        /// Cancels adding new WateringSystem - clears the NewWateringSystemText field
+        /// Cancels adding new PlantPosition - clears the NewPlantPositionText field
         /// </summary>
         public RelayCommand CancelAddingAttributeCommand
         {
             get
             {
-                if (_cancelAddingWateringSystemCommand == null)
-                    _cancelAddingWateringSystemCommand = new RelayCommand(o => CancelAddingWateringSystem(), o => CanCancelAddingWateringSystem());
-                return _cancelAddingWateringSystemCommand;
+                if (_cancelAddingPlantPositionCommand == null)
+                    _cancelAddingPlantPositionCommand = new RelayCommand(o => CancelAddingPlantPosition(), o => CanCancelAddingPlantPosition());
+                return _cancelAddingPlantPositionCommand;
             }
         }
-        bool CanCancelAddingWateringSystem()
+        bool CanCancelAddingPlantPosition()
         {
             if (NewAttributeText.Length > 0)
                 return true;
             else
                 return false;
         }
-        void CancelAddingWateringSystem()
+        void CancelAddingPlantPosition()
         {
             NewAttributeText = "";
         }
@@ -136,37 +135,37 @@ namespace PlantTrackerUI.ViewModels
         {
             get
             {
-                if (_removeWateringSystemCommand == null)
-                    _removeWateringSystemCommand = new RelayCommand(o => RemoveWateringSystem(o), o => CanRemoveWateringSystem());
-                return _removeWateringSystemCommand;
+                if (_removePlantPositionCommand == null)
+                    _removePlantPositionCommand = new RelayCommand(o => RemovePlantPosition(o), o => CanRemovePlantPosition());
+                return _removePlantPositionCommand;
             }
         }
 
-        bool CanRemoveWateringSystem()
+        bool CanRemovePlantPosition()
         {
             return true;
         }
-        void RemoveWateringSystem(object toRemove)
+        void RemovePlantPosition(object toRemove)
         {
-            if (toRemove is not WateringSystem)
+            if (toRemove is not PlantPosition)
                 return;
-            WateringSystem wateringSystemToRemove = (WateringSystem)toRemove;
-            var plantsThatUseTheSystem = _dataAccess.WateringSystem_GetAllPlantsWithSystem(wateringSystemToRemove);
+            PlantPosition plantPositionToRemove = (PlantPosition)toRemove;
+            var plantsThatUseTheSystem = _dataAccess.PlantPosition_GetAllPlantsWithPosition(plantPositionToRemove);
             if (plantsThatUseTheSystem.Count() > 0)
             {
                 string plantsInUseString = string.Join("\n- ", plantsThatUseTheSystem.Select(x => x.Name));
-                MessageBoxResult result = MessageBox.Show($"The following plants use this watering system:\n- {plantsInUseString}\nProceed?", "Watering system in use", MessageBoxButton.OKCancel, MessageBoxImage.Warning);
+                MessageBoxResult result = MessageBox.Show($"The following plants use this plant position:\n- {plantsInUseString}\nProceed?", "Plant position in use", MessageBoxButton.OKCancel, MessageBoxImage.Warning);
                 if (result == MessageBoxResult.OK)
                 {
-                    _tmpDeletes.Add(wateringSystemToRemove);
-                    _wateringSystemsToView.Remove(wateringSystemToRemove);
+                    _tmpDeletes.Add(plantPositionToRemove);
+                    _plantPositionsToView.Remove(plantPositionToRemove);
                 }
             }
             else
             {
-                if (!_tmpAdds.Remove(wateringSystemToRemove))
-                    _tmpDeletes.Add(wateringSystemToRemove);
-                _wateringSystemsToView.Remove(wateringSystemToRemove);
+                if (!_tmpAdds.Remove(plantPositionToRemove))
+                    _tmpDeletes.Add(plantPositionToRemove);
+                _plantPositionsToView.Remove(plantPositionToRemove);
             }
         }
 
@@ -189,11 +188,11 @@ namespace PlantTrackerUI.ViewModels
         {
             foreach (var ws in _tmpDeletes)
             {
-                _dataAccess.WateringSystem_DeleteWateringSystem(ws.Id);
+                _dataAccess.PlantPosition_DeletePlantPosition(ws.Id);
             }
             foreach (var ws in _tmpAdds)
             {
-                _dataAccess.WateringSystem_InsertOne(ws);
+                _dataAccess.PlantPosition_InsertOne(ws);
             }
             CloseWindow();
         }
@@ -217,6 +216,5 @@ namespace PlantTrackerUI.ViewModels
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
-
     }
 }

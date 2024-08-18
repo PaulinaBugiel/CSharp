@@ -251,7 +251,7 @@ namespace PlantTrackerUI.DataAccess
             throw new NotImplementedException();
         }
 
-        ObservableCollection<PlantPosition> IDataAccess.PlantPosition_GetByPlantId(int plantId)
+        PlantPosition IDataAccess.PlantPosition_GetByPlantId(int plantId)
         {
             throw new NotImplementedException();
         }
@@ -302,6 +302,16 @@ namespace PlantTrackerUI.DataAccess
         }
 
         public ObservableCollection<Plant> PlantContainer_GetAllPlantsWithContainer(PlantContainer container)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void PlantPosition_DeletePlantPosition(int positionId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public ObservableCollection<Plant> PlantPosition_GetAllPlantsWithPosition(PlantPosition position)
         {
             throw new NotImplementedException();
         }

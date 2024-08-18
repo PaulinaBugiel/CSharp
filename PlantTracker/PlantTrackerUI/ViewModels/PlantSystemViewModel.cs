@@ -41,6 +41,7 @@ namespace PlantTrackerUI.ViewModels
         private RelayCommand _openManageContainersWindowCommand;
 
         private RelayCommand _openAddPositionWindowCommand;
+        private RelayCommand _openManagePositionsWindowCommand;
 
         public PlantSystemViewModel(IWindowService genericWindowService)
         {
@@ -67,7 +68,7 @@ namespace PlantTrackerUI.ViewModels
             _openManageContainersWindowCommand = new RelayCommand(o => OpenManageContainersWindow());
 
             _openAddPositionWindowCommand = new RelayCommand(o => OpenAddPositionWindow(SelectedPlant));
-
+            _openManagePositionsWindowCommand = new RelayCommand(o => OpenManagePositionsWindow());
 
         }
 
@@ -193,6 +194,17 @@ namespace PlantTrackerUI.ViewModels
         public RelayCommand OpenManageContainersWindowCommand
         {
             get { return _openManageContainersWindowCommand; }
+        }
+
+        public void OpenManagePositionsWindow()
+        {
+            _windowService.ShowWindow(new ManagePlantPositionsViewModel());
+            SelectedPlant.Position = _dataAccess.PlantPosition_GetByPlantId(SelectedPlant.Id);
+            OnPropertyChanged(nameof(SelectedPlant));
+        }
+        public RelayCommand OpenManagePositionsWindowCommand
+        {
+            get { return _openManagePositionsWindowCommand; }
         }
 
         void RemoveSelectedContainer(object containerToRemove)

@@ -68,22 +68,7 @@ namespace PlantTrackerUI.ViewModels
             }
         }
 
-        public string NewAttributeText
-        {
-            get
-            {
-                return _newContainerText;
-            }
-            set
-            {
-                if (_newContainerText == value)
-                    return;
-                _newContainerText = value;
-                OnPropertyChanged(nameof(NewAttributeText));
-            }
-        }
         public string AddSelectedAttributeButtonText { get { return "Add Selected Container"; } set { } }
-        public string NewAttributeLabelText { get { return "New Container:"; } set { } }
 
         public PlantContainer SelectedAttribute
         {
@@ -99,70 +84,6 @@ namespace PlantTrackerUI.ViewModels
         #endregion
 
         #region Commands
-
-        /// <summary>
-        /// Adds new PlantContainer with name from NewAttributeText field
-        /// </summary>
-        public RelayCommand AddNewAttributeCommand
-        {
-            get
-            {
-                if (_addNewContainerCommand == null)
-                    _addNewContainerCommand = new RelayCommand(o => AddNewContainer(), o => CanAddNewContainer());
-                return _addNewContainerCommand;
-            }
-        }
-        bool CanAddNewContainer()
-        {
-            if (NewAttributeText.Length > 0)
-                return true;
-            else
-                return false;
-        }
-        void AddNewContainer()
-        {
-            ObservableCollection<PlantContainer> allContainers = _dataAccess.PlantContainer_GetAll();
-            var containerWithTheSameName = allContainers.Where(x => x.Name == NewAttributeText).FirstOrDefault();
-            if (containerWithTheSameName is not null)
-            {
-                MessageBox.Show($"Plant container \"{NewAttributeText}\" already exists", "Cannot add plant container",
-                    MessageBoxButton.OK, MessageBoxImage.Error);
-            }
-            else
-            {
-                PlantContainer? maxIdType = allContainers.OrderByDescending(x => x.Id).First();
-                int newId = maxIdType is null ? 1 : maxIdType.Id + 1;
-                PlantContainer newContainer = new PlantContainer { Name = NewAttributeText, Id = newId };
-                NewAttributeText = "";
-                _dataAccess.PlantContainer_InsertOne(newContainer);
-                AvailablePlantAttributes = _dataAccess.PlantContainer_GetAvailableForPlant(_selectedPlant.Id);
-
-            }
-        }
-
-        /// <summary>
-        /// Cancels adding new PlantType - clears the NewTypeText field
-        /// </summary>
-        public RelayCommand CancelAddingAttributeCommand
-        {
-            get
-            {
-                if (_cancelAddingContainerCommand == null)
-                    _cancelAddingContainerCommand = new RelayCommand(o => CancelAddingContainer(), o => CanCancelAddingContainer());
-                return _cancelAddingContainerCommand;
-            }
-        }
-        bool CanCancelAddingContainer()
-        {
-            if (NewAttributeText.Length > 0)
-                return true;
-            else
-                return false;
-        }
-        void CancelAddingContainer()
-        {
-            NewAttributeText = "";
-        }
 
         public RelayCommand AddSelectedAttributeCommand
         {

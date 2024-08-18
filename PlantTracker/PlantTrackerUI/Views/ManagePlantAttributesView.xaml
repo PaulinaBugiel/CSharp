@@ -35,10 +35,10 @@
              MinWidth="40"
              Text="{Binding NewAttributeText, UpdateSourceTrigger=PropertyChanged}"/>
                 <Button Command="{Binding AddNewAttributeCommand}" BorderThickness="0" Background="Transparent"
-            Style="{StaticResource OkButton}">
+                Style="{StaticResource OkButton}">
                 </Button>
                 <Button Command="{Binding CancelAddingAttributeCommand}" BorderThickness="0" Background="Transparent"
-            Style="{StaticResource CacnelButton}">
+                Style="{StaticResource CacnelButton}">
                 </Button>
             </WrapPanel>
         </Border>

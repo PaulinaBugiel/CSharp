@@ -114,6 +114,7 @@ namespace PlantTrackerUI.DataAccess
                 var p = new DynamicParameters();
                 p.Add("@Name", model.Name);
                 p.Add("@Capacity", model.Capacity);
+                p.Add("#Color", model.Color);
                 p.Add("@Id", 0, DbType.Int32, ParameterDirection.Output);
                 connection.Execute("dbo.spPlantContainers_Insert", p, commandType: CommandType.StoredProcedure);
                 model.Id = p.Get<int>("@Id");
@@ -223,14 +224,14 @@ namespace PlantTrackerUI.DataAccess
             return ret;
         }
 
-        public ObservableCollection<PlantPosition> PlantPosition_GetByPlantId(int plantId)
+        public PlantPosition? PlantPosition_GetByPlantId(int plantId)
         {
-            ObservableCollection<PlantPosition> ret;
+            PlantPosition? ret;
             using (IDbConnection connection = new System.Data.SqlClient.SqlConnection(connString))
             {
                 var p = new DynamicParameters();
                 p.Add("@PlantId", plantId);
-                ret = new ObservableCollection<PlantPosition>(connection.Query<PlantPosition>("dbo.spPlantPositions_GetByPlantId", p, commandType: CommandType.StoredProcedure));
+                ret = connection.Query<PlantPosition>("dbo.spPlantPositions_GetByPlantId", p, commandType: CommandType.StoredProcedure).FirstOrDefault();
             }
             return ret;
 
@@ -268,6 +269,28 @@ namespace PlantTrackerUI.DataAccess
                 p.Add("@PositionId", positionId);
                 connection.Execute("dbo.spPlantPositions_RemovePositionForPlant", p, commandType: CommandType.StoredProcedure);
             }
+        }
+
+        public void PlantPosition_DeletePlantPosition(int positionId)
+        {
+            using (IDbConnection connection = new System.Data.SqlClient.SqlConnection(connString))
+            {
+                var p = new DynamicParameters();
+                p.Add("@PositionId", positionId);
+                connection.Execute("dbo.spPlantPosition_DeletePlantPosition", p, commandType: CommandType.StoredProcedure);
+            }
+        }
+
+        public ObservableCollection<Plant> PlantPosition_GetAllPlantsWithPosition(PlantPosition position)
+        {
+            ObservableCollection<Plant> ret;
+            using (IDbConnection connection = new SqlConnection(connString))
+            {
+                var p = new DynamicParameters();
+                p.Add("@PositionId", position.Id);
+                ret = new ObservableCollection<Plant>(connection.Query<Plant>("dbo.spPlantPositions_GetAllPlantsWithPosition", p, commandType: CommandType.StoredProcedure));
+            }
+            return ret;
         }
 
 

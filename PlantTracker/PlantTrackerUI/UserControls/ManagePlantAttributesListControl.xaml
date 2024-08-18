@@ -23,10 +23,12 @@
                             <Grid x:Name="ItemsStackPanel">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="4*"/>
                                     <ColumnDefinition Width="30"/>
                                 </Grid.ColumnDefinitions>
-                                <TextBlock Grid.Column="0" Text="{Binding Name}" Margin="5 2"/>
-                                <Button Grid.Column="1" BorderThickness="0" Margin="0 1 3 0" Style="{StaticResource XButton}"
+                                <TextBlock Grid.Column="0" Text="{Binding Id}" Margin="5 2"/>
+                                <TextBlock Grid.Column="1" Text="{Binding Name}" Margin="5 2"/>
+                                <Button Grid.Column="2" BorderThickness="0" Margin="0 1 3 0" Style="{StaticResource XButton}"
                                  Command="{Binding ElementName=thiscontrol, Path=RemoveElementCommand}" CommandParameter="{Binding}"/>
                             </Grid>
                         </Border>

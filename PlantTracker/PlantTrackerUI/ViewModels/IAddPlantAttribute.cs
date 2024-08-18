@@ -13,12 +13,12 @@ namespace PlantTrackerUI.ViewModels
     {
         public ObservableCollection<T> AvailablePlantAttributes { get; set; }
         public Plant SelectedPlant { get; set; }
-        public string NewAttributeText { get; set; }
+        //public string NewAttributeText { get; set; }
         public string AddSelectedAttributeButtonText { get; set; }
-        public string NewAttributeLabelText { get; set; }
+        //public string NewAttributeLabelText { get; set; }
         public T SelectedAttribute { get; set; }
-        public RelayCommand AddNewAttributeCommand { get; }
-        public RelayCommand CancelAddingAttributeCommand { get; }
+        //public RelayCommand AddNewAttributeCommand { get; }
+        //public RelayCommand CancelAddingAttributeCommand { get; }
         public RelayCommand AddSelectedAttributeCommand { get; }
         //public RelayCommand RemoveAttributeCommand { get; }
     }

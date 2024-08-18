@@ -22,7 +22,7 @@ namespace PlantTrackerUI.ViewModels
         private ObservableCollection<PlantContainer> _tmpAdds;
         private ObservableCollection<PlantContainer> _tmpDeletes;
         private IDataAccess _dataAccess;
-        string _newPlantContainerText = ""; // TODO probably some container?
+        string _newPlantContainerText = "";
 
         private RelayCommand _addNewPlantContainerCommand;
         private RelayCommand _removePlantContainerCommand;
@@ -55,7 +55,7 @@ namespace PlantTrackerUI.ViewModels
             }
         }
 
-        public string NewAttributePlaceholderText { get { return "New Watering System:"; } set { } }
+        public string NewAttributePlaceholderText { get { return "New Container:"; } set { } }
 
         public string NewAttributeText
         {
@@ -101,13 +101,7 @@ namespace PlantTrackerUI.ViewModels
                 PlantContainer plantContainerToAdd = new PlantContainer { Name = NewAttributeText };
                 _plantContainersToView.Add(plantContainerToAdd);
                 _tmpAdds.Add(plantContainerToAdd);
-                //PlantContainer? maxIdType = _plantContainersToView.OrderByDescending(x => x.Id).First();
-                //int newId = maxIdType is null ? 1 : maxIdType.Id + 1;
-                //PlantContainer newPlantContainer = new PlantContainer { Name = NewAttributeText, Id = newId };
                 NewAttributeText = "";
-                //_dataAccess.PlantContainer_InsertOne(newPlantContainer);
-                //PlantAttributes = _dataAccess.PlantContainer_GetAll();
-                // // OnPropertyChanged(nameof(PlantAttributes));
 
             }
         }
@@ -156,7 +150,6 @@ namespace PlantTrackerUI.ViewModels
             if (toRemove is not PlantContainer)
                 return;
             PlantContainer plantContainerToRemove = (PlantContainer)toRemove;
-            // TODO PlantContainer_GetAllPlantsWithType
             var plantsThatUseTheSystem = _dataAccess.PlantContainer_GetAllPlantsWithContainer(plantContainerToRemove);
             if (plantsThatUseTheSystem.Count() > 0)
             {
@@ -193,13 +186,13 @@ namespace PlantTrackerUI.ViewModels
         }
         void ApplyChanges()
         {
-            foreach (var ws in _tmpDeletes)
+            foreach (var pc in _tmpDeletes)
             {
-                _dataAccess.PlantContainer_DeletePlantContainer(ws.Id);
+                _dataAccess.PlantContainer_DeletePlantContainer(pc.Id);
             }
-            foreach (var ws in _tmpAdds)
+            foreach (var pc in _tmpAdds)
             {
-                _dataAccess.PlantContainer_InsertOne(ws);
+                _dataAccess.PlantContainer_InsertOne(pc);
             }
             CloseWindow();
         }

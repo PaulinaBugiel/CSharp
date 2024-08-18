@@ -30,10 +30,12 @@ namespace PlantTrackerUI.DataAccess
 
         void PlantPosition_InsertOne(PlantPosition model);
         ObservableCollection<PlantPosition> PlantPosition_GetAll();
-        ObservableCollection<PlantPosition> PlantPosition_GetByPlantId(int plantId);
+        PlantPosition? PlantPosition_GetByPlantId(int plantId);
         ObservableCollection<PlantPosition> PlantPosition_GetAvailableForPlant(int plantId);
         void PlantPosition_AddOneForPlant(int plantId, int positionId); // TODO: int positionId => PlantPosition container
         void PlantPosition_RemoveOneForPlant(int plantId, int positionId); // TODO: int positionId => PlantPosition container
+        void PlantPosition_DeletePlantPosition(int positionId);
+        ObservableCollection<Plant> PlantPosition_GetAllPlantsWithPosition(PlantPosition position);
 
         void PlantType_InsertOne(PlantType model);
         ObservableCollection<PlantType> PlantType_GetAll();

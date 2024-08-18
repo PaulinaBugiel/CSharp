@@ -66,23 +66,8 @@ namespace PlantTrackerUI.ViewModels
             }
         }
 
-        public string NewAttributeText
-        {
-            get
-            {
-                return _newPlantTypeText;
-            }
-            set
-            {
-                if (_newPlantTypeText == value)
-                    return;
-                _newPlantTypeText = value;
-                OnPropertyChanged(nameof(NewAttributeText));
-            }
-        }
 
         public string AddSelectedAttributeButtonText { get { return "Add Selected Watering System"; } set { } }
-        public string NewAttributeLabelText { get { return "New Watering System:"; } set { } }
 
         public WateringSystem SelectedAttribute
         {
@@ -98,71 +83,6 @@ namespace PlantTrackerUI.ViewModels
         #endregion
 
         #region Commands
-
-        /// <summary>
-        /// Adds new PlantType with name written in NewPlantTypeText field
-        /// </summary>
-        public RelayCommand AddNewAttributeCommand
-        {
-            get
-            {
-                if (_addNewPlantTypeCommand == null)
-                    _addNewPlantTypeCommand = new RelayCommand(o => AddNewWateringSystem(), o => CanAddNewWateringSystem());
-                return _addNewPlantTypeCommand;
-            }
-        }
-        bool CanAddNewWateringSystem()
-        {
-            if (NewAttributeText.Length > 0)
-                return true;
-            else
-                return false;
-        }
-        void AddNewWateringSystem()
-        {
-            ObservableCollection<WateringSystem> allWateringSystems = _dataAccess.WateringSystem_GetAll();
-            var typeWithTheSameName = allWateringSystems.Where(x => x.Name == NewAttributeText).FirstOrDefault();
-            if (typeWithTheSameName is not null)
-            {
-                MessageBox.Show($"Watering system \"{NewAttributeText}\" already exists", "Cannot add",
-                    MessageBoxButton.OK, MessageBoxImage.Error);
-            }
-            else
-            {
-                WateringSystem? maxIdType = allWateringSystems.OrderByDescending(x => x.Id).First();
-                int newId = maxIdType is null ? 1 : maxIdType.Id + 1;
-                WateringSystem newWateringSystem = new WateringSystem { Name = NewAttributeText, Id = newId };
-                NewAttributeText = "";
-                _dataAccess.WateringSystem_InsertOne(newWateringSystem);
-                AvailablePlantAttributes = _dataAccess.WateringSystem_GetAvailableForPlant(_selectedPlant.Id);
-
-            }
-        }
-
-        /// <summary>
-        /// Cancels adding new WateringSystem - clears the NewWateringSystemText field
-        /// </summary>
-        public RelayCommand CancelAddingAttributeCommand
-        {
-            get
-            {
-                if (_cancelAddingWateringSystemCommand == null)
-                    _cancelAddingWateringSystemCommand = new RelayCommand(o => CancelAddingWateringSystem(), o => CanCancelAddingWateringSystem());
-                return _cancelAddingWateringSystemCommand;
-            }
-        }
-        bool CanCancelAddingWateringSystem()
-        {
-            if (NewAttributeText.Length > 0)
-                return true;
-            else
-                return false;
-        }
-        void CancelAddingWateringSystem()
-        {
-            NewAttributeText = "";
-        }
-
         public RelayCommand AddSelectedAttributeCommand
         {
             get

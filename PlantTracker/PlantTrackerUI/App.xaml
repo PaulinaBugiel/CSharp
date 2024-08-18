@@ -30,8 +30,16 @@
                 <vws:AddPlantAttributeView/>
             </DataTemplate>
 
+            <DataTemplate DataType="{x:Type vms:ManagePlantContainersViewModel}">
+                <vws:ManagePlantAttributesView/>
+            </DataTemplate>
+
             <DataTemplate DataType="{x:Type vms:AddPlantPositionViewModel}">
                 <vws:AddPlantAttributeView/>
+            </DataTemplate>
+
+            <DataTemplate DataType="{x:Type vms:ManagePlantPositionsViewModel}">
+                <vws:ManagePlantAttributesView/>
             </DataTemplate>
 
             <helpers:NullToVisibilityConverter x:Key="NullToVis"/>

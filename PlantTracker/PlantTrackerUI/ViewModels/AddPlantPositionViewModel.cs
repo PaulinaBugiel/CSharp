@@ -65,20 +65,8 @@ namespace PlantTrackerUI.ViewModels
             }
         }
 
-        public string NewAttributeText
-        {
-            get { return _newPositionText; }
-            set
-            {
-                if (_newPositionText == value)
-                    return;
-                _newPositionText = value;
-                OnPropertyChanged(nameof(NewAttributeText));
-            }
-        }
 
         public string AddSelectedAttributeButtonText { get { return "Add Selected Position";  } set { } }
-        public string NewAttributeLabelText { get { return "New Position:"; } set { } }
         public PlantPosition SelectedAttribute
         {
             get { return _selectedPosition; }
@@ -90,71 +78,6 @@ namespace PlantTrackerUI.ViewModels
             }
         }
 
-        /// <summary>
-        /// Adds new PlantPosition with name given in NewAttributeText field
-        /// </summary>
-        public RelayCommand AddNewAttributeCommand
-        {
-            get
-            {
-                if (_addNewPositionCommand == null)
-                    _addNewPositionCommand = new RelayCommand(o => AddNewPosition(), o => CanAddNewPosition());
-                return _addNewPositionCommand;
-            }
-        }
-
-        bool CanAddNewPosition()
-        {
-            if (NewAttributeText.Length > 0)
-                return true;
-            else
-                return false;
-        }
-
-        void AddNewPosition()
-        {
-            ObservableCollection<PlantPosition> allPositions = _dataAccess.PlantPosition_GetAll();
-            var positionWithTheSameName = allPositions.Where(x => x.Name == NewAttributeText).FirstOrDefault();
-            if (positionWithTheSameName is not null)
-            {
-                MessageBox.Show($"Plant position \"{NewAttributeText}\" already exists", "Cannot add plant position",
-                    MessageBoxButton.OK, MessageBoxImage.Error);
-            }
-            else
-            {
-                PlantPosition? maxIdPosition = allPositions.OrderByDescending(x => x.Id).First();
-                int newId = maxIdPosition is null ? 1 : maxIdPosition.Id + 1;
-                PlantPosition newPosition = new PlantPosition { Name = NewAttributeText, Id = newId };
-                NewAttributeText = "";
-                _dataAccess.PlantPosition_InsertOne(newPosition);
-                AvailablePlantAttributes = _dataAccess.PlantPosition_GetAvailableForPlant(_selectedPlant.Id);
-
-            }
-        }
-
-        /// <summary>
-        /// Cancels adding new PlantPosition - clears the NewTypeText field
-        /// </summary>
-        public RelayCommand CancelAddingAttributeCommand
-        {
-            get
-            {
-                if (_cancelAddingNewPositionCommand == null)
-                    _cancelAddingNewPositionCommand = new RelayCommand(o => CancelAddingPosition(), o => CanCancelAddingPosition());
-                return _cancelAddingNewPositionCommand;
-            }
-        }
-        bool CanCancelAddingPosition()
-        {
-            if (NewAttributeText.Length > 0)
-                return true;
-            else
-                return false;
-        }
-        void CancelAddingPosition()
-        {
-            NewAttributeText = "";
-        }
 
         public RelayCommand AddSelectedAttributeCommand
         {
