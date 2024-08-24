@@ -114,10 +114,24 @@ namespace PlantTrackerUI.DataAccess
                 var p = new DynamicParameters();
                 p.Add("@Name", model.Name);
                 p.Add("@Capacity", model.Capacity);
-                p.Add("#Color", model.Color);
+                p.Add("@Color", model.Color);
                 p.Add("@Id", 0, DbType.Int32, ParameterDirection.Output);
                 connection.Execute("dbo.spPlantContainers_Insert", p, commandType: CommandType.StoredProcedure);
                 model.Id = p.Get<int>("@Id");
+            }
+        }
+
+
+        public void PlantContainer_Update(PlantContainer model)
+        {
+            using (IDbConnection connection = new SqlConnection(connString))
+            {
+                var p = new DynamicParameters();
+                p.Add("@ContainerId", model.Id);
+                p.Add("@Name", model.Name);
+                p.Add("@Capacity", model.Capacity);
+                p.Add("@Color", model.Color);
+                connection.Execute("dbo.spPlantContainers_Update", p, commandType: CommandType.StoredProcedure);
             }
         }
 

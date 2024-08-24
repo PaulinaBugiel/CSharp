@@ -12,8 +12,11 @@ namespace PlantTrackerUI.ViewModels
     interface IManagePlantAttributes<T> where T : IModel
     {
         public ObservableCollection<T> PlantAttributes { get; set; }
+        public T SelectedAttribute { get; set; }
         public string NewAttributePlaceholderText { get; set; }
         public string NewAttributeText { get; set; }
+        public RelayCommand AddNewRowCommand { get; }
+        public RelayCommand FinishedEditingRowCommand { get; }
         public RelayCommand AddNewAttributeCommand { get; }
         public RelayCommand CancelAddingAttributeCommand { get; }
         public RelayCommand RemoveAttributeCommand { get; }

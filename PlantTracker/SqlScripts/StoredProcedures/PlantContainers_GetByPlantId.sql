@@ -4,7 +4,7 @@ AS
 BEGIN
 	SET NOCOUNT ON;
 
-	select c.Id, c.Name, c.Capacity
+	select c.Id, c.Name, c.Capacity, c.Color
 	from dbo.PlantsContainers pc
 	inner join dbo.PlantContainers c on pc.ContainerId = c.Id
 	where pc.PlantId = @PlantId;

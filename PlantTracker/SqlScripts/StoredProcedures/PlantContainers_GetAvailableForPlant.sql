@@ -4,7 +4,7 @@ AS
 BEGIN
 	SET NOCOUNT ON;
 
-	select c.Id, c.Name
+	select c.Id, c.Name, c.Color
 	from dbo.PlantContainers c
 	where c.Id not in 
 	(

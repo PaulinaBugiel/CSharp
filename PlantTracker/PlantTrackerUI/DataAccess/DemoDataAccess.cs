@@ -315,5 +315,10 @@ namespace PlantTrackerUI.DataAccess
         {
             throw new NotImplementedException();
         }
+
+        public void PlantContainer_Update(PlantContainer containerToUpdate)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

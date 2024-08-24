@@ -18,12 +18,15 @@ namespace PlantTrackerUI.ViewModels
         public event PropertyChangedEventHandler? PropertyChanged;
 
         private ObservableCollection<PlantPosition> _plantPositionsToView;
+        private PlantPosition _selectedPlantPosition;
         private readonly ObservableCollection<PlantPosition> _plantPositionsInDb;
         private ObservableCollection<PlantPosition> _tmpAdds;
         private ObservableCollection<PlantPosition> _tmpDeletes;
         private IDataAccess _dataAccess;
         string _newPlantPositionText = "";
 
+        private RelayCommand _addNewRowCommand;
+        private RelayCommand _finishedEditingRowCommand;
         private RelayCommand _addNewPlantPositionCommand;
         private RelayCommand _removePlantPositionCommand;
         private RelayCommand _cancelAddingPlantPositionCommand;
@@ -55,6 +58,18 @@ namespace PlantTrackerUI.ViewModels
             }
         }
 
+        public PlantPosition SelectedAttribute
+        {
+            get { return _selectedPlantPosition; }
+            set
+            {
+                if (_selectedPlantPosition == value)
+                    return;
+                _selectedPlantPosition = value;
+                OnPropertyChanged(nameof(SelectedAttribute));
+            }
+        }
+
         public string NewAttributePlaceholderText { get { return "New Plant Position:"; } set { } }
 
         public string NewAttributeText
@@ -67,6 +82,45 @@ namespace PlantTrackerUI.ViewModels
                 _newPlantPositionText = value;
                 OnPropertyChanged(nameof(NewAttributeText));
             }
+        }
+
+
+        public RelayCommand AddNewRowCommand
+        {
+            get
+            {
+                if (_addNewRowCommand == null)
+                    _addNewRowCommand = new RelayCommand(o => AddNewRow(), o => CanAddNewRow());
+                return _addNewRowCommand;
+            }
+        }
+        bool CanAddNewRow()
+        {
+            return true;
+        }
+        void AddNewRow()
+        {
+
+        }
+
+
+        /// <summary>
+        /// Command invoked when a row editing is finished
+        /// </summary>
+        public RelayCommand FinishedEditingRowCommand
+        {
+            get
+            {
+                if (_finishedEditingRowCommand == null)
+                    _finishedEditingRowCommand = new RelayCommand(o => OnRowEditingFinished());
+                return _finishedEditingRowCommand;
+            }
+        }
+
+        void OnRowEditingFinished()
+        {
+            MessageBox.Show(_selectedPlantPosition.Name);
+            // TODO edit/update
         }
 
         /// <summary>
@@ -212,7 +266,7 @@ namespace PlantTrackerUI.ViewModels
             CloseWindow();
         }
 
-        protected virtual void OnPropertyChanged(string propertyName = null)
+        protected virtual void OnPropertyChanged(string? propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }

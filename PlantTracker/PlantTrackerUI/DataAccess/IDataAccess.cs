@@ -20,6 +20,7 @@ namespace PlantTrackerUI.DataAccess
         ObservableCollection<Plant> WateringSystem_GetAllPlantsWithSystem(WateringSystem wateringSystem);
 
         void PlantContainer_InsertOne(PlantContainer model);
+        void PlantContainer_Update(PlantContainer containerToUpdate);
         ObservableCollection<PlantContainer> PlantContainer_GetAll();
         ObservableCollection<PlantContainer> PlantContainer_GetByPlantId(int plantId);
         ObservableCollection<PlantContainer> PlantContainer_GetAvailableForPlant(int plantId);

@@ -18,12 +18,15 @@ namespace PlantTrackerUI.ViewModels
         public event PropertyChangedEventHandler? PropertyChanged;
 
         private ObservableCollection<WateringSystem> _wateringSystemsToView;
+        private WateringSystem _selectedWateringSystem;
         private readonly ObservableCollection<WateringSystem> _wateringSystemsInDb;
         private ObservableCollection<WateringSystem> _tmpAdds;
         private ObservableCollection<WateringSystem> _tmpDeletes;
         private IDataAccess _dataAccess;
         string _newWateringSystemText = "";
 
+        private RelayCommand _addNewRowCommand;
+        private RelayCommand _finishedEditingRowCommand;
         private RelayCommand _addNewWateringSystemCommand;
         private RelayCommand _removeWateringSystemCommand;
         private RelayCommand _cancelAddingWateringSystemCommand;
@@ -56,6 +59,18 @@ namespace PlantTrackerUI.ViewModels
             }
         }
 
+        public WateringSystem SelectedAttribute
+        {
+            get { return _selectedWateringSystem; }
+            set
+            {
+                if (_selectedWateringSystem == value)
+                    return;
+                _selectedWateringSystem = value;
+                OnPropertyChanged(nameof(SelectedAttribute));
+            }
+        }
+
         public string NewAttributePlaceholderText { get { return "New Watering System:"; } set { } }
 
         public string NewAttributeText
@@ -68,6 +83,45 @@ namespace PlantTrackerUI.ViewModels
                 _newWateringSystemText = value;
                 OnPropertyChanged(nameof(NewAttributeText));
             }
+        }
+
+
+        public RelayCommand AddNewRowCommand
+        {
+            get
+            {
+                if (_addNewRowCommand == null)
+                    _addNewRowCommand = new RelayCommand(o => AddNewRow(), o => CanAddNewRow());
+                return _addNewRowCommand;
+            }
+        }
+        bool CanAddNewRow()
+        {
+            return true;
+        }
+        void AddNewRow()
+        {
+
+        }
+
+
+        /// <summary>
+        /// Command invoked when a row editing is finished
+        /// </summary>
+        public RelayCommand FinishedEditingRowCommand
+        {
+            get
+            {
+                if (_finishedEditingRowCommand == null)
+                    _finishedEditingRowCommand = new RelayCommand(o => OnRowEditingFinished());
+                return _finishedEditingRowCommand;
+            }
+        }
+
+        void OnRowEditingFinished()
+        {
+            MessageBox.Show(_selectedWateringSystem.Name);
+            // TODO edit/update
         }
 
         /// <summary>
@@ -213,7 +267,7 @@ namespace PlantTrackerUI.ViewModels
             CloseWindow();
         }
 
-        protected virtual void OnPropertyChanged(string propertyName = null)
+        protected virtual void OnPropertyChanged(string? propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
