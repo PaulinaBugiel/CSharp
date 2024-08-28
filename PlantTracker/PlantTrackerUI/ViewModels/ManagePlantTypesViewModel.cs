@@ -4,6 +4,7 @@ using PlantTrackerUI.Models;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Configuration;
 using System.Linq;
@@ -19,17 +20,14 @@ namespace PlantTrackerUI.ViewModels
 
         private ObservableCollection<PlantType> _plantTypesToView;
         private PlantType _selectedPlantType;
-        private readonly ObservableCollection<PlantType> _plantTypesInDb;
+        private ObservableCollection<PlantType> _tmpUpdates;
         private ObservableCollection<PlantType> _tmpAdds;
         private ObservableCollection<PlantType> _tmpDeletes;
         private IDataAccess _dataAccess;
         string _newPlantTypeText = "";
 
         private RelayCommand _addNewRowCommand;
-        private RelayCommand _finishedEditingRowCommand;
-        private RelayCommand _addNewPlantTypeCommand;
         private RelayCommand _removePlantTypeCommand;
-        private RelayCommand _cancelAddingPlantTypeCommand;
         private RelayCommand _applyChangesCommand;
         private RelayCommand _cancelChangesCommand;
         public ManagePlantTypesViewModel()
@@ -40,9 +38,11 @@ namespace PlantTrackerUI.ViewModels
             else
                 _dataAccess = new DemoDataAccess();
             _plantTypesToView = _dataAccess.PlantType_GetAll();
-            _plantTypesInDb = _dataAccess.PlantType_GetAll();
-            _tmpAdds = new ObservableCollection<PlantType>();
-            _tmpDeletes = new ObservableCollection<PlantType>();
+            _tmpAdds = new();
+            _tmpDeletes = new();
+            _tmpUpdates = new();
+            SubscribeCollectionItems(PlantAttributes);
+            PlantAttributes.CollectionChanged += OnPlantAttributesChanged;
         }
 
 
@@ -70,17 +70,69 @@ namespace PlantTrackerUI.ViewModels
             }
         }
 
-        public string NewAttributePlaceholderText { get { return "New Watering System:"; } set { } }
 
-        public string NewAttributeText
+        /// <summary>
+        /// Fired when an element is added to DataGrid or deleted via 'Delete' button (either of these actions has to be enabled in DataGrid)
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e">Contains OldItems - deleted items, and NewItems - newly added items</param>
+        public void OnPlantAttributesChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
-            get { return _newPlantTypeText; }
-            set
+
+            if (e.Action == NotifyCollectionChangedAction.Add && e.NewItems != null && e.NewItems.Count > 0)
             {
-                if (_newPlantTypeText == value)
-                    return;
-                _newPlantTypeText = value;
-                OnPropertyChanged(nameof(NewAttributeText));
+                ObservableCollection<PlantType> newItems = new();
+                foreach (PlantType item in e.NewItems)
+                {
+                    newItems.Add(item);
+                    _tmpAdds.Add(item);
+                }
+                SubscribeCollectionItems(newItems);
+
+            }
+
+            if (e.Action == NotifyCollectionChangedAction.Remove && e.OldItems != null && e.OldItems.Count > 0)
+            {
+                ObservableCollection<PlantType> oldItems = new();
+                foreach (var item in e.OldItems)
+                    oldItems.Add(item as PlantType);
+                UnsubscribeCollectionItems(oldItems);
+            }
+        }
+
+        private void SubscribeCollectionItems(ObservableCollection<PlantType> items)
+        {
+            if (items != null)
+            {
+                foreach (var item in items) item.PropertyChanged += ItemChanged;
+            }
+        }
+
+        private void UnsubscribeCollectionItems(ObservableCollection<PlantType> items)
+        {
+            if (items != null)
+            {
+                foreach (var item in items) item.PropertyChanged -= ItemChanged;
+            }
+        }
+
+        private void ItemChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if (sender != null)
+            {
+                PlantType? container = sender as PlantType;
+                if (e.PropertyName == "Name")
+                {
+                    var containerWithTheSameName = _plantTypesToView.FirstOrDefault(x => x.Name == container.Name);
+                    if (containerWithTheSameName is not null && containerWithTheSameName != container)
+                    {
+                        MessageBox.Show($"Plant container \"{container.Name}\" already exists", "Name duplicate",
+                            MessageBoxButton.OK);
+                    }
+                }
+                // If the attribute is already in newly added or updated attributes, there's no need to add it again
+                if (!(_tmpUpdates.Contains(container) || _tmpAdds.Contains(container)))
+                    _tmpUpdates.Add(container);
             }
         }
 
@@ -90,106 +142,16 @@ namespace PlantTrackerUI.ViewModels
             get
             {
                 if (_addNewRowCommand == null)
-                    _addNewRowCommand = new RelayCommand(o => AddNewRow(), o => CanAddNewRow());
+                    _addNewRowCommand = new RelayCommand(o => AddNewRow());
                 return _addNewRowCommand;
             }
         }
-        bool CanAddNewRow()
-        {
-            return true;
-        }
+
         void AddNewRow()
         {
-
+            PlantAttributes.Add(new());
         }
 
-
-        /// <summary>
-        /// Command invoked when a row editing is finished
-        /// </summary>
-        public RelayCommand FinishedEditingRowCommand
-        {
-            get
-            {
-                if (_finishedEditingRowCommand == null)
-                    _finishedEditingRowCommand = new RelayCommand(o => OnRowEditingFinished());
-                return _finishedEditingRowCommand;
-            }
-        }
-
-        void OnRowEditingFinished()
-        {
-            MessageBox.Show(_selectedPlantType.Name);
-            // TODO edit/update
-        }
-
-        /// <summary>
-        /// Adds new PlantType with name written in NewPlantTypeText field
-        /// </summary>
-        public RelayCommand AddNewAttributeCommand
-        {
-            get
-            {
-                if (_addNewPlantTypeCommand == null)
-                    _addNewPlantTypeCommand = new RelayCommand(o => AddNewPlantType(), o => CanAddNewPlantType());
-                return _addNewPlantTypeCommand;
-            }
-        }
-        bool CanAddNewPlantType()
-        {
-            if (NewAttributeText.Length > 0)
-                return true;
-            else
-                return false;
-        }
-        void AddNewPlantType()
-        {
-            var typeWithTheSameName = _plantTypesToView.Where(x => x.Name == NewAttributeText).FirstOrDefault();
-            if (typeWithTheSameName is not null)
-            {
-                MessageBox.Show($"Watering system \"{NewAttributeText}\" already exists", "Cannot add",
-                    MessageBoxButton.OK, MessageBoxImage.Error);
-            }
-            else
-            {
-                PlantType plantTypeToAdd = new PlantType { Name = NewAttributeText };
-                _plantTypesToView.Add(plantTypeToAdd);
-                _tmpAdds.Add(plantTypeToAdd);
-                //PlantType? maxIdType = _plantTypesToView.OrderByDescending(x => x.Id).First();
-                //int newId = maxIdType is null ? 1 : maxIdType.Id + 1;
-                //PlantType newPlantType = new PlantType { Name = NewAttributeText, Id = newId };
-                NewAttributeText = "";
-                //_dataAccess.PlantType_InsertOne(newPlantType);
-                //PlantAttributes = _dataAccess.PlantType_GetAll();
-                // // OnPropertyChanged(nameof(PlantAttributes));
-
-            }
-        }
-
-
-        /// <summary>
-        /// Cancels adding new PlantType - clears the NewPlantTypeText field
-        /// </summary>
-        public RelayCommand CancelAddingAttributeCommand
-        {
-            get
-            {
-                if (_cancelAddingPlantTypeCommand == null)
-                    _cancelAddingPlantTypeCommand = new RelayCommand(o => CancelAddingPlantType(), o => CanCancelAddingPlantType());
-                return _cancelAddingPlantTypeCommand;
-            }
-        }
-        bool CanCancelAddingPlantType()
-        {
-            if (NewAttributeText.Length > 0)
-                return true;
-            else
-                return false;
-        }
-        void CancelAddingPlantType()
-        {
-            NewAttributeText = "";
-        }
 
         public RelayCommand RemoveAttributeCommand
         {
@@ -210,8 +172,7 @@ namespace PlantTrackerUI.ViewModels
             if (toRemove is not PlantType)
                 return;
             PlantType plantTypeToRemove = (PlantType)toRemove;
-            // TODO PlantType_GetAllPlantsWithType
-             var plantsThatUseTheSystem = _dataAccess.PlantType_GetAllPlantsWithType(plantTypeToRemove);
+            var plantsThatUseTheSystem = _dataAccess.PlantType_GetAllPlantsWithType(plantTypeToRemove);
             if (plantsThatUseTheSystem.Count() > 0)
             {
                 string plantsInUseString = string.Join("\n- ", plantsThatUseTheSystem.Select(x => x.Name));
@@ -220,6 +181,7 @@ namespace PlantTrackerUI.ViewModels
                 {
                     _tmpDeletes.Add(plantTypeToRemove);
                     _plantTypesToView.Remove(plantTypeToRemove);
+                    _tmpUpdates.Remove(plantTypeToRemove);
                 }
             }
             else
@@ -227,6 +189,7 @@ namespace PlantTrackerUI.ViewModels
                 if (!_tmpAdds.Remove(plantTypeToRemove))
                     _tmpDeletes.Add(plantTypeToRemove);
                 _plantTypesToView.Remove(plantTypeToRemove);
+                _tmpUpdates.Remove(plantTypeToRemove);
             }
         }
 
@@ -241,20 +204,18 @@ namespace PlantTrackerUI.ViewModels
         }
         bool CanApplyChanges()
         {
-            if (_tmpAdds.Count() == 0 && _tmpDeletes.Count() == 0)
-                return false;
-            return true;
+            if (_tmpUpdates.Count() > 0 || _tmpAdds.Count() > 0 || _tmpDeletes.Count() > 0)
+                return true;
+            return false;
         }
         void ApplyChanges()
         {
-            foreach (var ws in _tmpDeletes)
-            {
-                _dataAccess.PlantType_DeletePlantType(ws.Id);
-            }
-            foreach (var ws in _tmpAdds)
-            {
-                _dataAccess.PlantType_InsertOne(ws);
-            }
+            foreach (var pt in _tmpDeletes)
+                _dataAccess.PlantType_DeletePlantType(pt.Id);
+            foreach (var pt in _tmpAdds)
+                _dataAccess.PlantType_InsertOne(pt);
+            foreach (var pt in _tmpUpdates)
+                _dataAccess.PlantType_Update(pt);
             CloseWindow();
         }
 

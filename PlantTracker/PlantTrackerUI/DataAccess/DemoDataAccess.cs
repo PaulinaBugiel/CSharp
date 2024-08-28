@@ -320,5 +320,20 @@ namespace PlantTrackerUI.DataAccess
         {
             throw new NotImplementedException();
         }
+
+        public void WateringSystem_Update(WateringSystem wateringSystemToUpdate)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void PlantPosition_Update(PlantPosition plantPositionToUpdate)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void PlantType_Update(PlantType plantTypeToUpdate)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

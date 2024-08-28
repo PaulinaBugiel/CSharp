@@ -29,6 +29,17 @@ namespace PlantTrackerUI.DataAccess
             }
         }
 
+        public void WateringSystem_Update(WateringSystem wateringSystemToUpdate)
+        {
+            using (IDbConnection connection = new SqlConnection(connString))
+            {
+                var p = new DynamicParameters();
+                p.Add("@WateringSystemId", wateringSystemToUpdate.Id);
+                p.Add("@Name", wateringSystemToUpdate.Name);
+                connection.Execute("dbo.spWateringSystems_Update", p, commandType: CommandType.StoredProcedure);
+            }
+        }
+
         public ObservableCollection<WateringSystem> WateringSystem_GetAll()
         {
             ObservableCollection<WateringSystem> ret;
@@ -121,16 +132,15 @@ namespace PlantTrackerUI.DataAccess
             }
         }
 
-
-        public void PlantContainer_Update(PlantContainer model)
+        public void PlantContainer_Update(PlantContainer containerToUpdate)
         {
             using (IDbConnection connection = new SqlConnection(connString))
             {
                 var p = new DynamicParameters();
-                p.Add("@ContainerId", model.Id);
-                p.Add("@Name", model.Name);
-                p.Add("@Capacity", model.Capacity);
-                p.Add("@Color", model.Color);
+                p.Add("@ContainerId", containerToUpdate.Id);
+                p.Add("@Name", containerToUpdate.Name);
+                p.Add("@Capacity", containerToUpdate.Capacity);
+                p.Add("@Color", containerToUpdate.Color);
                 connection.Execute("dbo.spPlantContainers_Update", p, commandType: CommandType.StoredProcedure);
             }
         }
@@ -223,8 +233,20 @@ namespace PlantTrackerUI.DataAccess
                 p.Add("@Name", model.Name);
                 p.Add("@SunExpositionId", (int) model.Exposition);
                 p.Add("@Id", 0, DbType.Int32, ParameterDirection.Output);
-                connection.Execute("dbo.spPlantContainers_Insert", p, commandType: CommandType.StoredProcedure);
+                connection.Execute("dbo.spPlantPositions_Insert", p, commandType: CommandType.StoredProcedure);
                 model.Id = p.Get<int>("@Id");
+            }
+        }
+
+        public void PlantPosition_Update(PlantPosition plantPositionToUpdate)
+        {
+            using (IDbConnection connection = new SqlConnection(connString))
+            {
+                var p = new DynamicParameters();
+                p.Add("@PositionId", plantPositionToUpdate.Id);
+                p.Add("@Name", plantPositionToUpdate.Name);
+                p.Add("@SunExpositionId", (int)plantPositionToUpdate.Exposition);
+                connection.Execute("dbo.spPlantPositions_Update", p, commandType: CommandType.StoredProcedure);
             }
         }
 
@@ -233,7 +255,8 @@ namespace PlantTrackerUI.DataAccess
             ObservableCollection<PlantPosition> ret;
             using (IDbConnection connection = new System.Data.SqlClient.SqlConnection(connString))
             {
-                ret = new ObservableCollection<PlantPosition>(connection.Query<PlantPosition>("dbo.spPlantPositions_GetAll"));
+                var queryResult = connection.Query<PlantPosition>("dbo.spPlantPositions_GetAll");
+                ret = new ObservableCollection<PlantPosition>(queryResult);
             }
             return ret;
         }
@@ -319,6 +342,18 @@ namespace PlantTrackerUI.DataAccess
                 model.Id = p.Get<int>("@Id");
             }
         }
+
+        public void PlantType_Update(PlantType plantTypeToUpdate)
+        {
+            using (IDbConnection connection = new SqlConnection(connString))
+            {
+                var p = new DynamicParameters();
+                p.Add("@TypeId", plantTypeToUpdate.Id);
+                p.Add("@Name", plantTypeToUpdate.Name);
+                connection.Execute("dbo.spPlantTypes_Update", p, commandType: CommandType.StoredProcedure);
+            }
+        }
+
         public ObservableCollection<PlantType> PlantType_GetAll()
         {
             ObservableCollection<PlantType> ret;

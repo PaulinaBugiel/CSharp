@@ -24,14 +24,9 @@ namespace PlantTrackerUI.ViewModels
         private ObservableCollection<PlantContainer> _tmpAdds;
         private ObservableCollection<PlantContainer> _tmpDeletes;
         private IDataAccess _dataAccess;
-        string _newPlantContainerText = "";
-        private PlantContainer? _newlyAddedContainer;
 
         private RelayCommand _addNewRowCommand;
-        private RelayCommand _finishedEditingRowCommand;
-        private RelayCommand _addNewPlantContainerCommand;
         private RelayCommand _removePlantContainerCommand;
-        private RelayCommand _cancelAddingPlantContainerCommand;
         private RelayCommand _applyChangesCommand;
         private RelayCommand _cancelChangesCommand;
         public ManagePlantContainersViewModel()
@@ -42,10 +37,9 @@ namespace PlantTrackerUI.ViewModels
             else
                 _dataAccess = new DemoDataAccess();
             _plantContainersToView = _dataAccess.PlantContainer_GetAll();
-            _tmpAdds = new(); // TODO copy to other ViewModels
-            _tmpDeletes = new(); // TODO copy to other ViewModels
+            _tmpAdds = new();
+            _tmpDeletes = new();
             _tmpUpdates = new();
-            _newlyAddedContainer = null;
             SubscribeCollectionItems(PlantAttributes);
             PlantAttributes.CollectionChanged += OnPlantAttributesChanged;
         }
@@ -70,46 +64,53 @@ namespace PlantTrackerUI.ViewModels
             {
                 if (_selectedContainer == value)
                     return;
-                _selectedContainer = value; // TODO id _selectedContainer is not null, look for it in _plantContainersToView and check for changes
+                _selectedContainer = value;
                 OnPropertyChanged(nameof(SelectedAttribute));
             }
         }
 
-        public string NewAttributePlaceholderText { get { return "New Container:"; } set { } }
-
-        public string NewAttributeText
+        /// <summary>
+        /// Fired when an element is added to DataGrid or deleted via 'Delete' button (either of these actions has to be enabled in DataGrid)
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e">Contains OldItems - deleted items, and NewItems - newly added items</param>
+        public void OnPlantAttributesChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
-            get { return _newPlantContainerText; }
-            set
+
+            if (e.Action == NotifyCollectionChangedAction.Add && e.NewItems != null && e.NewItems.Count > 0)
             {
-                if (_newPlantContainerText == value)
-                    return;
-                _newPlantContainerText = value;
-                OnPropertyChanged(nameof(NewAttributeText));
-            }
-        }
+                ObservableCollection<PlantContainer> newItems = new();
+                foreach (PlantContainer item in e.NewItems)
+                {
+                    newItems.Add(item);
+                    _tmpAdds.Add(item);
+                }
+                SubscribeCollectionItems(newItems);
 
-        void OnPlantAttributesChanged(object sender, NotifyCollectionChangedEventArgs e)
-        {
-            UnsubscribeCollectionItems(e.OldItems as ObservableCollection<PlantContainer>);
-            SubscribeCollectionItems(e.NewItems as ObservableCollection<PlantContainer>);
-            ObservableCollection<PlantContainer> senderCollection = sender as ObservableCollection<PlantContainer>;
-            NotifyCollectionChangedAction action = e.Action;
+            }
+
+            if (e.Action == NotifyCollectionChangedAction.Remove && e.OldItems != null && e.OldItems.Count > 0)
+            {
+                ObservableCollection<PlantContainer> oldItems = new();
+                foreach (var item in e.OldItems)
+                    oldItems.Add(item as PlantContainer);
+                UnsubscribeCollectionItems(oldItems);
+            }
         }
 
         private void SubscribeCollectionItems(ObservableCollection<PlantContainer> items)
         {
-            foreach (var item in items)
+            if (items != null)
             {
-                item.PropertyChanged += ItemChanged;
+                foreach (var item in items) item.PropertyChanged += ItemChanged;
             }
         }
 
         private void UnsubscribeCollectionItems(ObservableCollection<PlantContainer> items)
         {
-            foreach (var item in items)
+            if (items != null)
             {
-                item.PropertyChanged -= ItemChanged;
+                foreach (var item in items) item.PropertyChanged -= ItemChanged;
             }
         }
 
@@ -117,8 +118,19 @@ namespace PlantTrackerUI.ViewModels
         {
             if (sender != null)
             {
-                PlantContainer? containter = sender as PlantContainer;
-                _tmpUpdates.Add(containter);
+                PlantContainer? container = sender as PlantContainer;
+                if (e.PropertyName == "Name")
+                {
+                    var containerWithTheSameName = _plantContainersToView.FirstOrDefault(x => x.Name == container.Name);
+                    if (containerWithTheSameName is not null && containerWithTheSameName != container)
+                    {
+                        MessageBox.Show($"Plant container \"{container.Name}\" already exists", "Name duplicate",
+                            MessageBoxButton.OK);
+                    }
+                }
+                // If the attribute is already in newly added or updated attributes, there's no need to add it again
+                if (!(_tmpUpdates.Contains(container) || _tmpAdds.Contains(container)))
+                    _tmpUpdates.Add(container);
             }
         }
 
@@ -130,119 +142,30 @@ namespace PlantTrackerUI.ViewModels
             get
             {
                 if (_addNewRowCommand == null)
-                    _addNewRowCommand = new RelayCommand(o => AddNewRow(), o => CanAddNewRow());
+                    _addNewRowCommand = new RelayCommand(o => AddNewRow());
                 return _addNewRowCommand;
             }
         }
-        bool CanAddNewRow()
-        {
-            return true;
-        }
         void AddNewRow()
         {
-            _newlyAddedContainer = new();
-            PlantAttributes.Add(_newlyAddedContainer);
+            PlantAttributes.Add(new());
         }
 
-
-        /// <summary>
-        /// Command invoked when a row editing is finished
-        /// </summary>
-        public RelayCommand FinishedEditingRowCommand
-        {
-            get
-            {
-                if (_finishedEditingRowCommand == null)
-                    _finishedEditingRowCommand = new RelayCommand(o => OnRowEditingFinished(o));
-                return _finishedEditingRowCommand;
-            }
-        }
-        
-        void OnRowEditingFinished(object parameter)
-        {
-            MessageBox.Show(_selectedContainer.Name);
-            // TODO edit/update
-        }
-
-        /// <summary>
-        /// Adds new PlantContainer with name written in NewPlantContainerText field
-        /// </summary>
-        public RelayCommand AddNewAttributeCommand
-        {
-            get
-            {
-                if (_addNewPlantContainerCommand == null)
-                    _addNewPlantContainerCommand = new RelayCommand(o => AddNewPlantContainer(), o => CanAddNewPlantContainer());
-                return _addNewPlantContainerCommand;
-            }
-        }
-        bool CanAddNewPlantContainer()
-        {
-            
-            if (_newlyAddedContainer == null || _newlyAddedContainer.Name == "")
-                return false;
-            return true;
-            //if (NewAttributeText.Length > 0)
-            //    return true;
-            //else
-            //    return false;
-        }
-        void AddNewPlantContainer()
-        {
-            if (_newlyAddedContainer == null)
-                return;
-            var containerWithTheSameName = _plantContainersToView.FirstOrDefault(x => x.Name == _newlyAddedContainer.Name);
-            if (containerWithTheSameName is not null && containerWithTheSameName != _newlyAddedContainer)
-            {
-                MessageBox.Show($"Watering system \"{_newlyAddedContainer.Name}\" already exists", "Cannot add",
-                    MessageBoxButton.OK, MessageBoxImage.Error);
-            }
-            else
-            {
-                //_plantContainersToView.Add(_newlyAddedContainer);
-                _tmpAdds.Add(_newlyAddedContainer);
-                _newlyAddedContainer = null;
-            }
-        }
-
-
-        /// <summary>
-        /// Cancels adding new PlantContainer - clears the NewPlantContainerText field
-        /// </summary>
-        public RelayCommand CancelAddingAttributeCommand
-        {
-            get
-            {
-                if (_cancelAddingPlantContainerCommand == null)
-                    _cancelAddingPlantContainerCommand = new RelayCommand(o => CancelAddingPlantContainer(), o => CanCancelAddingPlantContainer());
-                return _cancelAddingPlantContainerCommand;
-            }
-        }
-        bool CanCancelAddingPlantContainer()
-        {
-            if (NewAttributeText.Length > 0)
-                return true;
-            else
-                return false;
-        }
-        void CancelAddingPlantContainer()
-        {
-            NewAttributeText = "";
-        }
 
         public RelayCommand RemoveAttributeCommand
         {
             get
             {
                 if (_removePlantContainerCommand == null)
-                    _removePlantContainerCommand = new RelayCommand(o => RemovePlantContainer(o), o => CanRemovePlantContainer());
+                    _removePlantContainerCommand = new RelayCommand(o => RemovePlantContainer(o), o => CanRemovePlantContainer(o));
                 return _removePlantContainerCommand;
             }
         }
 
-        bool CanRemovePlantContainer()
+        bool CanRemovePlantContainer(object toRemove)
         {
-            return true;
+            if (toRemove != null) return true;
+            return false;
         }
         void RemovePlantContainer(object toRemove)
         {
@@ -258,6 +181,7 @@ namespace PlantTrackerUI.ViewModels
                 {
                     _tmpDeletes.Add(plantContainerToRemove);
                     _plantContainersToView.Remove(plantContainerToRemove);
+                    _tmpUpdates.Remove(plantContainerToRemove);
                 }
             }
             else
@@ -265,6 +189,7 @@ namespace PlantTrackerUI.ViewModels
                 if (!_tmpAdds.Remove(plantContainerToRemove))
                     _tmpDeletes.Add(plantContainerToRemove);
                 _plantContainersToView.Remove(plantContainerToRemove);
+                _tmpUpdates.Remove(plantContainerToRemove);
             }
         }
 
@@ -303,6 +228,7 @@ namespace PlantTrackerUI.ViewModels
                 return _cancelChangesCommand;
             }
         }
+
 
         void CancelChanges()
         {

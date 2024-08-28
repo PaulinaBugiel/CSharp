@@ -4,6 +4,7 @@ using PlantTrackerUI.Models;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Configuration;
 using System.Linq;
@@ -20,6 +21,7 @@ namespace PlantTrackerUI.ViewModels
         private ObservableCollection<WateringSystem> _wateringSystemsToView;
         private WateringSystem _selectedWateringSystem;
         private readonly ObservableCollection<WateringSystem> _wateringSystemsInDb;
+        private ObservableCollection<WateringSystem> _tmpUpdates;
         private ObservableCollection<WateringSystem> _tmpAdds;
         private ObservableCollection<WateringSystem> _tmpDeletes;
         private IDataAccess _dataAccess;
@@ -42,8 +44,11 @@ namespace PlantTrackerUI.ViewModels
                 _dataAccess = new DemoDataAccess();
             _wateringSystemsToView = _dataAccess.WateringSystem_GetAll();
             _wateringSystemsInDb = _dataAccess.WateringSystem_GetAll();
-            _tmpAdds = new ObservableCollection<WateringSystem>();
-            _tmpDeletes = new ObservableCollection<WateringSystem>();
+            _tmpAdds = new();
+            _tmpDeletes = new();
+            _tmpUpdates = new();
+            SubscribeCollectionItems(PlantAttributes);
+            PlantAttributes.CollectionChanged += OnPlantAttributesChanged;
         }
 
 
@@ -71,156 +76,130 @@ namespace PlantTrackerUI.ViewModels
             }
         }
 
-        public string NewAttributePlaceholderText { get { return "New Watering System:"; } set { } }
 
-        public string NewAttributeText
+        /// <summary>
+        /// Fired when an element is added to DataGrid or deleted via 'Delete' button (either of these actions has to be enabled in DataGrid)
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e">Contains OldItems - deleted items, and NewItems - newly added items</param>
+        public void OnPlantAttributesChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
-            get { return _newWateringSystemText; }
-            set
+
+            if (e.Action == NotifyCollectionChangedAction.Add && e.NewItems != null && e.NewItems.Count > 0)
             {
-                if (_newWateringSystemText == value)
-                    return;
-                _newWateringSystemText = value;
-                OnPropertyChanged(nameof(NewAttributeText));
+                ObservableCollection<WateringSystem> newItems = new();
+                foreach (WateringSystem item in e.NewItems)
+                {
+                    newItems.Add(item);
+                    _tmpAdds.Add(item);
+                }
+                SubscribeCollectionItems(newItems);
+
+            }
+
+            if (e.Action == NotifyCollectionChangedAction.Remove && e.OldItems != null && e.OldItems.Count > 0)
+            {
+                ObservableCollection<WateringSystem> oldItems = new();
+                foreach (var item in e.OldItems)
+                    oldItems.Add(item as WateringSystem);
+                UnsubscribeCollectionItems(oldItems);
+            }
+        }
+
+        private void SubscribeCollectionItems(ObservableCollection<WateringSystem> items)
+        {
+            if (items != null)
+            {
+                foreach (var item in items) item.PropertyChanged += ItemChanged;
+            }
+        }
+
+        private void UnsubscribeCollectionItems(ObservableCollection<WateringSystem> items)
+        {
+            if (items != null)
+            {
+                foreach (var item in items) item.PropertyChanged -= ItemChanged;
+            }
+        }
+
+        private void ItemChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if (sender != null)
+            {
+                WateringSystem? container = sender as WateringSystem;
+                if (e.PropertyName == "Name")
+                {
+                    var containerWithTheSameName = _wateringSystemsToView.FirstOrDefault(x => x.Name == container.Name);
+                    if (containerWithTheSameName is not null && containerWithTheSameName != container)
+                    {
+                        MessageBox.Show($"Plant container \"{container.Name}\" already exists", "Name duplicate",
+                            MessageBoxButton.OK);
+                    }
+                }
+                // If the attribute is already in newly added or updated attributes, there's no need to add it again
+                if (!(_tmpUpdates.Contains(container) || _tmpAdds.Contains(container)))
+                    _tmpUpdates.Add(container);
             }
         }
 
 
+        /// <summary>
+        /// Command for adding new row to a DataGrid
+        /// </summary>
         public RelayCommand AddNewRowCommand
         {
             get
             {
                 if (_addNewRowCommand == null)
-                    _addNewRowCommand = new RelayCommand(o => AddNewRow(), o => CanAddNewRow());
+                    _addNewRowCommand = new RelayCommand(o => AddNewRow());
                 return _addNewRowCommand;
             }
         }
-        bool CanAddNewRow()
-        {
-            return true;
-        }
+
         void AddNewRow()
         {
-
+            PlantAttributes.Add(new());
         }
 
-
-        /// <summary>
-        /// Command invoked when a row editing is finished
-        /// </summary>
-        public RelayCommand FinishedEditingRowCommand
-        {
-            get
-            {
-                if (_finishedEditingRowCommand == null)
-                    _finishedEditingRowCommand = new RelayCommand(o => OnRowEditingFinished());
-                return _finishedEditingRowCommand;
-            }
-        }
-
-        void OnRowEditingFinished()
-        {
-            MessageBox.Show(_selectedWateringSystem.Name);
-            // TODO edit/update
-        }
-
-        /// <summary>
-        /// Adds new PlantType with name written in NewPlantTypeText field
-        /// </summary>
-        public RelayCommand AddNewAttributeCommand
-        {
-            get
-            {
-                if (_addNewWateringSystemCommand == null)
-                    _addNewWateringSystemCommand = new RelayCommand(o => AddNewWateringSystem(), o => CanAddNewWateringSystem());
-                return _addNewWateringSystemCommand;
-            }
-        }
-        bool CanAddNewWateringSystem()
-        {
-            if (NewAttributeText.Length > 0)
-                return true;
-            else
-                return false;
-        }
-        void AddNewWateringSystem()
-        {
-            var typeWithTheSameName = _wateringSystemsToView.Where(x => x.Name == NewAttributeText).FirstOrDefault();
-            if (typeWithTheSameName is not null)
-            {
-                MessageBox.Show($"Watering system \"{NewAttributeText}\" already exists", "Cannot add",
-                    MessageBoxButton.OK, MessageBoxImage.Error);
-            }
-            else
-            {
-                WateringSystem wateringSystemToAdd = new WateringSystem { Name = NewAttributeText };
-                _wateringSystemsToView.Add(wateringSystemToAdd);
-                _tmpAdds.Add(wateringSystemToAdd);
-                NewAttributeText = "";
-
-            }
-        }
-
-
-        /// <summary>
-        /// Cancels adding new WateringSystem - clears the NewWateringSystemText field
-        /// </summary>
-        public RelayCommand CancelAddingAttributeCommand
-        {
-            get
-            {
-                if (_cancelAddingWateringSystemCommand == null)
-                    _cancelAddingWateringSystemCommand = new RelayCommand(o => CancelAddingWateringSystem(), o => CanCancelAddingWateringSystem());
-                return _cancelAddingWateringSystemCommand;
-            }
-        }
-        bool CanCancelAddingWateringSystem()
-        {
-            if (NewAttributeText.Length > 0)
-                return true;
-            else
-                return false;
-        }
-        void CancelAddingWateringSystem()
-        {
-            NewAttributeText = "";
-        }
 
         public RelayCommand RemoveAttributeCommand
         {
             get
             {
                 if (_removeWateringSystemCommand == null)
-                    _removeWateringSystemCommand = new RelayCommand(o => RemoveWateringSystem(o), o => CanRemoveWateringSystem());
+                    _removeWateringSystemCommand = new RelayCommand(o => RemoveWateringSystem(o), o => CanRemoveWateringSystem(o));
                 return _removeWateringSystemCommand;
             }
         }
 
-        bool CanRemoveWateringSystem()
+        bool CanRemoveWateringSystem(object toRemove)
         {
-            return true;
+            if (toRemove != null) return true;
+            return false;
         }
         void RemoveWateringSystem(object toRemove)
         {
             if (toRemove is not WateringSystem)
                 return;
-            WateringSystem wateringSystemToRemove = (WateringSystem)toRemove;
-            var plantsThatUseTheSystem = _dataAccess.WateringSystem_GetAllPlantsWithSystem(wateringSystemToRemove);
+            WateringSystem plantContainerToRemove = (WateringSystem)toRemove;
+            var plantsThatUseTheSystem = _dataAccess.WateringSystem_GetAllPlantsWithSystem(plantContainerToRemove);
             if (plantsThatUseTheSystem.Count() > 0)
             {
                 string plantsInUseString = string.Join("\n- ", plantsThatUseTheSystem.Select(x => x.Name));
-                MessageBoxResult result = MessageBox.Show($"The following plants use this watering system:\n- {plantsInUseString}\nProceed?", "Watering system in use", MessageBoxButton.OKCancel, MessageBoxImage.Warning);
+                MessageBoxResult result = MessageBox.Show($"The following plants use this plant container:\n- {plantsInUseString}\nProceed?", "Plant container in use", MessageBoxButton.OKCancel, MessageBoxImage.Warning);
                 if (result == MessageBoxResult.OK)
                 {
-                    _tmpDeletes.Add(wateringSystemToRemove);
-                    _wateringSystemsToView.Remove(wateringSystemToRemove);
+                    _tmpDeletes.Add(plantContainerToRemove);
+                    _wateringSystemsToView.Remove(plantContainerToRemove);
+                    _tmpUpdates.Remove(plantContainerToRemove);
                 }
             }
             else
             {
-                if (!_tmpAdds.Remove(wateringSystemToRemove))
-                    _tmpDeletes.Add(wateringSystemToRemove);
-                _wateringSystemsToView.Remove(wateringSystemToRemove);
+                if (!_tmpAdds.Remove(plantContainerToRemove))
+                    _tmpDeletes.Add(plantContainerToRemove);
+                _wateringSystemsToView.Remove(plantContainerToRemove);
+                _tmpUpdates.Remove(plantContainerToRemove);
             }
         }
 
@@ -235,20 +214,18 @@ namespace PlantTrackerUI.ViewModels
         }
         bool CanApplyChanges()
         {
-            if (_tmpAdds.Count() == 0 && _tmpDeletes.Count() == 0)
-                return false;
-            return true;
+            if (_tmpUpdates.Count() > 0 || _tmpAdds.Count() > 0 || _tmpDeletes.Count() > 0) // TODO copy to other ViewModels
+                return true;
+            return false;
         }
         void ApplyChanges()
         {
-            foreach (var ws in _tmpDeletes)
-            {
-                _dataAccess.WateringSystem_DeleteWateringSystem(ws.Id);
-            }
-            foreach (var ws in _tmpAdds)
-            {
-                _dataAccess.WateringSystem_InsertOne(ws);
-            }
+            foreach (var pc in _tmpDeletes)
+                _dataAccess.WateringSystem_DeleteWateringSystem(pc.Id);
+            foreach (var pc in _tmpAdds)
+                _dataAccess.WateringSystem_InsertOne(pc);
+            foreach (var pc in _tmpUpdates) // TODO copy to other ViewModels
+                _dataAccess.WateringSystem_Update(pc);
             CloseWindow();
         }
 

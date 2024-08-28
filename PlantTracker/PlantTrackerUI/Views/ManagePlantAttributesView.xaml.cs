@@ -27,14 +27,34 @@ namespace PlantTrackerUI.Views
             InitializeComponent();
         }
 
-        //public ICommand RemoveAttributeViewCommand
-        //{
-        //    get { return (ICommand)GetValue(RemoveAttributeViewCommandProperty); }
-        //    set { SetValue(RemoveAttributeViewCommandProperty, value); }
-        //}
+        private void DataGrid_AutoGeneratingColumn(object sender, DataGridAutoGeneratingColumnEventArgs e)
+        {
+            if (e.Column.Header.ToString() == "Id")
+            {
+                //e.Cancel = true;
+                e.Column.IsReadOnly = true;
+                Style style = new Style();
+                style.Setters.Add(new Setter
+                {
+                    Property = BackgroundProperty,
+                    Value = new SolidColorBrush(Color.FromRgb(0xEE, 0xEE, 0xEE))
+                });
+                style.Setters.Add(new Setter
+                {
+                    Property = ForegroundProperty,
+                    Value = Brushes.Gray
+                });
 
-        //// Using a DependencyProperty as the backing store for RemoveAttributeViewCommand.  This enables animation, styling, binding, etc...
-        //public static readonly DependencyProperty RemoveAttributeViewCommandProperty =
-        //    DependencyProperty.Register("RemoveAttributeViewCommand", typeof(ICommand), typeof(ManagePlantAttributesView), new PropertyMetadata(null));
+
+                e.Column.CellStyle = style;
+            }
+        }
+
+        private void ScrollViewer_PreviewMouseWheel(object sender, MouseWheelEventArgs e)
+        {
+            ScrollViewer scv = (ScrollViewer)sender;
+            scv.ScrollToVerticalOffset(scv.VerticalOffset - e.Delta/10.0);
+            e.Handled = true;
+        }
     }
 }

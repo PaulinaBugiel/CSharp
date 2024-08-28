@@ -4,6 +4,7 @@ using PlantTrackerUI.Models;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Configuration;
 using System.Linq;
@@ -19,6 +20,7 @@ namespace PlantTrackerUI.ViewModels
 
         private ObservableCollection<PlantPosition> _plantPositionsToView;
         private PlantPosition _selectedPlantPosition;
+        private ObservableCollection<PlantPosition> _tmpUpdates;
         private readonly ObservableCollection<PlantPosition> _plantPositionsInDb;
         private ObservableCollection<PlantPosition> _tmpAdds;
         private ObservableCollection<PlantPosition> _tmpDeletes;
@@ -41,8 +43,11 @@ namespace PlantTrackerUI.ViewModels
                 _dataAccess = new DemoDataAccess();
             _plantPositionsToView = _dataAccess.PlantPosition_GetAll();
             _plantPositionsInDb = _dataAccess.PlantPosition_GetAll();
-            _tmpAdds = new ObservableCollection<PlantPosition>();
-            _tmpDeletes = new ObservableCollection<PlantPosition>();
+            _tmpAdds = new();
+            _tmpDeletes = new();
+            _tmpUpdates = new();
+            SubscribeCollectionItems(PlantAttributes);
+            PlantAttributes.CollectionChanged += OnPlantAttributesChanged;
         }
 
 
@@ -70,17 +75,68 @@ namespace PlantTrackerUI.ViewModels
             }
         }
 
-        public string NewAttributePlaceholderText { get { return "New Plant Position:"; } set { } }
-
-        public string NewAttributeText
+        /// <summary>
+        /// Fired when an element is added to DataGrid or deleted via 'Delete' button (either of these actions has to be enabled in DataGrid)
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e">Contains OldItems - deleted items, and NewItems - newly added items</param>
+        public void OnPlantAttributesChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
-            get { return _newPlantPositionText; }
-            set
+
+            if (e.Action == NotifyCollectionChangedAction.Add && e.NewItems != null && e.NewItems.Count > 0)
             {
-                if (_newPlantPositionText == value)
-                    return;
-                _newPlantPositionText = value;
-                OnPropertyChanged(nameof(NewAttributeText));
+                ObservableCollection<PlantPosition> newItems = new();
+                foreach (PlantPosition item in e.NewItems)
+                {
+                    newItems.Add(item);
+                    _tmpAdds.Add(item);
+                }
+                SubscribeCollectionItems(newItems);
+
+            }
+
+            if (e.Action == NotifyCollectionChangedAction.Remove && e.OldItems != null && e.OldItems.Count > 0)
+            {
+                ObservableCollection<PlantPosition> oldItems = new();
+                foreach (var item in e.OldItems)
+                    oldItems.Add(item as PlantPosition);
+                UnsubscribeCollectionItems(oldItems);
+            }
+        }
+
+        private void SubscribeCollectionItems(ObservableCollection<PlantPosition> items)
+        {
+            if (items != null)
+            {
+                foreach (var item in items) item.PropertyChanged += ItemChanged;
+            }
+        }
+
+        private void UnsubscribeCollectionItems(ObservableCollection<PlantPosition> items)
+        {
+            if (items != null)
+            {
+                foreach (var item in items) item.PropertyChanged -= ItemChanged;
+            }
+        }
+
+        private void ItemChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if (sender != null)
+            {
+                PlantPosition? container = sender as PlantPosition;
+                if (e.PropertyName == "Name")
+                {
+                    var containerWithTheSameName = _plantPositionsToView.FirstOrDefault(x => x.Name == container.Name);
+                    if (containerWithTheSameName is not null && containerWithTheSameName != container)
+                    {
+                        MessageBox.Show($"Plant container \"{container.Name}\" already exists", "Name duplicate",
+                            MessageBoxButton.OK);
+                    }
+                }
+                // If the attribute is already in newly added or updated attributes, there's no need to add it again
+                if (!(_tmpUpdates.Contains(container) || _tmpAdds.Contains(container)))
+                    _tmpUpdates.Add(container);
             }
         }
 
@@ -90,115 +146,33 @@ namespace PlantTrackerUI.ViewModels
             get
             {
                 if (_addNewRowCommand == null)
-                    _addNewRowCommand = new RelayCommand(o => AddNewRow(), o => CanAddNewRow());
+                    _addNewRowCommand = new RelayCommand(o => AddNewRow());
                 return _addNewRowCommand;
             }
         }
-        bool CanAddNewRow()
-        {
-            return true;
-        }
+
         void AddNewRow()
         {
-
+            PlantAttributes.Add(new());
         }
 
-
-        /// <summary>
-        /// Command invoked when a row editing is finished
-        /// </summary>
-        public RelayCommand FinishedEditingRowCommand
-        {
-            get
-            {
-                if (_finishedEditingRowCommand == null)
-                    _finishedEditingRowCommand = new RelayCommand(o => OnRowEditingFinished());
-                return _finishedEditingRowCommand;
-            }
-        }
-
-        void OnRowEditingFinished()
-        {
-            MessageBox.Show(_selectedPlantPosition.Name);
-            // TODO edit/update
-        }
-
-        /// <summary>
-        /// Adds new PlantPosition with name written in NewPlantPositionText field
-        /// </summary>
-        public RelayCommand AddNewAttributeCommand
-        {
-            get
-            {
-                if (_addNewPlantPositionCommand == null)
-                    _addNewPlantPositionCommand = new RelayCommand(o => AddNewPlantPosition(), o => CanAddNewPlantPosition());
-                return _addNewPlantPositionCommand;
-            }
-        }
-        bool CanAddNewPlantPosition()
-        {
-            if (NewAttributeText.Length > 0)
-                return true;
-            else
-                return false;
-        }
-        void AddNewPlantPosition()
-        {
-            var typeWithTheSameName = _plantPositionsToView.Where(x => x.Name == NewAttributeText).FirstOrDefault();
-            if (typeWithTheSameName is not null)
-            {
-                MessageBox.Show($"Watering system \"{NewAttributeText}\" already exists", "Cannot add",
-                    MessageBoxButton.OK, MessageBoxImage.Error);
-            }
-            else
-            {
-                PlantPosition plantPositionToAdd = new PlantPosition { Name = NewAttributeText };
-                _plantPositionsToView.Add(plantPositionToAdd);
-                _tmpAdds.Add(plantPositionToAdd);
-                NewAttributeText = "";
-
-            }
-        }
-
-
-        /// <summary>
-        /// Cancels adding new PlantPosition - clears the NewPlantPositionText field
-        /// </summary>
-        public RelayCommand CancelAddingAttributeCommand
-        {
-            get
-            {
-                if (_cancelAddingPlantPositionCommand == null)
-                    _cancelAddingPlantPositionCommand = new RelayCommand(o => CancelAddingPlantPosition(), o => CanCancelAddingPlantPosition());
-                return _cancelAddingPlantPositionCommand;
-            }
-        }
-        bool CanCancelAddingPlantPosition()
-        {
-            if (NewAttributeText.Length > 0)
-                return true;
-            else
-                return false;
-        }
-        void CancelAddingPlantPosition()
-        {
-            NewAttributeText = "";
-        }
 
         public RelayCommand RemoveAttributeCommand
         {
             get
             {
                 if (_removePlantPositionCommand == null)
-                    _removePlantPositionCommand = new RelayCommand(o => RemovePlantPosition(o), o => CanRemovePlantPosition());
+                    _removePlantPositionCommand = new RelayCommand(o => RemovePlantPosition(o), o => CanRemovePlantPosition(o));
                 return _removePlantPositionCommand;
             }
         }
 
-        bool CanRemovePlantPosition()
+        bool CanRemovePlantPosition(object toRemove)
         {
-            return true;
+            if (toRemove != null) return true;
+            return false;
         }
+
         void RemovePlantPosition(object toRemove)
         {
             if (toRemove is not PlantPosition)
@@ -213,6 +187,7 @@ namespace PlantTrackerUI.ViewModels
                 {
                     _tmpDeletes.Add(plantPositionToRemove);
                     _plantPositionsToView.Remove(plantPositionToRemove);
+                    _tmpUpdates.Remove(plantPositionToRemove);
                 }
             }
             else
@@ -220,6 +195,7 @@ namespace PlantTrackerUI.ViewModels
                 if (!_tmpAdds.Remove(plantPositionToRemove))
                     _tmpDeletes.Add(plantPositionToRemove);
                 _plantPositionsToView.Remove(plantPositionToRemove);
+                _tmpUpdates.Remove(plantPositionToRemove);
             }
         }
 
@@ -234,20 +210,18 @@ namespace PlantTrackerUI.ViewModels
         }
         bool CanApplyChanges()
         {
-            if (_tmpAdds.Count() == 0 && _tmpDeletes.Count() == 0)
-                return false;
-            return true;
+            if (_tmpUpdates.Count() > 0 || _tmpAdds.Count() > 0 || _tmpDeletes.Count() > 0)
+                return true;
+            return false;
         }
         void ApplyChanges()
         {
-            foreach (var ws in _tmpDeletes)
-            {
-                _dataAccess.PlantPosition_DeletePlantPosition(ws.Id);
-            }
-            foreach (var ws in _tmpAdds)
-            {
-                _dataAccess.PlantPosition_InsertOne(ws);
-            }
+            foreach (var pp in _tmpDeletes)
+                _dataAccess.PlantPosition_DeletePlantPosition(pp.Id);
+            foreach (var pp in _tmpAdds)
+                _dataAccess.PlantPosition_InsertOne(pp);
+            foreach (var pp in _tmpUpdates)
+                _dataAccess.PlantPosition_Update(pp);
             CloseWindow();
         }
 
