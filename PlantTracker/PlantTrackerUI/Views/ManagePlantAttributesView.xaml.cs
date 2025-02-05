@@ -27,6 +27,7 @@ namespace PlantTrackerUI.Views
             InitializeComponent();
         }
 
+        // Setting the ID column to Gray
         private void DataGrid_AutoGeneratingColumn(object sender, DataGridAutoGeneratingColumnEventArgs e)
         {
             if (e.Column.Header.ToString() == "Id")

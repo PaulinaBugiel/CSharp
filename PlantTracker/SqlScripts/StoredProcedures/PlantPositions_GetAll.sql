@@ -3,6 +3,6 @@ AS
 BEGIN
 	SET NOCOUNT ON;
 
-	SELECT *
+	SELECT Id, Name, SunExpositionId AS Exposition
 	FROM dbo.PlantPositions;
 END
